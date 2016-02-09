@@ -38,8 +38,19 @@
                 <div class="row"></div>
             </div>
         </div><!--Page header end-->
+                
+        <!--Flash messages logic-->
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <script>
+                        Materialize.toast({{ message|tojson }}, 5000)
+                    </script>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
         <!--Welcome login form section-->
-        
         <div class="container">
             <div class="row">
                 <div class="col l6 offset-l3 m8 offset-m2 s12">
@@ -75,6 +86,7 @@
                     </div><!--Login card end-->
                 </div>
             </div>
+            <p>{{data}}</p>
         </div><!--Container end-->
     </body>
 </html>
