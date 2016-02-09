@@ -1,0 +1,13 @@
+body {
+    background-color: #eceff1;
+}
+
+#login-card {
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+#login-card .btn-large {
+    margin-top: 1rem;
+    margin-bottom: -2rem;
+}
