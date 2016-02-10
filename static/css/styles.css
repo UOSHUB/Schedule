@@ -1,13 +1,39 @@
-body {
-    background-color: #eceff1;
+nav object {
+    height: 1.8rem;
+    pointer-events: none;
 }
 
-#login-card {
-    padding-left: 1rem;
-    padding-right: 1rem;
+nav span {
+    position: relative;
+    font-size: 1.4rem;
+    font-weight: 300;
+    bottom: 0.2rem;
 }
 
-#login-card .btn-large {
-    margin-top: 1rem;
-    margin-bottom: -2rem;
+nav i {
+    font-size: 2rem !important;
+}
+
+#login-dialog {
+    width: 24rem;
+	height: auto;
+    padding: 20px;
+}
+
+#login-dialog h5, #sid{
+	font-weight: 300;
+	margin-bottom: 0;
+}
+
+#login-dialog button {
+	margin-top: 24px;
+    margin-bottom: -8px;
+}
+
+#side-bar a {
+    font-size: 1.2rem;
+}
+
+.blue-grey-text.text-lighten-5:hover {
+    color: #263238 !important;
 }

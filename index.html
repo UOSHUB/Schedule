@@ -12,6 +12,8 @@
 		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.0.js') }}"></script>
 		<!--Import materialize.js-->
 		<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js') }}"></script>
+		<!--Import My scripts.js-->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
 		<!--Let browser know website is optimized for mobile-->
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -21,71 +23,71 @@
         <title>UOS UDC</title>
 	</head>
 
-	<body>
-        <!--Page header start-->
-        <div class="header deep-purple lighten-2">
-            <div class="container">
-                <!--Main row in the header-->
+	<body class="blue-grey lighten-5">
+        <!--Page Navigation bar start-->
+        <nav class="transparent z-depth-0">
+            <div class="nav-wrapper container">
+                <a href="http://uosudc.tk" class="brand-logo">
+                    <object type="image/svg+xml" data="{{ url_for('static', filename='img/uos_logo.svg') }}">Logo</object>
+                    <span class="light-green-text text-darken-2"><b class="blue-grey-text text-darken-4">UOS</b> UDC</span>
+                </a>
+                <ul class="right hide-on-med-and-down">
+                    <li><a href="/general/" class="blue-grey-text text-darken-4">General</a></li>
+                    <li><a href="/about/" class="blue-grey-text text-darken-4">About</a></li>
+                    <li><a href="#login-dialog" class="modal-trigger light-green-text text-darken-2">Login</a></li>
+                </ul>
+                <a href="" data-activates="side-bar" class="button-collapse right show-on-medium-and-down">
+                    <i class="material-icons blue-grey-text text-darken-4">view_headline</i>
+                </a>
+            </div>
+        </nav><!--Page Navigation bar end-->
+        
+        <!--Hidden Structures start-->
+            <!--Side Navigation bar start-->
+            <ul id="side-bar" class="side-nav blue-grey darken-4">
+                <li><a href="#login-dialog" class="modal-trigger light-green-text text-darken-2">LOGIN</a></li>
+                <li><a href="/general/" class="blue-grey-text text-lighten-5">GENERAL</a></li>
+                <li><a href="/about/" class="blue-grey-text text-lighten-5">ABOUT</a></li>
+            </ul><!--Side Navigation bar end-->
+
+            <!--Login form dialog Structure -->
+            <form id="login-dialog" class="modal white" method="post">
                 <div class="row">
-                    <!--Column containing UOS logo-->
-                    <div class="col s12 m4">
-                        <a id="logo-container" herf="http://www.sharjah.ac.ae/" class="brand-logo">
-                            <object type="image/svg+xml" data="{{ url_for('static', filename='img/uos_logo.svg') }}"></object>
-                        </a>
+                    <h5 class="blue-grey-text text-darken-4 col s12">Welcome to the New UDC!</h5>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="sid" name="sid" type="text" value="{{request.form.sid}}" class="validate">
+                        <label for="sid">Username</label>
                     </div>
                 </div>
-                <!--Just for a bit of space-->
-                <div class="row"></div>
-            </div>
-        </div><!--Page header end-->
-                
-        <!--Flash messages logic-->
-        {% with messages = get_flashed_messages() %}
-            {% if messages %}
-                {% for message in messages %}
-                    <script>
-                        Materialize.toast({{ message|tojson }}, 5000)
-                    </script>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="pin" name="pin" type="password" value="{{request.form.pin}}" class="validate">
+                        <label for="pin">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12">login</button>
+                    </div>
+                </div>
+            </form><!--Login form dialog end-->
 
+            <!--Flash messages logic start-->
+            {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    {% for message in messages %}
+                        <script>
+                            Materialize.toast({{ message|tojson }}, 5000)
+                        </script>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}<!--Flash messages logic end-->
+        <!--Hidden Structures end-->
+        
         <!--Welcome login form section-->
         <div class="container">
-            <div class="row">
-                <div class="col l6 offset-l3 m8 offset-m2 s12">
-                    <!--Login card start-->
-                    <div class="card">
-                        <div class="card-content">
-                            <div class="row" id="login-card">
-                                <!--Login form start-->
-                                <form class="col s12" method="post">
-                                    <div class="row">
-                                        <h5 class="col s12">Welcome to the New UDC!</h5>
-                                    </div>
-                                    <div class="row">
-                                        <div class="input-field col s12">
-                                            <input id="sid" name="sid" type="text" value="{{request.form.sid}}" class="validate">
-                                            <label for="sid">Username</label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="input-field col s12">
-                                            <input id="pin" name="pin" type="password" value="{{request.form.pin}}" class="validate">
-                                            <label for="pin">Password</label>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col s12">
-                                            <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12">login</button>
-                                        </div>
-                                    </div>
-                                </form><!--Login form end-->
-                            </div>
-                        </div>
-                    </div><!--Login card end-->
-                </div>
-            </div>
             <p>{{data}}</p>
         </div><!--Container end-->
     </body>
