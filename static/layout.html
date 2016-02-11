@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+	<head>
+        <!--Import Google Icon Font-->
+        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import Font Awesome-->
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+		<!--Import materialize.css-->
+		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}" media="screen,projection"/>
+		<!--Import My styles.css-->
+		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+
+		<!--Import jQuery before materialize.js-->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.0.js') }}"></script>
+		<!--Import materialize.js-->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js') }}"></script>
+		<!--Import My scripts.js-->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+		<!--Let browser know website is optimized for mobile-->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+        <!--Setup page title and icon-->
+        <link href="{{ url_for('static', filename='img/uos_icon.png') }}" type="image/png" rel="shortcut icon" />
+        <title>UOS UDC</title>
+	</head>
+
+	<body class="blue-grey lighten-5">
+        <!--Page Navigation bar start-->
+        <nav class="transparent z-depth-0">
+            <div class="nav-wrapper container">
+                <a href="http://uosudc.tk" class="brand-logo">
+                    <object type="image/svg+xml" data="{{ url_for('static', filename='img/uos_logo.svg') }}">Logo</object>
+                    <span class="light-green-text text-darken-2"><b class="blue-grey-text text-darken-4">UOS</b> UDC</span>
+                </a>
+                <ul class="right hide-on-med-and-down">
+                    {% if 'sid' in session %}
+                    <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2">Dashboard</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('general') }}" class="blue-grey-text text-darken-4">General</a></li>
+                    <li><a href="{{ url_for('about') }}" class="blue-grey-text text-darken-4">About</a></li>
+                    {% if 'sid' in session %}
+                    <li><a href="{{ url_for('logout') }}" class="modal-trigger blue-grey-text text-darken-4">Logout</a></li>
+                    {% else %}
+                    <li><a href="#login-dialog" class="modal-trigger light-green-text text-darken-2">Login</a></li>
+                    {% endif %}
+                </ul>
+                <a href="" data-activates="side-bar" class="button-collapse right show-on-medium-and-down">
+                    <i class="material-icons blue-grey-text text-darken-4">view_headline</i>
+                </a>
+            </div>
+        </nav><!--Page Navigation bar end-->
+        
+        <!--Side Navigation bar start-->
+        <ul id="side-bar" class="side-nav blue-grey darken-4">
+            {% if 'sid' in session %}
+            <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('general') }}" class="blue-grey-text text-lighten-5"><i class="material-icons">description</i>GENERAL</a></li>
+            <li><a href="{{ url_for('about') }}" class="blue-grey-text text-lighten-5"><i class="material-icons">info</i>ABOUT</a></li>
+            {% if 'sid' in session %}
+            <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
+            {% else %}
+            <li><a href="#login-dialog" class="modal-trigger light-green-text text-darken-2"><i class="fa fa-sign-in"></i>LOGIN</a></li>
+            {% endif %}
+        </ul><!--Side Navigation bar end-->
+
+        <!--Flash messages logic start-->
+        {% for message in get_flashed_messages() %}
+            <script>Materialize.toast({{ message|tojson }}, 5000)</script>
+        {% endfor %}
+        <!--Flash messages logic end-->
+        
+        <!--Main Body start-->
+        {% block body %} {% endblock %}
+        <!--Main Body end-->
+    </body>
+</html>

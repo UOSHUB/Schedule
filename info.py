@@ -1,18 +1,14 @@
 #!/usr/bin/env python
 
-import mechanize, cookielib
+import mechanize
 from bs4 import BeautifulSoup
 
-br = None
 
 def init_browser():
     # Instantiate browser
     br = mechanize.Browser()
-    # Enable cookie support for urllib2
-    br.set_cookiejar(cookielib.LWPCookieJar())
     # Browser options
     br.set_handle_equiv(True)
-    br.set_handle_gzip(True)
     br.set_handle_redirect(True)
     br.set_handle_referer(True)
     br.set_handle_robots(False)
@@ -35,7 +31,7 @@ def login(sid, pin):
     return br
 
 
-def grab_username():
+def grab_username(br):
     # Enter Personal Information section
     br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu")
     # Get raw html from Directory Profile

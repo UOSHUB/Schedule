@@ -1,0 +1,30 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <!--Login form dialog Structure -->
+    <form id="login-dialog" class="modal white" method="post">
+        <div class="row">
+            <h5 class="blue-grey-text text-darken-4 col s12">Welcome to the New UDC!</h5>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="sid" name="sid" type="text" value="{{request.form.sid}}" class="validate">
+                <label for="sid">Student ID</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="pin" name="pin" type="password" value="{{request.form.pin}}" class="validate">
+                <label for="pin">Password</label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s12">
+                <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12">login</button>
+            </div>
+        </div>
+    </form><!--Login form dialog end-->
+
+    <div class="container">
+    </div>
+{% endblock %}
