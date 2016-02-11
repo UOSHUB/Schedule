@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 
 # import needed libraries
-import os, json
+import os
 from flask import Flask, render_template, flash, request
-from info import get_info
+from info import login, grab_username
 
 # initialize with template folder in /
 app = Flask(__name__, template_folder='')
@@ -12,19 +12,21 @@ app = Flask(__name__, template_folder='')
 @app.route("/", methods=["GET","POST"])
 def index():
     info = ''
-    try:
-        if request.method == "POST":
-            sid = request.form["sid"]
-            pin = request.form["pin"]
-            if sid != '' and pin != '':
-                flash("Welcome " + sid)
-                info = json.dumps(get_info(sid, pin))
-        return render_template("index.html", data=info)
+    # handle if user clicks login
+    if request.method == "POST":
+        sid = request.form["sid"]
+        pin = request.form["pin"]
+        # proceed if input isn't empty
+        if sid != '' and pin != '':
+            # login and check if it succeeded
+            br = login(sid, pin)
+            if br.title() == "Main Menu":
+                flash("Welcome " + grab_username())
+                info = br.title()
+            else:
+                flash("Invalid ID or Password")
 
-    # Temporarily print out any Exception for debugging
-    except Exception as e:
-        flash(e)
-        return render_template("index.html")
+    return render_template("index.html", data=info)
 
 # finalize configurations and run the app
 if __name__ == "__main__":

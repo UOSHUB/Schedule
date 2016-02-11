@@ -34,6 +34,11 @@ nav i {
     font-size: 1.2rem;
 }
 
+#side-bar i {
+    padding-right: 1rem;
+    font-size: 1.4rem;
+}
+
 .blue-grey-text.text-lighten-5:hover {
     color: #263238 !important;
 }
