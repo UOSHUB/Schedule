@@ -1,10 +1,8 @@
 <!doctype html>
 <html>
 	<head>
-        <!--Import Google Icon Font-->
-        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <!--Import Font Awesome-->
-        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
 		<!--Import materialize.css-->
 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}" media="screen,projection"/>
 		<!--Import My styles.css-->
@@ -46,7 +44,7 @@
                     {% endif %}
                 </ul>
                 <a href="" data-activates="side-bar" class="button-collapse right show-on-medium-and-down">
-                    <i class="material-icons blue-grey-text text-darken-4">view_headline</i>
+                    <i class="fa fa-navicon blue-grey-text text-darken-4"></i>
                 </a>
             </div>
         </nav><!--Page Navigation bar end-->
@@ -54,14 +52,14 @@
         <!--Side Navigation bar start-->
         <ul id="side-bar" class="side-nav blue-grey darken-4">
             {% if 'sid' in session %}
-            <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2"><i class="material-icons">dashboard</i>DASHBOARD</a></li>
-            {% endif %}
-            <li><a href="{{ url_for('general') }}" class="blue-grey-text text-lighten-5"><i class="material-icons">description</i>GENERAL</a></li>
-            <li><a href="{{ url_for('about') }}" class="blue-grey-text text-lighten-5"><i class="material-icons">info</i>ABOUT</a></li>
-            {% if 'sid' in session %}
-            <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
+            <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2"><i class="fa fa-tachometer"></i>DASHBOARD</a></li>
             {% else %}
             <li><a href="#login-dialog" class="modal-trigger light-green-text text-darken-2"><i class="fa fa-sign-in"></i>LOGIN</a></li>
+            {% endif %}
+            <li><a href="{{ url_for('general') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-database"></i>GENERAL</a></li>
+            <li><a href="{{ url_for('about') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-info-circle"></i>ABOUT</a></li>
+            {% if 'sid' in session %}
+            <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
             {% endif %}
         </ul><!--Side Navigation bar end-->
 

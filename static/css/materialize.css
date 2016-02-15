@@ -2766,8 +2766,7 @@ video.responsive-video {
 }
 
 .breadcrumb i,
-.breadcrumb [class^="mdi-"], .breadcrumb [class*="mdi-"],
-.breadcrumb i.material-icons {
+.breadcrumb [class^="mdi-"], .breadcrumb [class*="mdi-"] {
   display: inline-block;
   float: left;
   font-size: 24px;
@@ -2778,7 +2777,6 @@ video.responsive-video {
   color: rgba(255, 255, 255, 0.7);
   vertical-align: top;
   display: inline-block;
-  font-family: 'Material Icons';
   font-weight: normal;
   font-style: normal;
   font-size: 25px;
@@ -3357,25 +3355,9 @@ nav ul a span.badge {
   padding: 0 !important;
 }
 
-/* This is needed for some mobile phones to display the Google Icon font properly */
-.material-icons {
-  text-rendering: optimizeLegibility;
-  -webkit-font-feature-settings: 'liga';
-     -moz-font-feature-settings: 'liga';
-          font-feature-settings: 'liga';
-}
-
-@font-face {
-  font-family: "Material-Design-Icons";
-  src: url("../font/material-design-icons/Material-Design-Icons.eot?#iefix") format("embedded-opentype"), url("../font/material-design-icons/Material-Design-Icons.woff2") format("woff2"), url("../font/material-design-icons/Material-Design-Icons.woff") format("woff"), url("../font/material-design-icons/Material-Design-Icons.ttf") format("truetype"), url("../font/material-design-icons/Material-Design-Icons.svg#Material-Design-Icons") format("svg");
-  font-weight: normal;
-  font-style: normal;
-}
-
 [class^="mdi-"], [class*="mdi-"] {
   speak: none;
   display: inline-block;
-  font-family: "Material-Design-Icons";
   font-style: normal;
   font-weight: normal;
   font-variant: normal;
@@ -7315,8 +7297,7 @@ nav a {
 }
 
 nav i,
-nav [class^="mdi-"], nav [class*="mdi-"],
-nav i.material-icons {
+nav [class^="mdi-"], nav [class*="mdi-"] {
   display: block;
   font-size: 2rem;
   height: 56px;
@@ -8593,14 +8574,6 @@ a.waves-effect .waves-ripple {
   border-radius: 50%;
 }
 
-.chip i.material-icons {
-  cursor: pointer;
-  float: right;
-  font-size: 16px;
-  line-height: 32px;
-  padding-left: 8px;
-}
-
 .materialboxed {
   display: block;
   cursor: -webkit-zoom-in;
@@ -9002,8 +8975,7 @@ textarea.materialize-textarea + label:after {
 }
 
 .input-field input[type=search]:focus + label i,
-.input-field input[type=search]:focus ~ .mdi-navigation-close,
-.input-field input[type=search]:focus ~ .material-icons {
+.input-field input[type=search]:focus ~ .mdi-navigation-close {
   color: #444;
 }
 
@@ -9011,8 +8983,7 @@ textarea.materialize-textarea + label:after {
   left: 1rem;
 }
 
-.input-field input[type=search] ~ .mdi-navigation-close,
-.input-field input[type=search] ~ .material-icons {
+.input-field input[type=search] ~ .mdi-navigation-close {
   position: absolute;
   top: 0;
   right: 1rem;
