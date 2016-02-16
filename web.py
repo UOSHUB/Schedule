@@ -15,7 +15,7 @@ app.secret_key = 'development key'
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if 'sid' in session:
+        if 'sid' in session and 'pin' in session:
             return f(*args, **kwargs)
         else:
             flash('You need to login first!')
@@ -25,28 +25,39 @@ def login_required(f):
 # Home page handling
 @app.route("/", methods=["GET","POST"])
 def index():
-    # handle if user clicks login
+    # If user is logged in goto dashboard
+    if 'sid' in session and 'pin' in session:
+        return redirect(url_for('dashboard'))
+    # Store login info and go to dashboard
     if request.method == "POST":
-        sid = request.form["sid"]
-        pin = request.form["pin"]
-        # proceed if input isn't empty
-        if sid != '' and pin != '':
-            # login and check if it succeeded
-            br = login(sid, pin)
-            if br.title() == "Main Menu":
-                flash("Welcome " + grab_username(br))
-                session['sid'] = sid
-                return redirect(url_for('dashboard'))
-            else:
-                # Flash an error if it fails
-                flash("Invalid ID or Password")
-    # Return index page if it didn't login
+        session['sid'] = request.form["sid"]
+        session['pin'] = request.form["pin"]
+        session['post'] = True
+        return redirect(url_for('dashboard'))
+    # If no login, return index page
     return render_template("index.html")
 
 # Dashboard page code
 @app.route("/dashboard/")
 @login_required
 def dashboard():
+    # Only if user posted login info
+    if 'post' in session:
+        session.pop('post', None)
+        # login and check if it succeeded
+        br = login(session['sid'], session['pin'])
+        if br.title() == "Main Menu":
+            session['name'] = grab_username(br)
+            flash("Welcome " + session['name'])
+        else: # If it fails to login
+            # Remove credentials from session
+            session.pop('sid', None)
+            session.pop('pin', None)
+            # Flash an error and go back home
+            flash("Invalid ID or Password")
+            return redirect(url_for('index'))
+    else:
+        flash("Welcome back " + session['name'])
     return render_template("dashboard.html")
 
 
@@ -54,6 +65,7 @@ def dashboard():
 @login_required
 def logout():
     session.pop('sid', None)
+    session.pop('pin', None)
     flash('See you soon ^_^')
     return redirect(url_for('index'))
 

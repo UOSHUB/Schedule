@@ -20,7 +20,7 @@
 
         <!--Setup page title and icon-->
         <link href="{{ url_for('static', filename='img/uos_icon.png') }}" type="image/png" rel="shortcut icon" />
-        <title>UOS UDC</title>
+        <title>{% block title %}{% endblock %}UOS UDC</title>
 	</head>
 
 	<body class="blue-grey lighten-5">
@@ -48,7 +48,7 @@
                 </a>
             </div>
         </nav><!--Page Navigation bar end-->
-        
+
         <!--Side Navigation bar start-->
         <ul id="side-bar" class="side-nav blue-grey darken-4">
             {% if 'sid' in session %}
@@ -70,7 +70,7 @@
         <!--Flash messages logic end-->
         
         <!--Main Body start-->
-        {% block body %} {% endblock %}
+        {% block body %}{% endblock %}
         <!--Main Body end-->
     </body>
 </html>
