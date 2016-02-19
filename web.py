@@ -3,7 +3,7 @@
 # import needed libraries
 import os
 from flask import Flask, render_template, flash, request, redirect, url_for, session
-from info import login, grab_username
+from info import login, grab_username, grab_schedule
 from functools import wraps
 
 # initialize with template folder in ./static
@@ -49,6 +49,8 @@ def dashboard():
         if br.title() == "Main Menu":
             session['name'] = grab_username(br)
             flash("Welcome " + session['name'])
+            schedule = grab_schedule(br)
+            return render_template("dashboard.html", data=schedule)
         else: # If it fails to login
             # Remove credentials from session
             session.pop('sid', None)
@@ -58,7 +60,7 @@ def dashboard():
             return redirect(url_for('index'))
     else:
         flash("Welcome back " + session['name'])
-    return render_template("dashboard.html")
+        return render_template("dashboard.html")
 
 
 @app.route("/logout/")

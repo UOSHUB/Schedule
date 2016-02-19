@@ -4,6 +4,15 @@
 
 {% block body %}
     <div class="container">
-        <p>{{data}}</p>
+        {% if data %}
+            {% for key, value in data.iteritems() %}
+                <p>{{key}}</p>
+                <p>
+                    {% for info in value %}
+                        {{info}}
+                    {% endfor %}
+                </p>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

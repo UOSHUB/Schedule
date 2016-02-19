@@ -14,6 +14,23 @@ nav i {
     font-size: 1.8rem !important;
 }
 
+#beta {
+    font-size: 0.8rem;
+    color: #006064;
+    display: inline-flex;
+    position: relative;
+    bottom: 1rem;
+    right: 0.5rem;
+    /* Safari */
+    -webkit-transform: rotate(30deg);
+    /* Firefox */
+    -moz-transform: rotate(30deg);
+    /* IE */
+    -ms-transform: rotate(30deg);
+    /* Opera */
+    -o-transform: rotate(30deg);
+}
+
 #login-dialog {
     width: 24rem;
 	height: auto;
