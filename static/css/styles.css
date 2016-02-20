@@ -14,37 +14,20 @@ nav i {
     font-size: 1.8rem !important;
 }
 
-#beta {
-    font-size: 0.8rem;
-    color: #006064;
-    display: inline-flex;
-    position: relative;
-    bottom: 1rem;
-    right: 0.5rem;
-    /* Safari */
-    -webkit-transform: rotate(30deg);
-    /* Firefox */
-    -moz-transform: rotate(30deg);
-    /* IE */
-    -ms-transform: rotate(30deg);
-    /* Opera */
-    -o-transform: rotate(30deg);
-}
-
 #login-dialog {
     width: 24rem;
 	height: auto;
-    padding: 20px;
+    padding: 1.4rem;
 }
 
-#login-dialog h5, #sid{
+#login-dialog h5, #sid, #pin{
 	font-weight: 300;
 	margin-bottom: 0;
 }
 
 #login-dialog button {
-	margin-top: 24px;
-    margin-bottom: -8px;
+	margin-top: 2rem;
+    margin-bottom: -0.5rem;
 }
 
 #side-bar a {

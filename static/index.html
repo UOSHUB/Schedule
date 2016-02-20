@@ -8,22 +8,30 @@
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <input id="sid" name="sid" type="text" value="{{request.form.sid}}" required>
+                <input id="sid" name="sid" type="text" value="{{request.form.sid}}" placeholder="E.g. u14111000" required>
                 <label for="sid">Student ID</label>
             </div>
         </div>
         <div class="row">
             <div class="input-field col s12">
-                <input id="pin" name="pin" type="password" value="{{request.form.pin}}" required>
+                <input id="pin" name="pin" type="password" value="{{request.form.pin}}" placeholder="Same as myUDC" required>
                 <label for="pin">Password</label>
             </div>
         </div>
         <div class="row">
             <div class="col s12">
-                <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12">login</button>
+                <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12" onclick="loggingIn()">login</button>
             </div>
         </div>
     </form><!--Login form dialog end-->
+
+    <!--Open login modal if login fail message flashed-->
+    {% for message in get_flashed_messages() %}
+        {% if message == "Invalid ID or Password" %}
+            <script>login.click()</script>
+        {% endif %}
+    {% endfor %}
+    <!--Open login modal end-->
 
     <div class="container">
     </div>

@@ -1,18 +1,11 @@
+// Configure Materialize components
 $(document).ready(function(){
-    // Initialize login modal
-	$('.modal-trigger').leanModal({
-		dismissible: true,
-		opacity: 0.2,
-		in_duration: 350,
-		out_duration: 250
-    });
     // Initialize sidebar for small screens
     $('.button-collapse').sideNav({
         menuWidth: 200,
         edge: 'right',
         closeOnClick: true
-        }
-    );
+    });
 });
 
 /* This method hides the sidebar when
@@ -37,3 +30,20 @@ $(window).resize(function() {
     // When screen is small set sidebar as visible
     } else if (!visible) visible = true;
 });
+
+// Display progress to user while waiting, it'll
+function loggingIn() {
+    // Check if fields aren't empty
+    if(pin.value != '' && sid.value != '') {
+        // Display Loading for 5 sec
+        Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Loading...', 7500)
+        // Display Almost done for the next 5 sec
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Almost done....', 7500)", 7600)
+        // Display Preparing your dashboard for the next 5 sec
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Preparing your dashboard...', 7500)", 15200)
+        // Display Something went wrong for the next 5 sec
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Something went wrong!..', 7500)", 22800)
+        // Finally if it took all this time, display Please refresh the page for the next 20 sec
+        setTimeout("Materialize.toast('<i class=\"fa fa-exclamation-triangle fa-2x\"></i>&nbsp;&nbsp;&nbsp;Please refresh the page!!', 30000)", 30400)
+    }
+}

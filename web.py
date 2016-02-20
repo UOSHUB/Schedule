@@ -66,9 +66,10 @@ def dashboard():
 @app.route("/logout/")
 @login_required
 def logout():
+    flash('See you soon ' + session['name'] + ' ^_^')
+    session.pop('name', None)
     session.pop('sid', None)
     session.pop('pin', None)
-    flash('See you soon ^_^')
     return redirect(url_for('index'))
 
 
