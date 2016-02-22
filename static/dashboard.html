@@ -9,7 +9,9 @@
                 <p>{{key}}</p>
                 <p>
                     {% for info in value %}
-                        {{info}}
+                        {% for detail in info %}
+                            {{detail}}
+                        {% endfor %}
                     {% endfor %}
                 </p>
             {% endfor %}
