@@ -3,18 +3,31 @@
 {% block title %}Dashboard - {% endblock %}
 
 {% block body %}
+    <div class="row"></div>
     <div class="container">
-        {% if data %}
-            {% for key, value in data.iteritems() %}
-                <p>{{key}}</p>
-                <p>
-                    {% for info in value %}
-                        {% for detail in info %}
-                            {{detail}}
-                        {% endfor %}
-                    {% endfor %}
-                </p>
-            {% endfor %}
-        {% endif %}
+        <table>
+            <tr>
+                <th>&nbsp;</th>
+                <th>Sun</th>
+                <th>Mon</th>
+                <th>Tue</th>
+                <th>Wed</th>
+                <th>Thu</th>
+            </tr>
+            <tr>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+                <td>&nbsp;</td>
+            </tr>
+        </table>
     </div>
+
+    {% if data %}
+        {% for key, course in data.iteritems() %}
+            <!--Real stuff are about to happen :)-->
+        {% endfor %}
+    {% endif %}
 {% endblock %}

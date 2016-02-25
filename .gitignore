@@ -1,0 +1,14 @@
+#
+# Igonre all interpreted python byte code
+#
+*.pyc
+
+#
+# Ignore my python test file
+#
+test.py
+
+#
+# Ignore PyCharm IDE project folder
+#
+.idea

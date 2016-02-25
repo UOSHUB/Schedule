@@ -59,7 +59,7 @@ def dashboard():
     try:
         schedule = info.grab_schedule()
     except Exception:
-        schedule = {"Error:": [["Session Expired!"]]}
+        schedule = {"Error!": []}
     return render_template("dashboard.html", data=schedule)
 
 

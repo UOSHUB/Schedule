@@ -3,14 +3,18 @@
 # import needed libraries
 import mechanize
 from bs4 import BeautifulSoup
+from course import Course
 
 
 # A class to manage information flow
 class Info:
-
     # Initializes a Mechanize Browser object
     def __init__(self):
-        # Instantiate browser
+        # Instantiate an empty browser holder
+        self.br = None
+
+    def initialize(self):
+        # Instantiate mechanize browser
         self.br = mechanize.Browser()
         # Browser options
         self.br.set_handle_equiv(True)
@@ -21,6 +25,7 @@ class Info:
 
     # Login to official UOS UDC
     def login(self, sid, pin):
+        self.initialize()
         # Open original UOS UDC url
         self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_WWWLogin")
         # Fill up login form and submit
@@ -68,8 +73,8 @@ class Info:
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
                 # Store courses info as: schedule[number] = [name, section, CRN, prof_name, prof_email, credit_hours]
-                schedule[key] = [[caption[0], caption[2], row[1].string, row[3].a.get("target"),
-                                 row[3].a.get("href").split(':')[1], row[5].string.split()[0][0]]]
+                schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
+                                       row[3].a.get("href").split(':')[1], row[5].string.split()[0][0])
         # Return to Student -> Registration section
         self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
         # Enter Student Detail Schedule page
@@ -100,6 +105,6 @@ class Info:
                     # Set where room should be that room info is within location
                     room = "Check in location"
                 # Add more info to schedule as: [[days in chars], [start/end class time], [building, room]]
-                schedule[row[0].string].extend([list(row[4].string), row[5].string.split(" - "), [location[0], room]])
+                schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
         # Return the complete student schedule
         return schedule
