@@ -3,31 +3,19 @@
 {% block title %}Dashboard - {% endblock %}
 
 {% block body %}
-    <div class="row"></div>
     <div class="container">
-        <table>
-            <tr>
-                <th>&nbsp;</th>
-                <th>Sun</th>
-                <th>Mon</th>
-                <th>Tue</th>
-                <th>Wed</th>
-                <th>Thu</th>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
+        <div class="row"></div>
+        <div class="row" style="height: 100%">
+            <div class="col s12" style="height: 100%">
+                <div class="card-panel" style="height: 100%">
+                    {% if info %}
+                        {% set schedule = info.grab_schedule() %}
+                        {% for key, course in schedule.iteritems() %}
+                            <p>{{key}} : {{ course.name }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
     </div>
-
-    {% if data %}
-        {% for key, course in data.iteritems() %}
-            <!--Real stuff are about to happen :)-->
-        {% endfor %}
-    {% endif %}
 {% endblock %}

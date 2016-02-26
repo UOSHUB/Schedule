@@ -8,10 +8,11 @@ from course import Course
 
 # A class to manage information flow
 class Info:
-    # Initializes a Mechanize Browser object
     def __init__(self):
         # Instantiate an empty browser holder
         self.br = None
+        # Declare schedule as member variable
+        self.schedule = {}
 
     def initialize(self):
         # Instantiate mechanize browser
@@ -26,7 +27,7 @@ class Info:
     # Login to official UOS UDC
     def login(self, sid, pin):
         self.initialize()
-        # Open original UOS UDC url
+        # Open original UOS UDC login url
         self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_WWWLogin")
         # Fill up login form and submit
         self.br.select_form(nr=0)
@@ -47,20 +48,27 @@ class Info:
 
     # Returns student's schedule
     def grab_schedule(self):
-        # Enter Student -> Registration section
-        self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
-        # Enter Student Detail Schedule page
-        self.br.open(self.br.click_link(url="/prod_enUS/bwskfshd.P_CrseSchdDetl"))
-        # Select current semester to be displayed
+        # If schedule is filled already, directly return it
+        if self.schedule != {}:
+            return self.schedule
+        # When the login session has expired, it need to login again
         try:
+            # Enter Student -> Registration section
+            self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
+            # Enter Student Detail Schedule page
+            self.br.open(self.br.click_link(url="/prod_enUS/bwskfshd.P_CrseSchdDetl"))
+        except:
+            return {"Error!": []}
+        # When requesting the above link twice, the below form won't exist
+        try:
+            # Select current semester to be displayed
             self.br.select_form(nr=1)
             self.br.submit()
         except mechanize._mechanize.FormNotFoundError:
             pass
         # Use BeautifulSoup to extract info from raw html
         soup = BeautifulSoup(self.br.response().read(), "lxml")
-        # Initialize schedule dictionary that'll hold course details
-        schedule = {}
+        # Declare course key
         key = None
         # Loop through tables with datadisplaytable class
         for table in soup.find_all("table", class_="datadisplaytable"):
@@ -73,8 +81,8 @@ class Info:
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
                 # Store courses info as: schedule[number] = [name, section, CRN, prof_name, prof_email, credit_hours]
-                schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
-                                       row[3].a.get("href").split(':')[1], row[5].string.split()[0][0])
+                self.schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
+                                       row[3].a.get("href").split(':')[1], int(row[5].string.split()[0][0]))
         # Return to Student -> Registration section
         self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
         # Enter Student Detail Schedule page
@@ -105,6 +113,16 @@ class Info:
                     # Set where room should be that room info is within location
                     room = "Check in location"
                 # Add more info to schedule as: [[days in chars], [start/end class time], [building, room]]
-                schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
+                self.schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
         # Return the complete student schedule
-        return schedule
+        return self.schedule
+
+    # Get lowest course time
+    @staticmethod
+    def min_time():
+        return Course.min_time
+
+    # Get highest course time
+    @staticmethod
+    def max_time():
+        return Course.max_time

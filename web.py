@@ -18,7 +18,7 @@ info = Info()
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if "sid" in session:
+        if "name" in session:
             return f(*args, **kwargs)
         else:
             flash("You need to login first!")
@@ -30,7 +30,7 @@ def login_required(f):
 @app.route("/", methods=["GET", "POST"])
 def index():
     # If logged in, flash welcome back & go to dashboard
-    if "sid" in session:
+    if "name" in session:
         flash("Welcome back " + session["name"])
         return redirect(url_for("dashboard"))
     # Store login info and go to dashboard
@@ -38,8 +38,7 @@ def index():
         # login and check if it succeeded
         info.login(request.form["sid"], request.form["pin"])
         if info.br.title() == "Main Menu":
-            # If logged in, store sid and name in session
-            session["sid"] = request.form["sid"]
+            # If logged in, store student name in session
             session["name"] = info.grab_username()
             # Flash welcoming message and go to dashboard
             flash("Welcome " + session["name"])
@@ -55,12 +54,7 @@ def index():
 @app.route("/dashboard/")
 @login_required
 def dashboard():
-    # Try to grab student schedule and go to dashboard
-    try:
-        schedule = info.grab_schedule()
-    except Exception:
-        schedule = {"Error!": []}
-    return render_template("dashboard.html", data=schedule)
+    return render_template("dashboard.html", info=info)
 
 
 @app.route("/logout/")
@@ -69,7 +63,6 @@ def logout():
     # Flash bye message, delete student info and go home
     flash("See you soon " + session["name"] + " ^_^")
     session.pop("name", None)
-    session.pop("sid", None)
     return redirect(url_for("index"))
 
 
