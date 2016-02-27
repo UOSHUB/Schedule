@@ -5,13 +5,35 @@
 {% block body %}
     <div class="container">
         <div class="row"></div>
-        <div class="row" style="height: 100%">
-            <div class="col s12" style="height: 100%">
-                <div class="card-panel" style="height: 100%">
-                    {% if info %}
-                        {% set schedule = info.grab_schedule() %}
+        <div class="row" id="card">
+            <div class="col s12">
+                <div class="card-panel">
+                    
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    
+                    {% if student %}
+                        {% set schedule = student.get_schedule() %}
+                        {% set height = student.hour_length() %}
+                        {% for count in student.hour_count_array() %}
+                            <div class="hour" style="height: {{count * height}}%"></div>
+                        {% endfor %}
+                        {% set colors = ["red", "teal", "green", "orange", "purple", "light-blue", "teal", "yellow", "deep-orange", "blue"] %}
+                        {% set count = 0 %}
                         {% for key, course in schedule.iteritems() %}
-                            <p>{{key}} : {{ course.name }}</p>
+                            {% if key != "Error!" %}
+                                {% for left, top in course.coordinates(20, height) %}
+                                    <div class="class {{colors[count]}}"
+                                         style="width: 20%; height: {{course.length()*height}}%; left: {{left}}%; top: {{top}}%">
+                                        {{course.name}}<br>
+                                        Tought by: {{course.prof_name}}<br>
+                                        Location: {{course.location[0]}} {{course.location[1]}}
+                                    </div>
+                                {% endfor %}
+                            {% endif  %}
+                            {% set count = count + 1 %}
                         {% endfor %}
                     {% endif %}
                 </div>

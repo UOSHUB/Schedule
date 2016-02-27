@@ -7,12 +7,10 @@ from course import Course
 
 
 # A class to manage information flow
-class Info:
+class Scrape:
     def __init__(self):
         # Instantiate an empty browser holder
         self.br = None
-        # Declare schedule as member variable
-        self.schedule = {}
 
     def initialize(self):
         # Instantiate mechanize browser
@@ -48,9 +46,6 @@ class Info:
 
     # Returns student's schedule
     def grab_schedule(self):
-        # If schedule is filled already, directly return it
-        if self.schedule != {}:
-            return self.schedule
         # When the login session has expired, it need to login again
         try:
             # Enter Student -> Registration section
@@ -68,7 +63,8 @@ class Info:
             pass
         # Use BeautifulSoup to extract info from raw html
         soup = BeautifulSoup(self.br.response().read(), "lxml")
-        # Declare course key
+        # Declare course schedule & key holders
+        schedule = {}
         key = None
         # Loop through tables with datadisplaytable class
         for table in soup.find_all("table", class_="datadisplaytable"):
@@ -81,7 +77,7 @@ class Info:
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
                 # Store courses info as: schedule[number] = [name, section, CRN, prof_name, prof_email, credit_hours]
-                self.schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
+                schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
                                        row[3].a.get("href").split(':')[1], int(row[5].string.split()[0][0]))
         # Return to Student -> Registration section
         self.br.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
@@ -113,16 +109,6 @@ class Info:
                     # Set where room should be that room info is within location
                     room = "Check in location"
                 # Add more info to schedule as: [[days in chars], [start/end class time], [building, room]]
-                self.schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
+                schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
         # Return the complete student schedule
-        return self.schedule
-
-    # Get lowest course time
-    @staticmethod
-    def min_time():
-        return Course.min_time
-
-    # Get highest course time
-    @staticmethod
-    def max_time():
-        return Course.max_time
+        return schedule

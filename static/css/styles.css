@@ -1,4 +1,6 @@
-html, body {
+html, body,
+#card, #card .col,
+#card .card-panel {
     height: 100%;
 }
 
@@ -10,7 +12,7 @@ html, body {
 }
 
 nav object {
-    height: 1.8rem;
+    height: 2rem;
     pointer-events: none;
 }
 
@@ -52,4 +54,39 @@ nav .button-collapse > i {
 
 .blue-grey-text.text-lighten-5:hover {
     color: #263238;
+}
+
+.day {
+    width: 20%;
+    height: 100%;
+    float: left;
+    border-right: 1px solid #e0e0e0;
+}
+
+.hour {
+    position: relative;
+    width: 100%;
+    border-bottom: 1px solid #eee;
+}
+
+.ds {
+    width: 5%;
+}
+
+.hs {
+    height: 10%;
+}
+
+.class {
+    position: absolute;
+    padding: 0.8rem;
+    color: #fff;
+    cursor: pointer;
+    overflow:hidden;
+}
+
+#card .card-panel {
+    padding: 0;
+    margin: 0;
+    position: relative;
 }
