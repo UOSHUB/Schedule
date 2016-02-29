@@ -2,6 +2,7 @@
 
 # import needed libraries
 from __future__ import division
+from datetime import date, timedelta
 from scraper import Scrape
 from course import Course
 
@@ -75,5 +76,32 @@ class Student:
         return count_array
 
     # Get length of an hour in schedule
-    def hour_length(self):
-        return 100 / self.hour_count()
+    def hour_length(self, top_start):
+        return (100 - top_start) / self.hour_count()
+
+    # Get today as int: (Sun = 0, Mon = 1 .... Sat = 6)
+    def get_today_int(self):
+        # Originally it is: (Sun = 7, Mon = 1 .... Sat = 6)
+        day_int = date.isoweekday(date.today())
+        # To sort it my way, change Sun from 7 to 0
+        if day_int == 7:
+            return 0
+        # Otherwise it's the correct index
+        return day_int
+
+    # Get an array of weekday dates: ["MM/DD"]
+    def get_dates(self):
+        dates = []
+        today_int = self.get_today_int()
+        # Check if it's weekday or weekend
+        if today_int < 5:
+            # If it's a weekday, get current week
+            for count in range(0, 5):
+                # Add days by shifting week according to today's int
+                dates.extend([(date.today() - timedelta(today_int - count)).strftime("%m/%d")])
+        else:
+            # If it's the weekend, get next week
+            for count in range(0, 5):
+                # Add days by shifting week according to today's int and a week after
+                dates.extend([(date.today() + timedelta(7 - (today_int - count))).strftime("%m/%d")])
+        return dates

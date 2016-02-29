@@ -1,16 +1,12 @@
+/* Things that take up all screen height */
 html, body,
 #card, #card .col,
 #card .card-panel {
     height: 100%;
 }
+/* Full height end */
 
-.container {
-    width: 85%;
-    height: 85%;
-    max-width: 1440px;
-    max-height: 810px;
-}
-
+/* Navigation bar start */
 nav object {
     height: 2rem;
     pointer-events: none;
@@ -26,7 +22,9 @@ nav span {
 nav .button-collapse > i {
     font-size: 1.8rem;
 }
+/* Navigation bar end */
 
+/* Login dialog start */
 #login-dialog {
     width: 24rem;
 	height: auto;
@@ -42,7 +40,9 @@ nav .button-collapse > i {
 	margin-top: 2rem;
     margin-bottom: -0.5rem;
 }
+/* Login dialog end */
 
+/* Side bar start */
 #side-bar a {
     font-size: 1.2rem;
 }
@@ -55,38 +55,19 @@ nav .button-collapse > i {
 .blue-grey-text.text-lighten-5:hover {
     color: #263238;
 }
+/* Side bar end */
 
-.day {
-    width: 20%;
-    height: 100%;
-    float: left;
-    border-right: 1px solid #e0e0e0;
+/* Content container start */
+.container {
+    width: 85%;
+    height: 85%;
+    max-width: 1440px;
+    max-height: 810px;
 }
 
-.hour {
-    position: relative;
-    width: 100%;
-    border-bottom: 1px solid #eee;
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
 }
-
-.ds {
-    width: 5%;
-}
-
-.hs {
-    height: 10%;
-}
-
-.class {
-    position: absolute;
-    padding: 0.8rem;
-    color: #fff;
-    cursor: pointer;
-    overflow:hidden;
-}
-
-#card .card-panel {
-    padding: 0;
-    margin: 0;
-    position: relative;
-}
+/* Content container end */

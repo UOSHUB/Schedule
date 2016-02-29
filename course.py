@@ -44,11 +44,13 @@ class Course:
         return (self.time[1] - self.time[0]) / 60
 
     # Returns left, top positioning for course occurrences
-    def coordinates(self, width, height):
+    def coordinates(self, width, height, left_start, top_start):
         points = []
         for day in self.days:
-            # left: day column number * column width, top: row height * (course start - schedule bottom) in hours
-            points.extend([[self.switch(day) * width, height * (self.time[0] - Course.min_time + 30) / 60]])
+            # left: left start + day column number * column width,
+            points.extend([[left_start + self.switch(day) * width,
+                            # top: top start + row height * (course start - schedule bottom) in hours
+                            top_start + height * (self.time[0] - Course.min_time + 30) / 60]])
         return points
 
     # Switch alternative to link days letters with values

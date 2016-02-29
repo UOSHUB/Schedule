@@ -1,5 +1,10 @@
 {% extends "layout.html" %}
 
+{% block head %}
+    <!--Import specific dashboard.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
+{% endblock %}
+
 {% block title %}Dashboard - {% endblock %}
 
 {% block body %}
@@ -9,14 +14,16 @@
             <div class="col s12">
                 <div class="card-panel">
                     
+                    <div class="day hhead"></div>
                     <div class="day"></div>
                     <div class="day"></div>
                     <div class="day"></div>
                     <div class="day"></div>
                     
+                    <div class="days-head"></div>
                     {% if student %}
                         {% set schedule = student.get_schedule() %}
-                        {% set height = student.hour_length() %}
+                        {% set height = student.hour_length(5) %}
                         {% for count in student.hour_count_array() %}
                             <div class="hour" style="height: {{count * height}}%"></div>
                         {% endfor %}
@@ -24,18 +31,23 @@
                         {% set count = 0 %}
                         {% for key, course in schedule.iteritems() %}
                             {% if key != "Error!" %}
-                                {% for left, top in course.coordinates(20, height) %}
+                                {% for left, top in course.coordinates(19, height, 5, 5) %}
                                     <div class="class {{colors[count]}}"
-                                         style="width: 20%; height: {{course.length()*height}}%; left: {{left}}%; top: {{top}}%">
-                                        {{course.name}}<br>
-                                        Tought by: {{course.prof_name}}<br>
-                                        Location: {{course.location[0]}} {{course.location[1]}}
+                                         style="width: calc(19% - 1px); height: {{course.length()*height}}%; left: {{left}}%; top: {{top}}%">
+                                        <span class="course-name">{{course.name}}</span><br>
+                                        <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
+                                        <i class="fa fa-map-marker fa-fw"></i> {{course.location[0]}} {{course.location[1]}}
                                     </div>
                                 {% endfor %}
                             {% endif  %}
                             {% set count = count + 1 %}
                         {% endfor %}
                     {% endif %}
+                    {% set days = ["Sun", "Mon", "Tue", "Wed", "Thu"] %}
+                    {% set dates = student.get_dates() %}
+                    {% for count in range(0, 5) %}
+                        <div class="day-label blue-grey-text text-darken-2" style="left: {{5 + count*19}}%">{{days[count]}} {{dates[count]}}</div>
+                    {% endfor %}
                 </div>
             </div>
         </div>

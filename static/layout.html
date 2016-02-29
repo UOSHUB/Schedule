@@ -5,8 +5,9 @@
         <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
 		<!--Import materialize.css-->
 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}" media="screen,projection"/>
-		<!--Import My styles.css-->
-		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"/>
+		<!--Import specific layout.css-->
+		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"/>
+        {% block head %}{% endblock %}
 
 		<!--Import jQuery before materialize.js-->
 		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-2.2.0.js') }}"></script>
