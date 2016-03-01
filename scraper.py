@@ -107,8 +107,9 @@ class Scrape:
                     # Store the whole location string as is
                     location = [row[6].string]
                     # Set where room should be that room info is within location
-                    room = "Check in location"
+                    room = ""
                 # Add more info to schedule as: [[days in chars], [start/end class time], [building, room]]
-                schedule[row[0].string].set_others(list(row[4].string), row[5].string.split(" - "), [location[0], room])
+                schedule[row[0].string].set_other_details(row[1].string, list(row[4].string),
+                                                          row[5].string.split(" - "), [location[0], room])
         # Return the complete student schedule
         return schedule

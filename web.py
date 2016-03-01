@@ -3,7 +3,7 @@
 # import needed libraries
 import os
 from flask import Flask, render_template, flash, request, redirect, url_for, session
-from student import Student
+from interface import Interface
 from functools import wraps
 
 # initialize with template folder in ./static
@@ -11,7 +11,7 @@ app = Flask(__name__, template_folder="static")
 # configure security key
 app.secret_key = "development key"
 # instantiate an info object
-student = Student()
+interface = Interface()
 
 
 # login required decorator
@@ -36,9 +36,9 @@ def index():
     # Store login info and go to dashboard
     if request.method == "POST":
         # login and check if it succeeded
-        if student.verify(request.form["sid"], request.form["pin"]):
+        if interface.verify_login(request.form["sid"], request.form["pin"]):
             # If logged in, store student name in session
-            session["name"] = student.get_name()
+            session["name"] = interface.get_name()
             # Flash welcoming message and go to dashboard
             flash("Welcome " + session["name"])
             return redirect(url_for("dashboard"))
@@ -53,7 +53,7 @@ def index():
 @app.route("/dashboard/")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", student=student)
+    return render_template("dashboard.html", interface=interface)
 
 
 @app.route("/logout/")
@@ -62,7 +62,7 @@ def logout():
     # Flash bye message, delete student info and go home
     flash("See you soon " + session["name"] + " ^_^")
     session.pop("name", None)
-    student.reinitialize()
+    interface.empty_schedule()
     return redirect(url_for("index"))
 
 

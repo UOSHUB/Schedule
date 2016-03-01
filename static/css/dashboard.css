@@ -9,7 +9,7 @@
     width: 19%;
     height: 100%;
     float: left;
-    border-right: 1px solid #e0e0e0;
+    border-right: 1px solid #cfd8dc;
 }
 
 .days-head {
@@ -17,8 +17,7 @@
     position: relative;
     width: calc(95% + 1px);
     margin-left: calc(5% - 1px);
-    background-color: #e8f5e9;
-    border-bottom: 1px solid #e0e0e0;
+    border-bottom: 1px solid #cfd8dc;
     border-radius: 2px;
 }
 
@@ -36,30 +35,41 @@
     position: relative;
     width: 95%;
     margin-left: 5%;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #cfd8dc;
 }
 
 .hhead {
     width: 5%;
-    background-color: #e8f5e9;
     border-radius: 2px;
 }
 
+.hour-label {
+    position: absolute;
+    width: 5%;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
 .class {
     position: absolute;
-    padding: 0.8rem;
+    padding: 0.5rem 0.5rem 0.7rem 0.7rem;
     color: #fff;
     cursor: pointer;
     overflow: hidden;
     word-wrap: break-word;
     box-shadow: inset 0 0 10rem 2rem rgba(0, 0, 0, 0.1);
-    border-radius: 3px;
+    border-radius: 2px;
 }
 
 @media only screen and (max-width: 600px) {
     .class {
-        padding: 0.2rem 0.2rem 0.4rem 0.4rem;
+        padding: 0.2rem 0.2rem 0.3rem 0.3rem;
+        font-size: 0.8rem;
+    }
+    .hour-label,
+    .day-label {
         font-size: 0.9rem;
+        font-weight: 300;
     }
 }
 
