@@ -24,6 +24,8 @@ class Course:
         self.time = []
         # Building, Room of class eg. ["M10", "109"]
         self.location = []
+        # Possible course lab
+        self.lab = None
 
     # Initialize other variables from the second page
     def set_other_details(self, short_name, days, time, location):
@@ -34,6 +36,36 @@ class Course:
         # Store minutes equivalent of time string
         self.time = [Calculate.minutes_from_string(time[0]), Calculate.minutes_from_string(time[1])]
         # Compare every course time to get min and max
+        Calculate.find_min(self.time[0])
+        Calculate.find_max(self.time[1])
+
+    # If course has lab, initialize lab object with info
+    def set_course_lab(self, days, time, location):
+        self.lab = Lab(days, time, location)
+
+    # Returns course length in hours
+    def length(self):
+        return Calculate.hours_between_minutes(self.time[1], self.time[0])
+
+    # Returns left, top positions for course occurrences
+    def coordinates(self, column_width, row_height, left_shift, top_shift):
+        points = []
+        for day in self.days:  # Calculate [x, y] coordinates and add them to points
+            points.extend([[Calculate.class_x_coordinate(left_shift, day, column_width),
+                            Calculate.class_y_coordinate(top_shift, row_height, self.time[0])]])
+        return points
+
+
+# A class to store course lab details
+class Lab:
+    # Initialize course lab variables with info
+    def __init__(self, days, time, location):
+        self.days = days
+        self.time_string = time
+        self.location = location
+        # Store minutes equivalent of time string
+        self.time = [Calculate.minutes_from_string(time[0]), Calculate.minutes_from_string(time[1])]
+        # Compare lab time with every course time to get min and max
         Calculate.find_min(self.time[0])
         Calculate.find_max(self.time[1])
 

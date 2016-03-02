@@ -13,6 +13,12 @@ class Calculate:
     min_time = 24 * 60
 
     ''' Beginning of Methods used for Interface class '''
+    # Reinitialize min and max time
+    @classmethod
+    def reset_min_max(cls):
+        cls.max_time = 0
+        cls.min_time = 24 * 60
+
     # Returns week earliest course time with 30 minutes space below it
     @classmethod
     def week_bottom(cls):

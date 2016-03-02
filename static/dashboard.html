@@ -22,7 +22,8 @@
                     
                     <div class="days-head green lighten-5"></div>
                     {% if interface %}
-                        {% set schedule = interface.get_schedule() %}
+                        <!--201520, 201510, 201420, 201410-->
+                        {% set schedule = interface.get_schedule("201410") %}
                         {% set height = interface.get_hour_length(5) %}
                         {% set labels = interface.get_hours_labels() %}
                         {% set index = 0 %}
@@ -50,6 +51,16 @@
                                         <i class="fa fa-map-marker fa-fw"></i> {{course.location[0]}} {{course.location[1]}}
                                     </div>
                                 {% endfor %}
+                                {% if course.lab %}
+                                    {% for left, top in course.lab.coordinates(19, height, 5, 5) %}
+                                        <div class="class {{colors[count]}}"
+                                             style="width: calc(19% - 1px); height: {{course.lab.length() * height}}%; left: {{left}}%; top: {{top}}%">
+                                            <span class="course-name">{{course.short_name}} Lab</span><br>
+                                            <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
+                                            <i class="fa fa-map-marker fa-fw"></i> {{course.lab.location[0]}} {{course.lab.location[1]}}
+                                        </div>
+                                    {% endfor %}
+                                {% endif %}
                             {% endif  %}
                             {% set count = count + 1 %}
                         {% endfor %}

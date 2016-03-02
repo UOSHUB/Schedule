@@ -12,6 +12,7 @@ class Interface:
     def __init__(self):
         self.scrape = Scrape()
         self.schedule = {}
+        self.semester = None
 
     # Empty schedule as student logs out
     def empty_schedule(self):
@@ -30,10 +31,16 @@ class Interface:
         return self.scrape.grab_username()
 
     # Gets and returns student schedule
-    def get_schedule(self):
-        # Only fill schedule if it's empty
-        if self.schedule == {}:
-            self.schedule = self.scrape.grab_schedule()
+    def get_schedule(self, semester):
+        # Only fill schedule if it's empty or selected a different semester
+        if self.schedule == {} or self.semester != semester:
+            # When the login session has expired, it need to login again
+            try:
+                Calculate.reset_min_max()
+                self.schedule = self.scrape.grab_schedule(semester)
+                self.semester = semester
+            except:
+                self.schedule = {"Error!": []}
         return self.schedule
 
     # Get hour length in schedule
