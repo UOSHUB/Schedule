@@ -11,6 +11,7 @@ class Scrape:
     def __init__(self):
         # Instantiate an empty browser holder
         self.br = None
+        # Store root url in shortcut variable as it's going to be use a lot
         self.root_url = "https://uos.sharjah.ac.ae:9050/prod_enUS"
 
     def initialize(self):
@@ -39,7 +40,7 @@ class Scrape:
         # Enter Personal Information section
         self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu")
         # Enter Directory Profile page
-        self.br.open(self.br.click_link(url="/prod_enUS/bwgkoprf.P_ShowDiroItems"))
+        self.br.follow_link(url="/prod_enUS/bwgkoprf.P_ShowDiroItems")
         # Use BeautifulSoup to extract info from raw html
         soup = BeautifulSoup(self.br.response().read(), "lxml")
         # Extract and return student name from soup
@@ -47,19 +48,22 @@ class Scrape:
 
     # Returns student's schedule
     def grab_schedule(self, semester):
+        # Enter Student -> Registration section
         self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
-        self.br.open(self.br.click_link(url="/prod_enUS/bwskflib.P_SelDefTerm"))
+        # Enter Registration Term
+        self.br.follow_link(url="/prod_enUS/bwskflib.P_SelDefTerm")
+        # Select the sent semester to be displayed
         self.br.select_form(nr=1)
         self.br.form["term_in"] = [semester]
         self.br.submit()
         # Enter Student Detail Schedule page
-        self.br.open(self.br.click_link(url="/prod_enUS/bwskfshd.P_CrseSchdDetl"))
-        # Send raw Detail Schedule data soup to be scraped and stored in the empty {}
+        self.br.follow_link(url="/prod_enUS/bwskfshd.P_CrseSchdDetl")
+        # Send raw Detail Schedule data soup to be scraped and stored instead of the empty {}
         schedule = self.scrape_detail_schedule(BeautifulSoup(self.br.response().read(), "lxml"), {})
         # Return to Student -> Registration section
         self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
         # Enter Student Summarized Schedule page
-        self.br.open(self.br.click_link(url="/prod_enUS/uos_dispschd.P_DispCrseSchdSum"))
+        self.br.follow_link(url="/prod_enUS/uos_dispschd.P_DispCrseSchdSum")
         # Send raw Summarized Schedule data soup to be scraped and stored on top of schedule then return it
         return self.scrape_summarized_schedule(BeautifulSoup(self.br.response().read(), "lxml"), schedule)
 
@@ -72,38 +76,49 @@ class Scrape:
             if table.caption.string != "Scheduled Meeting Times":
                 # Split table caption into three parts ['name', 'number', 'section']
                 caption = table.caption.string.split(" - ")
-                # Store array key as course number after removing spaces
+                # Store dictionary key as course number after removing spaces
                 key = caption[1].replace(' ', '')
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
-                # Store courses info as: schedule[number] = (name, section, CRN, prof_name, prof_email, credit_hours)
-                schedule[key] = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
-                                       row[3].a.get("href").split(':')[1], int(row[5].string.split()[0][0]))
+                # Store courses info: Course(name, section, CRN, prof_name, prof_email, credit_hours)
+                course = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
+                                row[3].a.get("href").split(':')[1], int(row[5].string.split()[0][0]))
+                # If course key is new to schedule
+                if schedule.get(key, None) is None:
+                    # Store the course with that key
+                    schedule[key] = course
+                else:  # If the course already exists
+                    # Store it as a lab of the previous course
+                    schedule[key].lab = course
         return schedule
 
     # Scrape Student Summarized Schedule from soup and store complete data in schedule
     @classmethod
     def scrape_summarized_schedule(cls, soup, schedule):
-        # Declare course key holder
-        key = None
+        # Declare previous course key holder
+        previous_key = None
         # Loop through TR tags of tables with datadisplaytable class
         for table in soup.find_all("table", class_="datadisplaytable")[1].find_all("tr"):
             # Exclude rows with TH tag or that doesn't have valign attribute
             if table.th is None and table.has_attr("valign"):
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
+                # Store dictionary key as course number
+                key = row[0].string
                 # Fix if location info is divided into parts or repeated
                 location = cls.split_location(row[6].string)
-                # Add other course details if key is there, otherwise consider it as a course lab
-                if row[0].string != " ":
-                    # Add more info to schedule as: set_other_details(short name, [days in chars],
-                    schedule[row[0].string].set_other_details(row[1].string, list(row[4].string),
-                                                              # [start/end class time], [building, room])
-                                                              row[5].string.split(" - "), location)
-                    # Store course key for possible lab addition case
-                    key = row[0].string
-                else:  # Add lab details as: set_course_lab([days in chars], [start/end class time], [building, room])
-                    schedule[key].set_course_lab(list(row[4].string), row[5].string.split(" - "), location)
+                # If key isn't empty
+                if key != " ":
+                    # If key isn't repeated, it's dedicated course, otherwise consider it a lab
+                    course = schedule[key] if key != previous_key else schedule[key].lab
+                    # set other details as: ([days in chars], [start/end class time], [building, room], short name)
+                    course.set_other_details(list(row[4].string), row[5].string.split(" - "), location, row[1].string)
+                else:  # If key is empty, consider course as a lab
+                    # Add lab details as: set_course_lab([days in chars], [start/end class time], [building, room])
+                    schedule[previous_key].set_course_lab(row[7].string).set_other_details(list(row[4].string),
+                                                                               row[5].string.split(" - "), location)
+                # Store course key for possible lab addition case
+                previous_key = key
         return schedule
 
     # Split location info and fix if it's repeated

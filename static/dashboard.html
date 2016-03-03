@@ -23,14 +23,18 @@
                     <div class="days-head green lighten-5"></div>
                     {% if interface %}
                         <!--201520, 201510, 201420, 201410-->
-                        {% set schedule = interface.get_schedule("201410") %}
+                        {% set schedule = interface.get_schedule("201520") %}
                         {% set height = interface.get_hour_length(5) %}
                         {% set labels = interface.get_hours_labels() %}
                         {% set index = 0 %}
                         {% set count = 0 %}
                         {% for fraction in interface.get_hours_array() %}
                             {% set count = count + fraction %}
-                            <div class="hour-label blue-grey-text" style="top: {{2 + count * height}}%">{{labels[index][0]}}<span class="hide-on-med-and-down">{{labels[index][1]}}</span></div>
+                                {% if labels %}
+                                    <div class="hour-label blue-grey-text" style="top: {{2 + count * height}}%">
+                                        {{labels[index][0]}}<span class="hide-on-med-and-down">{{labels[index][1]}}</span>
+                                    </div>
+                                {% endif %}
                             {% if fraction == 1 %}
                                 <div class="hour" style="height: {{height / 2}}%; border-bottom: 1px solid #eceff1;"></div>
                                 <div class="hour" style="height: {{height / 2}}%"></div>
@@ -41,35 +45,33 @@
                         {% endfor %}
                         {% set colors = ["red", "teal", "green", "orange", "purple", "light-blue", "teal", "yellow", "deep-orange", "blue"] %}
                         {% set count = 0 %}
+                        {% macro draw(course) %}
+                            {% for left, top in course.coordinates(19, height, 5, 5) %}
+                                <div class="class {{colors[count]}}"
+                                     style="width: calc(19% - 1px); height: {{course.length() * height}}%; left: {{left}}%; top: {{top}}%">
+                                    <span class="course-name">{{course.short_name}}</span><br>
+                                    <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
+                                    <i class="fa fa-map-marker fa-fw"></i> {{course.location[0]}} {{course.location[1]}}
+                                </div>
+                            {% endfor %}
+                        {% endmacro %}
                         {% for key, course in schedule.iteritems() %}
                             {% if key != "Error!" %}
-                                {% for left, top in course.coordinates(19, height, 5, 5) %}
-                                    <div class="class {{colors[count]}}"
-                                         style="width: calc(19% - 1px); height: {{course.length() * height}}%; left: {{left}}%; top: {{top}}%">
-                                        <span class="course-name">{{course.short_name}}</span><br>
-                                        <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
-                                        <i class="fa fa-map-marker fa-fw"></i> {{course.location[0]}} {{course.location[1]}}
-                                    </div>
-                                {% endfor %}
+                                {{ draw(course) }}
                                 {% if course.lab %}
-                                    {% for left, top in course.lab.coordinates(19, height, 5, 5) %}
-                                        <div class="class {{colors[count]}}"
-                                             style="width: calc(19% - 1px); height: {{course.lab.length() * height}}%; left: {{left}}%; top: {{top}}%">
-                                            <span class="course-name">{{course.short_name}} Lab</span><br>
-                                            <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
-                                            <i class="fa fa-map-marker fa-fw"></i> {{course.lab.location[0]}} {{course.lab.location[1]}}
-                                        </div>
-                                    {% endfor %}
+                                    {{ draw(course.lab) }}
                                 {% endif %}
                             {% endif  %}
                             {% set count = count + 1 %}
                         {% endfor %}
+                        {% set days = ["Sun", "Mon", "Tue", "Wed", "Thu"] %}
+                        {% set dates = interface.get_dates() %}
+                        {% for count in range(0, 5) %}
+                            <div class="day-label blue-grey-text text-darken-2" style="left: {{5 + count * 19}}%">
+                                {{days[count]}} <span class="hide-on-small-only">{{dates[count]}}</span>
+                            </div>
+                        {% endfor %}
                     {% endif %}
-                    {% set days = ["Sun", "Mon", "Tue", "Wed", "Thu"] %}
-                    {% set dates = interface.get_dates() %}
-                    {% for count in range(0, 5) %}
-                        <div class="day-label blue-grey-text text-darken-2" style="left: {{5 + count * 19}}%">{{days[count]}} <span class="hide-on-small-only">{{dates[count]}}</span></div>
-                    {% endfor %}
                 </div>
             </div>
         </div>
