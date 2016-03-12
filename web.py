@@ -1,16 +1,20 @@
 #!/usr/bin/env python
 
-# import needed libraries
+# Import needed libraries
 import os
 from flask import Flask, render_template, flash, request, redirect, url_for, session
+from flask_sqlalchemy import SQLAlchemy
 from interface import Interface
 from functools import wraps
+from models import *
 
-# initialize with template folder in ./static
+# Initialize with template folder in ./static
 app = Flask(__name__, template_folder="static")
-# configure security key
-app.secret_key = "development key"
-# instantiate an info object
+# configure app from object of current environment
+app.config.from_object(os.environ['APP_SETTINGS'])
+# Initialize SQLAlchemy database
+db = SQLAlchemy(app)
+# Instantiate an info object
 interface = Interface()
 
 
@@ -38,7 +42,20 @@ def index():
         # login and check if it succeeded
         if interface.verify_login(request.form["sid"], request.form["pin"]):
             # If logged in, store student name in session
-            session["name"] = interface.get_name()
+            sid = request.form["sid"]
+            # Grab student by id from database if existed
+            student = Student.query.filter_by(sid=sid).first()
+            # If student is new
+            if student is None:
+                # Grab student name and store it in session
+                session["name"] = interface.get_name()
+                # Add student id and name to database
+                db.session.add(Student(sid, session["name"]))
+                # Commit changes to database
+                db.session.commit()
+            else:  # If student has logged in before
+                # Store student name in session from database
+                session["name"] = student.name
             # Flash welcoming message and go to dashboard
             flash("Welcome " + session["name"])
             return redirect(url_for("dashboard"))
@@ -59,9 +76,11 @@ def dashboard():
 @app.route("/logout/")
 @login_required
 def logout():
-    # Flash bye message, delete student info and go home
+    # Flash bye message
     flash("See you soon " + session["name"] + " ^_^")
+    # Delete student info
     session.pop("name", None)
+    # Clean up schedule and go home
     interface.empty_schedule()
     return redirect(url_for("index"))
 
@@ -78,4 +97,4 @@ def about():
 # finalize configurations and run the app
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port, debug=True)
+    app.run(host="0.0.0.0", port=port)
