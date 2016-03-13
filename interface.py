@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from scraper import Scrape
+from scrape import Scrape
 from calculate import Calculate
 
 

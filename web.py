@@ -6,7 +6,6 @@ from flask import Flask, render_template, flash, request, redirect, url_for, ses
 from flask_sqlalchemy import SQLAlchemy
 from interface import Interface
 from functools import wraps
-from models import *
 
 # Initialize with template folder in ./static
 app = Flask(__name__, template_folder="static")
@@ -14,6 +13,8 @@ app = Flask(__name__, template_folder="static")
 app.config.from_object(os.environ['APP_SETTINGS'])
 # Initialize SQLAlchemy database
 db = SQLAlchemy(app)
+# Import models after initializing database
+from models import *
 # Instantiate an info object
 interface = Interface()
 
