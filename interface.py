@@ -19,9 +19,9 @@ class Interface:
         self.schedule = {}
 
     # Verify login with provided credentials
-    def verify_login(self, sid, pin):
+    def verify_login(self):
         try:
-            self.scrape.login(sid, pin)
+            self.scrape.login()
             return self.scrape.br.title() == "Main Menu"
         except:
             return False

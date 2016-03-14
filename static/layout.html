@@ -63,10 +63,39 @@
                 <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
             {% endif %}
         </ul><!--Side Navigation bar end-->
-
+        
+        {% if 'name' not in session %}
+            <!--Login form dialog Structure -->
+            <form id="login-dialog" class="modal white" method="post">
+                <div class="row">
+                    <h5 class="blue-grey-text text-darken-4 col s12">Welcome to the New UDC!</h5>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="sid" name="sid" type="text" value="{{request.form.sid}}" placeholder="E.g. u14111000" required>
+                        <label for="sid">Student ID</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <input id="pin" name="pin" type="password" value="{{request.form.pin}}" placeholder="Same as myUDC" required>
+                        <label for="pin">Password</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12">
+                        <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12" onclick="loggingIn()">login</button>
+                    </div>
+                </div>
+            </form><!--Login form dialog end-->
+        {% endif %}
+        
         <!--Flash messages logic start-->
         {% for message in get_flashed_messages() %}
             <script>Materialize.toast({{ message|tojson }}, 5000)</script>
+            {% if message == "Invalid ID or Password" %}
+                <script>login.click()</script>
+            {% endif %}
         {% endfor %}
         <!--Flash messages logic end-->
 

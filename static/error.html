@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {% if "404" in error %}
+        Page Not Found - 
+    {% else %}
+        Server Error - 
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+    <div class="container" id="error">
+        {% if "404" in error %}
+            <i class="fa fa-frown-o"></i><br>
+            <h3>Sad, what you're looking for isn't here!</h3>
+        {% else %}
+            <i class="fa fa-medkit"></i><br>
+            <h3>Ouch! we'll need medications to fix this</h3>
+        {% endif %}
+        <br>
+        <h5><a href="{{ url_for('index') }}">Go somewhere nice</a></h5>
+    </div>
+    <style>
+        #error {
+            text-align: center;
+            color: #607d8b;
+        }
+        #error > i {
+            font-size: 25rem;
+            font-size: 37vw;
+        }
+    </style>
+{% endblock %}

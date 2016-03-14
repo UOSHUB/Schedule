@@ -3,6 +3,7 @@
 # import needed libraries
 import mechanize
 from bs4 import BeautifulSoup
+from flask import session
 from course import Course
 
 
@@ -25,14 +26,14 @@ class Scrape:
         self.br.set_handle_refresh(mechanize._http.HTTPRefreshProcessor(), max_time=1)
 
     # Login to official UOS UDC
-    def login(self, sid, pin):
+    def login(self):
         self.initialize()
         # Open original UOS UDC login url
         self.br.open(self.root_url + "/twbkwbis.P_WWWLogin")
         # Fill up login form and submit
         self.br.select_form(nr=0)
-        self.br["sid"] = sid
-        self.br["PIN"] = pin
+        self.br["sid"] = session["sid"]
+        self.br["PIN"] = session["pin"]
         self.br.submit()
 
     # Returns student's first name
@@ -74,7 +75,7 @@ class Scrape:
         for table in soup.find_all("table", class_="datadisplaytable"):
             # If it's the heading table
             if table.caption.string != "Scheduled Meeting Times":
-                # Split table caption into three parts ['name', 'number', 'section']
+                # Split table caption into three parts ["name", "number", "section"]
                 caption = table.caption.string.split(" - ")
                 # Store dictionary key as course number after removing spaces
                 key = caption[1].replace(' ', '')

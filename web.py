@@ -10,7 +10,7 @@ from functools import wraps
 # Initialize with template folder in ./static
 app = Flask(__name__, template_folder="static")
 # configure app from object of current environment
-app.config.from_object(os.environ['APP_SETTINGS'])
+app.config.from_object(os.environ["APP_SETTINGS"])
 # Initialize SQLAlchemy database
 db = SQLAlchemy(app)
 # Import models after initializing database
@@ -38,20 +38,21 @@ def index():
     if "name" in session:
         flash("Welcome back " + session["name"])
         return redirect(url_for("dashboard"))
-    # Store login info and go to dashboard
+    # Try to login if credentials are provided
     if request.method == "POST":
+        # Store student credentials in session
+        session["sid"] = request.form["sid"]
+        session["pin"] = request.form["pin"]
         # login and check if it succeeded
-        if interface.verify_login(request.form["sid"], request.form["pin"]):
-            # If logged in, store student name in session
-            sid = request.form["sid"]
+        if interface.verify_login():
             # Grab student by id from database if existed
-            student = Student.query.filter_by(sid=sid).first()
+            student = Student.query.filter_by(sid=session["sid"]).first()
             # If student is new
             if student is None:
                 # Grab student name and store it in session
                 session["name"] = interface.get_name()
                 # Add student id and name to database
-                db.session.add(Student(sid, session["name"]))
+                db.session.add(Student(session["sid"], session["name"]))
                 # Commit changes to database
                 db.session.commit()
             else:  # If student has logged in before
@@ -63,6 +64,8 @@ def index():
         else:
             # Flash an error if login fails
             flash("Invalid ID or Password")
+            # And clear wrong credentials
+            session.clear()
     # If no login, return to index page
     return render_template("index.html")
 
@@ -79,8 +82,8 @@ def dashboard():
 def logout():
     # Flash bye message
     flash("See you soon " + session["name"] + " ^_^")
-    # Delete student info
-    session.pop("name", None)
+    # Clear student info
+    session.clear()
     # Clean up schedule and go home
     interface.empty_schedule()
     return redirect(url_for("index"))
@@ -94,6 +97,20 @@ def general():
 @app.route("/about/")
 def about():
     return redirect(url_for("dashboard"))
+
+
+# Nicely handle all errors
+@app.errorhandler(Exception)
+@app.errorhandler(500)
+@app.errorhandler(404)
+@app.errorhandler(403)
+def error(e):
+    # If student logs in from error page
+    if request.method == "POST":
+        # Send code 307 to preserve the post request
+        return redirect(url_for("index"), code=307)
+    # Otherwise render appropriate error page
+    return render_template("error.html", error=str(e))
 
 # finalize configurations and run the app
 if __name__ == "__main__":
