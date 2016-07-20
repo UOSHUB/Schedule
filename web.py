@@ -62,10 +62,10 @@ def index():
             flash("Welcome " + session["name"])
             return redirect(url_for("dashboard"))
         else:
+            # Clear wrong credentials
+            session.clear()
             # Flash an error if login fails
             flash("Invalid ID or Password")
-            # And clear wrong credentials
-            session.clear()
     # If no login, return to index page
     return render_template("index.html")
 

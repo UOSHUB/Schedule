@@ -10,12 +10,8 @@ from course import Course
 # A class to manage information flow
 class Scrape:
     def __init__(self):
-        # Instantiate an empty browser holder
-        self.br = None
         # Store root url in shortcut variable as it's going to be use a lot
-        self.root_url = "https://uos.sharjah.ac.ae:9050/prod_enUS"
-
-    def initialize(self):
+        self.root_url = "https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_"
         # Instantiate mechanize browser
         self.br = mechanize.Browser()
         # Browser options
@@ -27,9 +23,8 @@ class Scrape:
 
     # Login to official UOS UDC
     def login(self):
-        self.initialize()
         # Open original UOS UDC login url
-        self.br.open(self.root_url + "/twbkwbis.P_WWWLogin")
+        self.br.open(self.root_url + "WWWLogin")
         # Fill up login form and submit
         self.br.select_form(nr=0)
         self.br["sid"] = session["sid"]
@@ -39,7 +34,7 @@ class Scrape:
     # Returns student's first name
     def grab_username(self):
         # Enter Personal Information section
-        self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_GenMnu")
+        self.br.open(self.root_url + "GenMenu?name=bmenu.P_GenMnu")
         # Enter Directory Profile page
         self.br.follow_link(url="/prod_enUS/bwgkoprf.P_ShowDiroItems")
         # Use BeautifulSoup to extract info from raw html
@@ -50,19 +45,26 @@ class Scrape:
     # Returns student's schedule
     def grab_schedule(self, semester):
         # Enter Student -> Registration section
-        self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
-        # Enter Registration Term
-        self.br.follow_link(url="/prod_enUS/bwskflib.P_SelDefTerm")
+        self.br.open(self.root_url + "GenMenu?name=bmenu.P_RegMnu")
+        try:
+            # Enter Registration Term
+            self.br.follow_link(url="/prod_enUS/bwskflib.P_SelDefTerm")
+        except mechanize.LinkNotFoundError:
+            # Login if not logged then try again
+            self.login()
+            return self.grab_schedule(semester)
         # Select the sent semester to be displayed
         self.br.select_form(nr=1)
-        self.br.form["term_in"] = [semester]
+        # Select semester if it was specified
+        if semester:
+            self.br.form["term_in"] = [semester]
         self.br.submit()
         # Enter Student Detail Schedule page
         self.br.follow_link(url="/prod_enUS/bwskfshd.P_CrseSchdDetl")
         # Send raw Detail Schedule data soup to be scraped and stored instead of the empty {}
         schedule = self.scrape_detail_schedule(BeautifulSoup(self.br.response().read(), "lxml"), {})
         # Return to Student -> Registration section
-        self.br.open(self.root_url + "/twbkwbis.P_GenMenu?name=bmenu.P_RegMnu")
+        self.br.open(self.root_url + "GenMenu?name=bmenu.P_RegMnu")
         # Enter Student Summarized Schedule page
         self.br.follow_link(url="/prod_enUS/uos_dispschd.P_DispCrseSchdSum")
         # Send raw Summarized Schedule data soup to be scraped and stored on top of schedule then return it
@@ -81,9 +83,16 @@ class Scrape:
                 key = caption[1].replace(' ', '')
                 # Store all table cells into row array
                 row = table.find_all("td", class_="dddefault")
+
+                prof = row[3].a
+                if prof:
+                    prof_name = prof.get("target")
+                    prof_email = prof.get("href").split(':')[1]
+                else:
+                    prof_name = prof_email = "To Be Announced"
                 # Store courses info: Course(name, section, CRN, prof_name, prof_email, credit_hours)
-                course = Course(caption[0], caption[2], row[1].string, row[3].a.get("target"),
-                                row[3].a.get("href").split(':')[1], int(row[5].string.split()[0][0]))
+                course = Course(caption[0], caption[2], row[1].string, prof_name, prof_email,
+                                int(row[5].string.split()[0][0]))
                 # If course key is new to schedule
                 if schedule.get(key, None) is None:
                     # Store the course with that key

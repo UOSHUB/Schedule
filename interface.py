@@ -16,27 +16,24 @@ class Interface:
 
     # Empty schedule as student logs out
     def empty_schedule(self):
-        self.schedule = {}
+        self.schedule.clear()
 
     # Verify login with provided credentials
     def verify_login(self):
-        try:
-            self.scrape.login()
-            return self.scrape.br.title() == "Main Menu"
-        except:
-            return False
+        self.scrape.login()
+        return self.scrape.br.title() == "Main Menu"
 
     # Gets and returns student name
     def get_name(self):
         return self.scrape.grab_username()
 
     # Gets and returns student schedule
-    def get_schedule(self, semester):
+    def get_schedule(self, semester=None):
         # Only fill schedule if it's empty or selected a different semester
-        if self.schedule == {} or self.semester != semester:
+        if self.schedule == {} or "Error!" in self.schedule or self.semester != semester:
             # When the login session has expired, it need to login again
+            Calculate.reset_min_max()
             try:
-                Calculate.reset_min_max()
                 self.schedule = self.scrape.grab_schedule(semester)
                 self.semester = semester
             except:

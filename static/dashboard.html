@@ -23,7 +23,7 @@
                     <div class="days-head green lighten-5"></div>
                     {% if interface %}
                         <!--201520, 201510, 201420, 201410-->
-                        {% set schedule = interface.get_schedule("201520") %}
+                        {% set schedule = interface.get_schedule() %}
                         {% set height = interface.get_hour_length(5) %}
                         {% set labels = interface.get_hours_labels() %}
                         {% set index = 0 %}
