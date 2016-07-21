@@ -23,7 +23,7 @@ $(window).resize(function() {
         // Only execute when sidebar is visible
         if (visible) {
             // Hide sidebar
-            $('.button-collapse').sideNav('hide')
+            $('.button-collapse').sideNav('hide');
             // Set visibility to false
             visible = false;
         }
@@ -36,14 +36,14 @@ function loggingIn() {
     // Check if fields aren't empty
     if(pin.value != '' && sid.value != '') {
         // Display Loading for 5 sec
-        Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Loading...', 7500)
+        Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Loading...', 7500);
         // Display Almost done for the next 5 sec
-        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Almost done....', 7500)", 7600)
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Almost done....', 7500)", 7600);
         // Display Preparing your dashboard for the next 5 sec
-        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Preparing your dashboard...', 7500)", 15200)
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Preparing your dashboard...', 7500)", 15200);
         // Display Something went wrong for the next 5 sec
-        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Something went wrong!..', 7500)", 22800)
+        setTimeout("Materialize.toast('<i class=\"fa fa-spinner fa-pulse fa-2x\"></i>&nbsp;&nbsp;&nbsp;Something went wrong!..', 7500)", 22800);
         // Finally if it took all this time, display Please refresh the page for the next 20 sec
-        setTimeout("Materialize.toast('<i class=\"fa fa-exclamation-triangle fa-2x\"></i>&nbsp;&nbsp;&nbsp;Please refresh the page!!', 30000)", 30400)
+        setTimeout("Materialize.toast('<i class=\"fa fa-exclamation-triangle fa-2x\"></i>&nbsp;&nbsp;&nbsp;Please refresh the page!!', 30000)", 30400);
     }
 }

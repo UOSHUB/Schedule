@@ -6,9 +6,11 @@ from flask import Flask, render_template, flash, request, redirect, url_for, ses
 from flask_sqlalchemy import SQLAlchemy
 from interface import Interface
 from functools import wraps
+from schedule.views import schedule
 
 # Initialize with template folder in ./static
 app = Flask(__name__, template_folder="static")
+app.register_blueprint(schedule, url_prefix="/schedule")
 # configure app from object of current environment
 app.config.from_object(os.environ["APP_SETTINGS"])
 # Initialize SQLAlchemy database

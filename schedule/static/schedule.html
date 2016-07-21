@@ -1,0 +1,79 @@
+{% extends "layout.html" %}
+
+{% block head %}
+    <!--Import specific dashboard.css-->
+    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
+{% endblock %}
+
+{% block title %}Dashboard - {% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="row hide-on-small-only"></div>
+        <div class="row" id="card">
+            <div class="col s12">
+                <div class="card-panel">
+                    
+                    <div class="day hhead green lighten-5"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    
+                    <div class="days-head green lighten-5"></div>
+                    {% if interface %}
+                        <!--201520, 201510, 201420, 201410-->
+                        {% set schedule = interface.get_schedule() %}
+                        {% set height = interface.get_hour_length(5) %}
+                        {% set labels = interface.get_hours_labels() %}
+                        {% set index = 0 %}
+                        {% set count = 0 %}
+                        {% for fraction in interface.get_hours_array() %}
+                            {% set count = count + fraction %}
+                                {% if labels %}
+                                    <div class="hour-label blue-grey-text" style="top: {{2 + count * height}}%">
+                                        {{labels[index][0]}}<span class="hide-on-med-and-down">{{labels[index][1]}}</span>
+                                    </div>
+                                {% endif %}
+                            {% if fraction == 1 %}
+                                <div class="hour" style="height: {{height / 2}}%; border-bottom: 1px solid #eceff1;"></div>
+                                <div class="hour" style="height: {{height / 2}}%"></div>
+                            {% else %}
+                                <div class="hour" style="height: {{fraction * height}}%"></div>
+                            {% endif %}
+                            {% set index = index + 1 %}
+                        {% endfor %}
+                        {% set colors = ["red", "teal", "green", "orange", "purple", "light-blue", "teal", "yellow", "deep-orange", "blue"] %}
+                        {% set count = 0 %}
+                        {% macro draw(course) %}
+                            {% for left, top in course.coordinates(19, height, 5, 5) %}
+                                <div class="class {{colors[count]}}"
+                                     style="width: calc(19% - 1px); height: {{course.length() * height}}%; left: {{left}}%; top: {{top}}%">
+                                    <span class="course-name">{{course.short_name}}</span><br>
+                                    <i class="fa fa-user fa-fw"></i> {{course.prof_name}}<br>
+                                    <i class="fa fa-map-marker fa-fw"></i> {{course.location[0]}} {{course.location[1]}}
+                                </div>
+                            {% endfor %}
+                        {% endmacro %}
+                        {% for key, course in schedule.iteritems() %}
+                            {% if key != "Error!" %}
+                                {{ draw(course) }}
+                                {% if course.lab %}
+                                    {{ draw(course.lab) }}
+                                {% endif %}
+                            {% endif  %}
+                            {% set count = count + 1 %}
+                        {% endfor %}
+                        {% set days = ["Sun", "Mon", "Tue", "Wed", "Thu"] %}
+                        {% set dates = interface.get_dates() %}
+                        {% for count in range(0, 5) %}
+                            <div class="day-label blue-grey-text text-darken-2" style="left: {{5 + count * 19}}%">
+                                {{days[count]}} <span class="hide-on-small-only">{{dates[count]}}</span>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
