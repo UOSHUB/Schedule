@@ -25,16 +25,16 @@
 
         <!--Setup page title and icon-->
         <link href="{{ url_for('static', filename='img/uos_icon.png') }}" type="image/png" rel="shortcut icon" />
-        <title>{% block title %}{% endblock %}UOS UDC</title>
+        <title>{% block title %}{% endblock %}UOS HUB</title>
 	</head>
 
 	<body class="blue-grey lighten-5">
         <!--Page Navigation bar start-->
         <nav class="transparent z-depth-0">
             <div class="nav-wrapper container">
-                <a href="http://uosudc.tk" class="brand-logo">
+                <a href="http://uoshub.tk" class="brand-logo">
                     <object type="image/svg+xml" data="{{ url_for('static', filename='img/uos_logo.svg') }}">Logo</object>
-                    <span class="light-green-text text-darken-2"><b class="blue-grey-text text-darken-4">UOS</b> UDC</span>
+                    <span class="light-green-text text-darken-2"><b class="blue-grey-text text-darken-4">UOS</b> HUB</span>
                 </a>
                 <ul class="right hide-on-med-and-down">
                     {% if 'name' in session %}
@@ -72,7 +72,7 @@
             <!--Login form dialog Structure -->
             <form id="login-dialog" class="modal white" method="post">
                 <div class="row">
-                    <h5 class="blue-grey-text text-darken-4 col s12">Welcome to the New UDC!</h5>
+                    <h5 class="blue-grey-text text-darken-4 col s12">Welcome to Your UOSHUB!</h5>
                 </div>
                 <div class="row">
                     <div class="input-field col s12">

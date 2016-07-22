@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from scrape import Scrape
+from .scrape import get_schedule
 from calculate import Calculate
 
 
@@ -10,22 +10,12 @@ from calculate import Calculate
 class Interface:
     # Initialize basic class variables
     def __init__(self):
-        self.scrape = Scrape()
         self.schedule = {}
         self.semester = None
 
     # Empty schedule as student logs out
     def empty_schedule(self):
         self.schedule.clear()
-
-    # Verify login with provided credentials
-    def verify_login(self):
-        self.scrape.login()
-        return self.scrape.br.title() == "Main Menu"
-
-    # Gets and returns student name
-    def get_name(self):
-        return self.scrape.grab_username()
 
     # Gets and returns student schedule
     def get_schedule(self, semester=None):
@@ -34,7 +24,7 @@ class Interface:
             # When the login session has expired, it need to login again
             Calculate.reset_min_max()
             try:
-                self.schedule = self.scrape.grab_schedule(semester)
+                self.schedule = get_schedule(semester)
                 self.semester = semester
             except:
                 self.schedule = {"Error!": []}
@@ -59,3 +49,5 @@ class Interface:
     @staticmethod
     def get_dates():
         return Calculate.dates()
+
+interface = Interface()

@@ -4,12 +4,12 @@
 import os
 from flask import Flask, render_template, flash, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from interface import Interface
-from functools import wraps
+from scraper import scraper, login_required
 from schedule.views import schedule
 
 # Initialize with template folder in ./static
 app = Flask(__name__, template_folder="static")
+# Register schedule blueprint
 app.register_blueprint(schedule, url_prefix="/schedule")
 # configure app from object of current environment
 app.config.from_object(os.environ["APP_SETTINGS"])
@@ -17,20 +17,6 @@ app.config.from_object(os.environ["APP_SETTINGS"])
 db = SQLAlchemy(app)
 # Import models after initializing database
 from models import *
-# Instantiate an info object
-interface = Interface()
-
-
-# login required decorator
-def login_required(f):
-    @wraps(f)
-    def wrap(*args, **kwargs):
-        if "name" in session:
-            return f(*args, **kwargs)
-        else:
-            flash("You need to login first!")
-            return redirect(url_for("index"))
-    return wrap
 
 
 # Home page handling
@@ -46,13 +32,13 @@ def index():
         session["sid"] = request.form["sid"]
         session["pin"] = request.form["pin"]
         # login and check if it succeeded
-        if interface.verify_login():
+        if scraper.login():
             # Grab student by id from database if existed
             student = Student.query.filter_by(sid=session["sid"]).first()
             # If student is new
             if student is None:
                 # Grab student name and store it in session
-                session["name"] = interface.get_name()
+                session["name"] = scraper.get_username()
                 # Add student id and name to database
                 db.session.add(Student(session["sid"], session["name"]))
                 # Commit changes to database
@@ -76,18 +62,19 @@ def index():
 @app.route("/dashboard/")
 @login_required
 def dashboard():
-    return render_template("dashboard.html", interface=interface)
+    return render_template("dashboard.html")
 
 
 @app.route("/logout/")
 @login_required
 def logout():
-    # Flash bye message
-    flash("See you soon " + session["name"] + " ^_^")
+    name = session["name"]
     # Clear student info
     session.clear()
+    # Flash bye message
+    flash("See you soon " + name + " ^_^")
     # Clean up schedule and go home
-    interface.empty_schedule()
+    # TODO: CLEAN EVERYTHING OF THE USER
     return redirect(url_for("index"))
 
 
