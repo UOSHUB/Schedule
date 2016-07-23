@@ -1,31 +1,17 @@
 <!doctype html>
 <html>
 	<head>
-        <!--Import Font Awesome-->
-        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.css') }}">
-		<!--Import materialize.css-->
-		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/materialize.css') }}" media="screen,projection"/>
+		<!--Import general imports-->
+		{% include 'general.html' %}
 		<!--Import specific layout.css-->
 		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"/>
-        {% block head %}{% endblock %}
-
-		<!--Import jQuery before materialize.js-->
-		<script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.1.0.js') }}"></script>
-		<!--Import materialize.js-->
-		<script type="text/javascript" src="{{ url_for('static', filename='js/materialize.js') }}"></script>
 		<!--Import My scripts.js-->
 		<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-        <!--Import angular.min.js-->
-		<script type="text/javascript" src="{{ url_for('static', filename='js/angular.min.js') }}"></script>
 		<!--Import My app.js-->
 		<script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
-
-		<!--Let browser know website is optimized for mobile-->
-		<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-
-        <!--Setup page title and icon-->
-        <link href="{{ url_for('static', filename='img/uos_icon.png') }}" type="image/png" rel="shortcut icon" />
-        <title>{% block title %}{% endblock %}UOS HUB</title>
+        {% block head %}{% endblock %}
+		<!--Setup page title-->
+        <title>{% block title %}{% endblock %}UOSHUB</title>
 	</head>
 
 	<body class="blue-grey lighten-5">

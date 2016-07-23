@@ -1,11 +1,3 @@
-/* Things that take up all screen height */
-html, body,
-#card, #card .col,
-#card .card-panel {
-    height: 100%;
-}
-/* Full height end */
-
 body {
     background-image: linear-gradient(to bottom, #eceff1 5%, rgba(0, 0, 0, 0) 30%), url(../img/background.svg);
 }
@@ -60,21 +52,3 @@ nav .button-collapse > i {
     color: #263238;
 }
 /* Side bar end */
-
-/* Content container start */
-.container {
-    width: 85%;
-    height: 85%;
-    max-width: 1440px;
-    max-height: 810px;
-}
-
-@media only screen and (max-width: 600px) {
-    .container {
-        width: 90%;
-    }
-}
-/* Content container end */
-.shadow {
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
-}

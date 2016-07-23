@@ -25,9 +25,10 @@ class Interface:
             Calculate.reset_min_max()
             try:
                 self.schedule = get_schedule(semester)
-                self.semester = semester
             except:
                 self.schedule = {"Error!": []}
+            else:
+                self.semester = semester
         return self.schedule
 
     # Get hour length in schedule

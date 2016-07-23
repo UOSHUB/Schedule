@@ -19,6 +19,7 @@ def login_required(f):
     return wrap
 
 
+# A mechanize subclass with frequently use methods
 class Scraper(Browser):
     def __init__(self):
         # Instantiate superclass mechanize browser
@@ -30,16 +31,22 @@ class Scraper(Browser):
         self.set_handle_robots(False)
         self.set_handle_refresh(_http.HTTPRefreshProcessor(), max_time=1)
 
+    # Gets UOS UDC link by providing sub url only
     def get(self, sub_url):
         self.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_" + sub_url)
 
+    # Follows a UOS UDC link by providing sub link only
     def follow(self, sub_link):
         try:
             self.follow_link(url="/prod_enUS/" + sub_link)
+        # Return false if link isn't found
         except LinkNotFoundError:
             return False
-        return True
+        # Otherwise return true
+        else:
+            return True
 
+    # Returns BeautifulSoup object of current page
     def get_soup(self):
         return BeautifulSoup(self.response().read(), "lxml")
 
@@ -64,4 +71,6 @@ class Scraper(Browser):
         # Extract and return student name from soup
         return self.get_soup().find("td", class_="dedefault").string.split()[0]
 
+# Instantiate a scraper object to be used
+# in many different places (kind statically)
 scraper = Scraper()

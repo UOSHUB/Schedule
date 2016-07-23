@@ -1,0 +1,27 @@
+/* Things that take up all screen height */
+html, body,
+#card, #card .col,
+#card .card-panel {
+    height: 100%;
+}
+/* Full height end */
+
+
+/* Content container start */
+.container {
+    width: 85%;
+    height: 85%;
+    max-width: 1440px;
+    max-height: 810px;
+}
+
+@media only screen and (max-width: 600px) {
+    .container {
+        width: 90%;
+    }
+}
+/* Content container end */
+
+.shadow {
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+}
