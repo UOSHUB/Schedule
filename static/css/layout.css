@@ -23,17 +23,17 @@ nav .button-collapse > i {
 /* Login dialog start */
 #login-dialog {
     width: 24rem;
-	height: auto;
+    height: auto;
     padding: 1.4rem;
 }
 
 #login-dialog h5, #sid, #pin{
-	font-weight: 300;
-	margin-bottom: 0;
+    font-weight: 300;
+    margin-bottom: 0;
 }
 
 #login-dialog button {
-	margin-top: 2rem;
+    margin-top: 2rem;
     margin-bottom: -0.5rem;
 }
 /* Login dialog end */

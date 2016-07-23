@@ -1,64 +1,64 @@
 {% extends "layout.html" %}
 
-{% block head %}
-    <!--Import specific dashboard.css-->
-    <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
+{% block head -%}
+        <!--Import specific dashboard.css-->
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}"/>
 {% endblock %}
 
 {% block title %}Dashboard - {% endblock %}
 
 {% block body %}
-    <div class="container">
-        <div class="row hide-on-small-only"></div>
-        <div class="row" id="dashboard">
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow blue darken-2" onclick="location.href='{{ url_for('schedule.index') }}'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-calendar" aria-hidden="true"></i>
-                        <h4>My Schedule</h4>
+        <div class="container">
+            <div class="row hide-on-small-only"></div>
+            <div class="row" id="dashboard">
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow blue darken-2" onclick="location.href='{{ url_for('schedule.index') }}'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-calendar" aria-hidden="true"></i>
+                            <h4>My Schedule</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow red darken-2" onclick="location.href='/email'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-envelope-o" aria-hidden="true"></i>
-                        <h4>My Email</h4>
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow red darken-2" onclick="location.href='/email'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-envelope-o" aria-hidden="true"></i>
+                            <h4>My Email</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow teal darken-2" onclick="location.href='/balance'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
-                        <h4>My Balance</h4>
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow teal darken-2" onclick="location.href='/balance'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-credit-card" aria-hidden="true"></i>
+                            <h4>My Balance</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow green darken-2" onclick="location.href='/grades'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-graduation-cap" aria-hidden="true"></i>
-                        <h4>My Grades</h4>
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow green darken-2" onclick="location.href='/grades'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-graduation-cap" aria-hidden="true"></i>
+                            <h4>My Grades</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow orange darken-2" onclick="location.href='/friends'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-users" aria-hidden="true"></i>
-                        <h4>My Friends</h4>
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow orange darken-2" onclick="location.href='/friends'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-users" aria-hidden="true"></i>
+                            <h4>My Friends</h4>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col l4 m6 s12">
-                <div class="card-panel shadow purple darken-2" onclick="location.href='/blackboard'">
-                    <div class="row valign-wrapper">
-                        <i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i>
-                        <h4>My BlackBoard</h4>
+                <div class="col l4 m6 s12">
+                    <div class="card-panel shadow purple darken-2" onclick="location.href='/blackboard'">
+                        <div class="row valign-wrapper">
+                            <i class="fa fa-fw fa-pencil-square-o" aria-hidden="true"></i>
+                            <h4>My BlackBoard</h4>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+{%- endblock %}

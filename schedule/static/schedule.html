@@ -1,15 +1,14 @@
 <!doctype html>
 <html>
-	<head>
-		<!--Import general imports-->
-		{% include 'general.html' %}
-		<!--Import specific schedule.css-->
-		<link type="text/css" rel="stylesheet" href="{{ url_for('schedule.static', filename='css/schedule.css') }}"/>
-		<!--Import specific AngularJS app.js-->
-		<script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
-		<!--Setup page title-->
+    <head>
+        {% include 'general.html' %}
+        <!--Import specific schedule.css-->
+        <link type="text/css" rel="stylesheet" href="{{ url_for('schedule.static', filename='css/schedule.css') }}"/>
+        <!--Import specific AngularJS app.js-->
+        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
+        <!--Setup page title-->
         <title>Schedule - UOSHUB</title>
-	</head>
+    </head>
 
     <body class="grey lighten-3">
         <div class="container">
@@ -80,7 +79,7 @@
                 </div>
             </div>
         </div>
-		<!--Google Analytics code start-->
+        <!--Google Analytics code start-->
         {% include 'ganalytics.html' %}
         <!--Google Analytics code end-->
     </body>

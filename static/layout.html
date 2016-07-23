@@ -1,20 +1,20 @@
 <!doctype html>
 <html>
-	<head>
-		<!--Import general imports-->
-		{% include 'general.html' %}
-		<!--Import specific layout.css-->
-		<link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"/>
-		<!--Import My scripts.js-->
-		<script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
-		<!--Import My app.js-->
-		<script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
-        {% block head %}{% endblock %}
-		<!--Setup page title-->
-        <title>{% block title %}{% endblock %}UOSHUB</title>
-	</head>
+    <head>
+        {%- include 'general.html' %}
 
-	<body class="blue-grey lighten-5">
+        <!--Import specific layout.css-->
+        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"/>
+        <!--Import My scripts.js-->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+        <!--Import My app.js-->
+        <script type="text/javascript" src="{{ url_for('static', filename='js/app.js') }}"></script>
+        {% block head %}{% endblock %}
+        <!--Setup page title-->
+        <title>{% block title %}{% endblock %}UOSHUB</title>
+    </head>
+
+    <body class="blue-grey lighten-5">
         <!--Page Navigation bar start-->
         <nav class="transparent z-depth-0">
             <div class="nav-wrapper container">
@@ -23,16 +23,16 @@
                     <span class="light-green-text text-darken-2"><b class="blue-grey-text text-darken-4">UOS</b> HUB</span>
                 </a>
                 <ul class="right hide-on-med-and-down">
-                    {% if 'name' in session %}
+                    {% if 'name' in session -%}
                         <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2">Dashboard</a></li>
-                    {% endif %}
+                    {% endif -%}
                     <li><a href="{{ url_for('general') }}" class="blue-grey-text text-darken-4">General</a></li>
                     <li><a href="{{ url_for('about') }}" class="blue-grey-text text-darken-4">About</a></li>
-                    {% if 'name' in session %}
+                    {% if 'name' in session -%}
                         <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-darken-4">Logout</a></li>
-                    {% else %}
+                    {%- else -%}
                         <li><a id="login" onclick="$('#login-dialog').openModal({opacity: 0.1})" class="light-green-text text-darken-2">Login</a></li>
-                    {% endif %}
+                    {%- endif %}
                 </ul>
                 <a href="" data-activates="side-bar" class="button-collapse right show-on-medium-and-down">
                     <i class="fa fa-navicon blue-grey-text text-darken-4"></i>
@@ -42,59 +42,59 @@
 
         <!--Side Navigation bar start-->
         <ul id="side-bar" class="side-nav blue-grey darken-4">
-            {% if 'name' in session %}
+            {% if 'name' in session -%}
                 <li><a href="{{ url_for('dashboard') }}" class="light-green-text text-darken-2"><i class="fa fa-tachometer"></i>DASHBOARD</a></li>
-            {% else %}
+            {%- else -%}
                 <li><a href="#" onclick="login.click()" class="light-green-text text-darken-2"><i class="fa fa-sign-in"></i>LOGIN</a></li>
-            {% endif %}
+            {%- endif %}
             <li><a href="{{ url_for('general') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-database"></i>GENERAL</a></li>
             <li><a href="{{ url_for('about') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-info-circle"></i>ABOUT</a></li>
-            {% if 'name' in session %}
-                <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
-            {% endif %}
+            {%- if 'name' in session %}
+            <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
+            {%- endif %}
         </ul><!--Side Navigation bar end-->
         
-        {% if 'name' not in session %}
-            <!--Login form dialog Structure -->
-            <form id="login-dialog" class="modal white" method="post">
-                <div class="row">
-                    <h5 class="blue-grey-text text-darken-4 col s12">Welcome to Your UOSHUB!</h5>
+        {% if 'name' not in session -%}
+        <!--Login form dialog Structure -->
+        <form id="login-dialog" class="modal white" method="post">
+            <div class="row">
+                <h5 class="blue-grey-text text-darken-4 col s12">Welcome to Your UOSHUB!</h5>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="sid" name="sid" type="text" value="{{request.form.sid}}" placeholder="E.g. u14111000" required>
+                    <label for="sid">Student ID</label>
                 </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="sid" name="sid" type="text" value="{{request.form.sid}}" placeholder="E.g. u14111000" required>
-                        <label for="sid">Student ID</label>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="pin" name="pin" type="password" value="{{request.form.pin}}" placeholder="Same as myUDC" required>
+                    <label for="pin">Password</label>
                 </div>
-                <div class="row">
-                    <div class="input-field col s12">
-                        <input id="pin" name="pin" type="password" value="{{request.form.pin}}" placeholder="Same as myUDC" required>
-                        <label for="pin">Password</label>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col s12">
+                    <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12" onclick="loggingIn()">login</button>
                 </div>
-                <div class="row">
-                    <div class="col s12">
-                        <button type="submit" name="login" value="done" class="waves-effect waves-light btn-large green col s12" onclick="loggingIn()">login</button>
-                    </div>
-                </div>
-            </form><!--Login form dialog end-->
-        {% endif %}
+            </div>
+        </form><!--Login form dialog end-->
+        {%- endif -%}
         
-        <!--Flash messages logic start-->
-        {% for message in get_flashed_messages() %}
+        {# Flash messages logic start #}
+        {%- for message in get_flashed_messages() %}
             <script>Materialize.toast({{ message|tojson }}, 5000)</script>
             {% if message == "Invalid ID or Password" %}
                 <script>login.click()</script>
             {% endif %}
-        {% endfor %}
-        <!--Flash messages logic end-->
+        {% endfor -%}
+        {# Flash messages logic end -#}
 
         <!--Main Body start-->
-        {% block body %}{% endblock %}
+        {%- block body %}{% endblock -%}
         <!--Main Body end-->
 
         <!--Google Analytics code start-->
-        {% include 'ganalytics.html' %}
+        {% include 'ganalytics.html' -%}
         <!--Google Analytics code end-->
     </body>
 </html>
