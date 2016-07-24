@@ -5,6 +5,11 @@ from scraper import scraper
 from course import Course
 
 
+class Storage:
+    courses = {}
+    semester = None
+
+
 # Returns student's schedule
 def get_schedule(semester):
     # Enter Student -> Registration section

@@ -24,6 +24,8 @@ class Course:
         self.time = []
         # Building, Room of class eg. ["M10", "109"]
         self.location = []
+        # Course length in hours
+        self.length = None
         # Possible course lab
         self.lab = None
 
@@ -36,14 +38,16 @@ class Course:
         self.location = location
         # Store minutes equivalent of time string
         self.time = [Calculate.minutes_from_string(time[0]), Calculate.minutes_from_string(time[1])]
+        # Calculate length in hours
+        self.length = Calculate.hours_between_minutes(self.time[1], self.time[0])
         # Compare every course time to get min and max
         Calculate.find_min(self.time[0])
         Calculate.find_max(self.time[1])
 
     # If course has key-less lab, initialize lab course with same info as parent
-    def set_course_lab(self, prof_name):
+    def set_course_lab(self, prof_name):  # TODO: ACCEPT PROF_EMAIL AND CREDIT HOURS AS WELL
         # if professor's name is provided, use it instead
-        if prof_name == "To Be Announced" or prof_name is None:
+        if prof_name in ("To Be Announced", None):
             prof_name = self.prof_name
         # Initialize a course lab with parent course info
         self.lab = Course(self.name + " Lab", self.section, self.crn, prof_name, self.prof_email, "")
@@ -51,14 +55,18 @@ class Course:
         self.lab.short_name = self.short_name + " Lab"
         return self.lab
 
-    # Returns course length in hours
-    def length(self):
-        return Calculate.hours_between_minutes(self.time[1], self.time[0])
+    # Returns left, top positions for course occurrences # TODO: FIX MULTIPLE Calculate.hour_length() CALLING
+    def points(self, column_width=19, left_shift=5, top_shift=5):
+        y = Calculate.y_coordinate(top_shift, Calculate.hour_length(5), self.time[0])
+        # Calculate [x, y] coordinates then return them
+        return [[Calculate.x_coordinate(left_shift, day, column_width), y] for day in self.days]
 
-    # Returns left, top positions for course occurrences
-    def coordinates(self, column_width, row_height, left_shift, top_shift):
-        points = []
-        for day in self.days:  # Calculate [x, y] coordinates and add them to points
-            points.extend([[Calculate.class_x_coordinate(left_shift, day, column_width),
-                            Calculate.class_y_coordinate(top_shift, row_height, self.time[0])]])
-        return points
+    # Return course data in a dictionary
+    def dictionary(self):
+        course = self.__dict__
+        course["points"] = self.points()
+        if isinstance(self.lab, Course):
+            points = self.lab.points()
+            course["lab"] = self.lab.__dict__
+            course["lab"]["points"] = points
+        return course

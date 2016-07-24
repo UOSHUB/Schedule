@@ -44,12 +44,15 @@ class Calculate:
         # If there are fractions
         if sub_hour > 0:
             # Add them to the array
-            count_array.extend([sub_hour])
+            count_array.append(sub_hour)
             # Subtract them from hours count
             count -= sub_hour
+        else:
+            count_array.append(1)
+            count -= 1
         # For every whole hour put one in the array
         while count >= 1:
-            count_array.extend([1])
+            count_array.append(1 + count_array[-1])
             count -= 1
         return count_array
 
@@ -140,13 +143,13 @@ class Calculate:
 
     # Returns left (x) coordinate of the class box
     @classmethod
-    def class_x_coordinate(cls, left_shift, day, column_width):
+    def x_coordinate(cls, left_shift, day, column_width):
         # left: left shift + day column number * column width,
         return left_shift + cls.switch(day) * column_width
 
     # Returns top (y) coordinate of the class box
     @classmethod
-    def class_y_coordinate(cls, top_shift, row_height, class_start_time):
+    def y_coordinate(cls, top_shift, row_height, class_start_time):
         # top: top shift + row height * (course start time - schedule beginning) in hours
         return top_shift + row_height * (class_start_time - cls.min_time + 30) / 60
 
