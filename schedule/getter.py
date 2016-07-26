@@ -2,7 +2,7 @@
 
 # import needed libraries
 from scraper import scraper
-from course import Course
+from calculate import Calculate as Calc
 
 
 class Storage:
@@ -56,16 +56,16 @@ def scrape_detail_schedule(soup, schedule):
                 prof_email = prof.get("href").split(':')[1]
             else:
                 prof_name = prof_email = "To Be Announced"
-            # Store courses info: Course(name, section, CRN, prof_name, prof_email, credit_hours)
-            course = Course(caption[0], caption[2], row[1].string, prof_name,
-                            prof_email, int(row[5].string.split()[0][0]))
+            # Store courses info
+            course = {"name": caption[0], "section": caption[2], "crn": row[1].string, "prof_name": prof_name,
+                      "prof_email": prof_email, "credit_hours": int(row[5].string.split()[0][0])}
             # If course key is new to schedule
             if schedule.get(key, None) is None:
                 # Store the course with that key
                 schedule[key] = course
             else:  # If the course already exists
                 # Store it as a lab of the previous course
-                schedule[key].lab = course
+                schedule[key]["lab"] = course
     return schedule
 
 
@@ -81,18 +81,27 @@ def scrape_summarized_schedule(soup, schedule):
             row = table.find_all("td", class_="dddefault")
             # Store dictionary key as course number
             key = row[0].string
+            # Store course time interval
+            time = [Calc.minutes_from_string(time) for time in row[5].string.split(" - ")]
             # Fix if location info is divided into parts or repeated
             location = split_location(row[6].string)
+            # collect other details as: ([days in chars], [building, room], [start/end class time], length)
+            data = {"days": list(row[4].string), "location": location, "time": time}
             # If key isn't empty
             if key != " ":
+                # Add short name to data then add data to course
+                data["short_name"] = row[1].string
                 # If key isn't repeated, it's dedicated course, otherwise consider it a lab
-                course = schedule[key] if key != previous_key else schedule[key].lab
-                # set other details as: ([days in chars], [start/end class time], [building, room], short name)
-                course.set_other_details(list(row[4].string), row[5].string.split(" - "), location, row[1].string)
+                (schedule[key] if key != previous_key else schedule[key]["lab"]).update(data)
             else:  # If key is empty, consider course as a lab
-                # Add lab details as: set_course_lab([days in chars], [start/end class time], [building, room])
-                schedule[previous_key].set_course_lab(row[7].string).set_other_details(
-                                                      list(row[4].string), row[5].string.split(" - "), location)
+                # Add prof name to data if it exists and not TBA
+                if row[7].string not in ("To Be Announced", None):
+                    data["prof_name"] = row[7].string
+                # Assign collected data as a lab for the previous course
+                schedule[previous_key]["lab"] = data
+            # Check if course timing is min or max
+            Calc.find_min(time[0])
+            Calc.find_max(time[1])
             # Store course key for possible lab addition case
             previous_key = key
     return schedule
