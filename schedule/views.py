@@ -3,7 +3,6 @@
 # import needed libraries
 from flask import Blueprint, render_template, request, json
 from scraper import login_required
-from calculate import Calculate as Calc
 from getter import get_schedule, Storage
 
 # Instantiate schedule blueprint
@@ -22,7 +21,6 @@ def getter():
     # Only fill schedule if it's empty or selected a different semester
     if Storage.courses == {} or Storage.semester != request.data:
         # When the login session has expired, it need to login again
-        Calc.reset_min_max()
         try:
             Storage.courses = get_schedule(request.data)
         except Exception:
@@ -30,11 +28,4 @@ def getter():
             return Exception
         else:
             Storage.semester = request.data
-    return json.dumps({
-        "courses": Storage.courses,
-        "height": Calc.hour_length(5),
-        "labels": Calc.hours_labels(),
-        "fractions": Calc.hour_count_array(),
-        "dates": Calc.dates(),
-        "bottom": Calc.week_bottom()
-    })
+    return json.dumps(Storage.courses)

@@ -2,7 +2,6 @@
 
 # import needed libraries
 from scraper import scraper
-from calculate import Calculate as Calc
 
 
 class Storage:
@@ -82,7 +81,7 @@ def scrape_summarized_schedule(soup, schedule):
             # Store dictionary key as course number
             key = row[0].string
             # Store course time interval
-            time = [Calc.minutes_from_string(time) for time in row[5].string.split(" - ")]
+            time = [minutes_from_string(time) for time in row[5].string.split(" - ")]
             # Fix if location info is divided into parts or repeated
             location = split_location(row[6].string)
             # collect other details as: ([days in chars], [building, room], [start/end class time], length)
@@ -99,9 +98,6 @@ def scrape_summarized_schedule(soup, schedule):
                     data["prof_name"] = row[7].string
                 # Assign collected data as a lab for the previous course
                 schedule[previous_key]["lab"] = data
-            # Check if course timing is min or max
-            Calc.find_min(time[0])
-            Calc.find_max(time[1])
             # Store course key for possible lab addition case
             previous_key = key
     return schedule
@@ -123,3 +119,17 @@ def split_location(raw_location):
     except:
         # Return location without splitting
         return [raw_location, ""]
+
+
+def minutes_from_string(time):
+    # Store "1:30" in clock and "pm" in period
+    clock, period = time.split()
+    # Store "1" in hours and "30" in minutes
+    hours, minutes = clock.split(":")
+    # Calculate minutes without considering period
+    total_minutes = int(minutes) + int(hours) * 60
+    # If it's "pm" then add 12 * 60
+    if period == "pm" and hours != "12":
+        total_minutes += 720
+    # Return final result
+    return total_minutes

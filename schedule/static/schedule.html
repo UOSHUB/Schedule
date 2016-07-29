@@ -4,6 +4,8 @@
         {% include 'general.html' %}
         <!--Import specific schedule.css-->
         <link type="text/css" rel="stylesheet" href="{{ url_for('schedule.static', filename='css/schedule.css') }}"/>
+        <!--Import specific Data processor.js-->
+        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/processor.js') }}"></script>
         <!--Import specific AngularJS app.js-->
         <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
         <!--Setup page title-->
@@ -29,7 +31,7 @@
                         <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
                         <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
                         <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
-                        
+
                         <div ng-repeat="course in courses"> {$ updateColor($index) $}
                             <div ng-repeat="point in course.points" class="class {$ color $}"
                                 style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
