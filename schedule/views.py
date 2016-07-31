@@ -3,7 +3,7 @@
 # import needed libraries
 from flask import Blueprint, render_template, request, json
 from scraper import login_required
-from getter import get_schedule, Storage
+from getter import get_schedule
 
 # Instantiate schedule blueprint
 schedule = Blueprint("schedule", __name__, template_folder="static", static_folder="static")
@@ -18,14 +18,4 @@ def index():
 @schedule.route('/getter', methods=["POST"])
 @login_required
 def getter():
-    # Only fill schedule if it's empty or selected a different semester
-    if Storage.courses == {} or Storage.semester != request.data:
-        # When the login session has expired, it need to login again
-        try:
-            Storage.courses = get_schedule(request.data)
-        except Exception:
-            Storage.courses = {}
-            return Exception
-        else:
-            Storage.semester = request.data
-    return json.dumps(Storage.courses)
+    return json.dumps(get_schedule(request.data))

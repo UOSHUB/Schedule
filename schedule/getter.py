@@ -4,11 +4,6 @@
 from scraper import scraper
 
 
-class Storage:
-    courses = {}
-    semester = None
-
-
 # Returns student's schedule
 def get_schedule(semester):
     # Enter Student -> Registration section
@@ -23,6 +18,8 @@ def get_schedule(semester):
     # Select semester if it was specified
     if semester:
         scraper.form["term_in"] = [semester]
+    else:
+        semester = scraper.form["term_in"][0]
     scraper.submit()
     # Enter Student Detail Schedule page
     scraper.follow("bwskfshd.P_CrseSchdDetl")
@@ -33,7 +30,7 @@ def get_schedule(semester):
     # Enter Student Summarized Schedule page
     scraper.follow("uos_dispschd.P_DispCrseSchdSum")
     # Scrape soup and store data on top of schedule then return it
-    return scrape_summarized_schedule(scraper.get_soup(), schedule)
+    return [semester, scrape_summarized_schedule(scraper.get_soup(), schedule)]
 
 
 # Scrape Student Detail Schedule from soup and return data in schedule

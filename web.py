@@ -73,8 +73,7 @@ def logout():
     session.clear()
     # Flash bye message
     flash("See you soon " + name + " ^_^")
-    # Clean up schedule and go home
-    # TODO: CLEAN EVERYTHING OF THE USER
+    # Go back to home page
     return redirect(url_for("index"))
 
 
