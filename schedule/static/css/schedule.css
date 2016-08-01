@@ -1,5 +1,68 @@
+/* Navigation bar start */
+nav object {
+    padding-left: 12px;
+}
+/* Navigation bar end */
+
+/* Side bar start */
+#side-bar {
+    width: 60px;
+    height: calc(100% - 64px);
+    top: 64px;
+    z-index: 1;
+}
+
+#side-bar a {
+    height: 60px;
+    color: #90a4ae;
+    font-size: 1.2rem;
+    font-weight: 400;
+    line-height: 60px;
+}
+
+#side-bar i {
+    line-height: 60px;
+    color: #b0bec5;
+    font-size: 2rem;
+}
+
+#back, #divider {
+    position: fixed;
+    width: 100%;
+}
+
+#divider {
+    bottom: 60px;
+}
+
+#divider > div {
+    background-color: #b0bec5;
+}
+
+#back {
+    bottom: 0;
+}
+
+#back i {
+    font-size: 1.8rem;
+}
+/* Side bar end */
+
 /* Schedule card start */
-#card .card-panel {
+#container {
+    margin-left: 60px;
+    width: calc(100% - 60px);
+    height: calc(100% - 64px);
+    padding: 0.75rem 0;
+    margin-bottom: 0;
+}
+
+.card-panel,
+.col, .day {
+    height: 100%;
+}
+
+.card-panel {
     padding: 0;
     margin: 0;
     position: relative;
@@ -7,7 +70,6 @@
 
 .day {
     width: 19%;
-    height: 100%;
     float: left;
     border-right: 1px solid #cfd8dc;
 }

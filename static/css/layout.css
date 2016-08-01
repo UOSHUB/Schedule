@@ -2,27 +2,9 @@ body {
     background-image: linear-gradient(to bottom, #eceff1 5%, rgba(0, 0, 0, 0) 30%), url(../img/background.svg);
 }
 
-/* Navigation bar start */
-nav object {
-    height: 2rem;
-    pointer-events: none;
-}
-
-nav span {
-    position: relative;
-    font-size: 1.4rem;
-    font-weight: 300;
-    bottom: 0.2rem;
-}
-
-nav .button-collapse > i {
-    font-size: 1.8rem;
-}
-/* Navigation bar end */
-
 /* Login dialog start */
 #login-dialog {
-    width: 24rem;
+    width: 24.1rem;
     height: auto;
     padding: 1.4rem;
 }

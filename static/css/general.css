@@ -1,11 +1,26 @@
 /* Things that take up all screen height */
-html, body,
-#card, #card .col,
-#card .card-panel {
+html, body {
     height: 100%;
 }
 /* Full height end */
 
+/* Navigation bar start */
+nav object {
+    height: 2rem;
+    pointer-events: none;
+}
+
+nav span {
+    position: relative;
+    font-size: 1.4rem;
+    font-weight: 300;
+    bottom: 0.2rem;
+}
+
+nav .button-collapse > i {
+    font-size: 1.8rem;
+}
+/* Navigation bar end */
 
 /* Content container start */
 .container {

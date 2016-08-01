@@ -8,41 +8,62 @@
         <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/processor.js') }}"></script>
         <!--Import specific AngularJS app.js-->
         <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
+        <!--Import my scripts.js-->
+        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/scripts.js') }}"></script>
         <!--Setup page title-->
         <title>Schedule - UOSHUB</title>
     </head>
 
-    <body class="grey lighten-3">
-        <div class="container" ng-controller="ctrl" ng-init="initialize()">
-            <div class="row hide-on-small-only"></div>
-            <div class="row" id="card">
-                <div class="col s12">
-                    <div class="card-panel shadow">
-                        <div class="day hhead green lighten-5"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
+    <body class="grey lighten-2">
+        <div class="navbar-fixed">
+            <nav class="grey lighten-5 shadow">
+                <div class="nav-wrapper">
+                    <a href="http://uoshub.tk" class="brand-logo">
+                        <object type="image/svg+xml" data="{{ url_for('schedule.static', filename='img/uos_logo.svg') }}">Logo</object>
+                        <span class="teal-text text-darken-1"><b class="blue-grey-text text-darken-3">UOS</b> HUB</span>
+                    </a>
+                </div>
+            </nav>
+        </div>
 
-                        <div class="days-head green lighten-5"></div>
-                        <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
-                            {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
-                        </div>
-                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
-                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
-                        <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
+        <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
+            <li><a class="waves-effect"><i class="fa fa-clock-o" aria-hidden="true"></i>Select Semester</a></li>
+            <li><a class="waves-effect"><i class="fa fa-plus" aria-hidden="true"></i>Add Item</a></li>
+            <li><a class="waves-effect"><i class="fa fa-pencil" aria-hidden="true"></i>Design Schedule</a></li>
+            <li><a class="waves-effect"><i class="fa fa-share-alt" aria-hidden="true"></i>Share Schedule</a></li>
+            <li id="divider"><div class="divider"></div></li>
+            <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
+                <i class="fa fa-dashboard" aria-hidden="true"></i>Go To Dashboard
+            </a></li>
+        </ul>
 
-                        <div ng-repeat="course in courses"> {$ updateColor($index) $}
-                            <div ng-repeat="point in course.points" class="class {$ color $}"
-                                style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
-                                <span class="course-name">{$ course.short_name $}</span><br>
-                                <i class="fa fa-user fa-fw"></i> {$ course.prof_name $}<br>
-                                <i class="fa fa-map-marker fa-fw"></i> {$ course.location[0] $} {$ course.location[1] $}
-                            </div>
+        <div id="container" class="row" ng-controller="ctrl" ng-init="initialize()">
+            <div class="col s12">
+                <div class="card-panel shadow">
+                    <div class="day hhead teal lighten-5"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+                    <div class="day"></div>
+
+                    <div class="days-head teal lighten-5"></div>
+                    <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
+                        {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
+                    </div>
+                    <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
+                    <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
+                    <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
+
+                    <div ng-repeat="course in courses"> {$ updateColor($index) $}
+                        <div ng-repeat="point in course.points" class="class {$ color $}"
+                            style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
+                            <span class="course-name">{$ course.short_name $}</span><br>
+                            <i class="fa fa-user fa-fw"></i> {$ course.prof_name $}<br>
+                            <i class="fa fa-map-marker fa-fw"></i> {$ course.location[0] $} {$ course.location[1] $}
                         </div>
-                        <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">
-                            {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
-                        </div>
+                    </div>
+                    <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">
+                        {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
                     </div>
                 </div>
             </div>
