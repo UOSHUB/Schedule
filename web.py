@@ -4,7 +4,7 @@
 import os
 from flask import Flask, render_template, flash, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from scraper import scraper, login_required
+from browser import br, login_required
 from schedule.views import schedule
 
 # Initialize with template folder in ./static
@@ -32,13 +32,13 @@ def index():
         session["sid"] = request.form["sid"]
         session["pin"] = request.form["pin"]
         # login and check if it succeeded
-        if scraper.login():
+        if br.login():
             # Grab student by id from database if existed
             student = Student.query.filter_by(sid=session["sid"]).first()
             # If student is new
             if student is None:
                 # Grab student name and store it in session
-                session["name"] = scraper.get_username()
+                session["name"] = br.get_username()
                 # Add student id and name to database
                 db.session.add(Student(session["sid"], session["name"]))
                 # Commit changes to database
@@ -90,13 +90,19 @@ def about():
 # Nicely handle all errors
 @app.errorhandler(Exception)
 @app.errorhandler(500)
+@app.errorhandler(405)
 @app.errorhandler(404)
 @app.errorhandler(403)
 def error(e):
-    # If student logs in from error page
+    # If the error happened with a post request
     if request.method == "POST":
-        # Send code 307 to preserve the post request
-        return redirect(url_for("index"), code=307)
+        # If it's login request from error page
+        if "login" in request.form:
+            # Send code 307 to preserve the post request
+            return redirect(url_for("index"), code=307)
+        # Otherwise just return an exception
+        else:
+            return Exception
     # Otherwise render appropriate error page
     return render_template("error.html", error=str(e))
 

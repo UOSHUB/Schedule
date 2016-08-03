@@ -4,8 +4,8 @@
         {% include 'general.html' %}
         <!--Import specific schedule.css-->
         <link type="text/css" rel="stylesheet" href="{{ url_for('schedule.static', filename='css/schedule.css') }}"/>
-        <!--Import specific Data processor.js-->
-        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/processor.js') }}"></script>
+        <!--Import specific Data process.js Handler-->
+        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/process.js') }}"></script>
         <!--Import specific AngularJS app.js-->
         <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
         <!--Import my scripts.js-->
@@ -26,44 +26,59 @@
             </nav>
         </div>
 
-        <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
-            <li><a class="waves-effect"><i class="fa fa-clock-o" aria-hidden="true"></i>Select Semester</a></li>
-            <li><a class="waves-effect"><i class="fa fa-plus" aria-hidden="true"></i>Add Item</a></li>
-            <li><a class="waves-effect"><i class="fa fa-pencil" aria-hidden="true"></i>Design Schedule</a></li>
-            <li><a class="waves-effect"><i class="fa fa-share-alt" aria-hidden="true"></i>Share Schedule</a></li>
-            <li id="divider"><div class="divider"></div></li>
-            <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
-                <i class="fa fa-dashboard" aria-hidden="true"></i>Go To Dashboard
-            </a></li>
-        </ul>
+        <div id="container" ng-controller="ctrl" ng-init="initialize()">
+            <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
+                <li class="no-padding">
+                    <ul class="collapsible collapsible-accordion">
+                        <li>
+                            <a ng-click="grabSemesters()" class="collapsible-header waves-effect"><i class="fa fa-clock-o" aria-hidden="true"></i>Switch Semester</a>
+                            <div id="semesters" class="collapsible-body">
+                                <ul>
+                                    <li class="loading"><a class="waves-effect"><i class="fa fa-refresh fa-spin fa-fw"></i>Loading...</a></li>
+                                    <li ng-repeat="item in semesters"><a id="{$ item[0] $}" ng-click="grabSchedule(item[0])"
+                                        class="waves-effect{$ item[0] == semester ? ' selected' : '' $}">{$ item[1] $}</a></li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="waves-effect"><i class="fa fa-plus" aria-hidden="true"></i>Add an Event</a></li>
+                <li><a class="waves-effect"><i class="fa fa-pencil" aria-hidden="true"></i>Design Schedule</a></li>
+                <li><a class="waves-effect"><i class="fa fa-share-alt" aria-hidden="true"></i>Share Schedule</a></li>
+                <li id="divider"><div class="divider"></div></li>
+                <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
+                    <i class="fa fa-dashboard" aria-hidden="true"></i>Go To Dashboard
+                </a></li>
+            </ul>
 
-        <div id="container" class="row" ng-controller="ctrl" ng-init="initialize()">
-            <div class="col s12">
-                <div class="card-panel shadow">
-                    <div class="day hhead teal lighten-5"></div>
-                    <div class="day"></div>
-                    <div class="day"></div>
-                    <div class="day"></div>
-                    <div class="day"></div>
+            <div id="schedule" class="row">
+                <div class="col s12">
+                    <div class="card-panel shadow">
+                        <div class="day hhead teal lighten-5"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
+                        <div class="day"></div>
 
-                    <div class="days-head teal lighten-5"></div>
-                    <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
-                        {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
-                    </div>
-                    <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
-                    <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
-                    <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
-
-                    <div ng-repeat="course in courses"> {$ updateColor($index) $}
-                        <div ng-repeat="point in course.points" class="class {$ color $}"
-                            style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
-                            <span class="course-name">{$ course.short_name $}</span><br>
-                            <i class="fa fa-user fa-fw"></i> {$ course.prof_name $}<br>
-                            <i class="fa fa-map-marker fa-fw"></i> {$ course.location[0] $} {$ course.location[1] $}
+                        <div class="days-head teal lighten-5"></div>
+                        <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
+                            {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
                         </div>
-                    </div>
-                    <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">
-                        {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
+                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
+                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
+                        <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
+
+                        <div ng-repeat="course in courses"> {$ updateColor($index) $}
+                            <div ng-repeat="point in course.points" class="class {$ color $}"
+                                style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
+                                <span class="course-name">{$ course.short_name $}</span><br>
+                                <i class="fa fa-user fa-fw"></i> {$ course.prof_name $}<br>
+                                <i class="fa fa-map-marker fa-fw"></i> {$ course.location[0] $} {$ course.location[1] $}
+                            </div>
+                        </div>
+                        <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">
+                            {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
+                        </div>
                     </div>
                 </div>
             </div>

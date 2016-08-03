@@ -1,11 +1,27 @@
+// Switch on season db value according to it's string name
+var seasons = {"FALL": 10, "Fall": 10, "Spring": 20, "Summer": 30};
 // Switch on day column number according to day's first letter
 var switchDay = {"U": 0, "M": 1, "T": 2, "W": 3, "R": 4, "F": 5, "S": 6};
 // Initialize schedule padding and column width
 var topShift = 5, leftShift = 5, columnWidth = 19;
 // Declare schedule frequently used variables
 var maxTime, minTime, hoursCount, rowHeight;
+// Returns semesters as [digit value, beautified string]
+function getSemestersData(semesters) {
+    var data = [];
+    // Loop through semesters from array
+    for(var i = 0; i < semesters.length; i++) {
+        // Add spaces around the '-' to beautify string
+        var string = semesters[i].replace('-', " - ");
+        // Split string on first two spaces
+        var array = string.split(' ', 2);
+        // Add to output the digit value and the string
+        data.push([array[1] + seasons[array[0]], string]);
+    }
+    return data;
+}
 // Main method that returns schedule drawing data from courses
-function getData(courses) {
+function getCoursesData(courses) {
     initialProcessing(courses);
     // Loop through courses
     for(var id in courses) {

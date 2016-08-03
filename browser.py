@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from mechanize import Browser, _http, LinkNotFoundError
+from mechanize import Browser as Mechanize, _http, LinkNotFoundError
 from flask import session, flash, url_for, redirect
 from bs4 import BeautifulSoup
 from functools import wraps
@@ -20,10 +20,10 @@ def login_required(f):
 
 
 # A mechanize subclass with frequently use methods
-class Scraper(Browser):
+class Browser(Mechanize):
     def __init__(self):
         # Instantiate superclass mechanize browser
-        Browser.__init__(self)
+        Mechanize.__init__(self)
         # Browser options
         self.set_handle_equiv(True)
         self.set_handle_redirect(True)
@@ -73,4 +73,4 @@ class Scraper(Browser):
 
 # Instantiate a scraper object to be used
 # in many different places (kind statically)
-scraper = Scraper()
+br = Browser()

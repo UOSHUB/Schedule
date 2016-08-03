@@ -1,40 +1,8 @@
 #!/usr/bin/env python
 
-# import needed libraries
-from scraper import scraper
-
-
-# Returns student's schedule
-def get_schedule(semester):
-    # Enter Student -> Registration section
-    scraper.get("GenMenu?name=bmenu.P_RegMnu")
-    # Enter Registration Term
-    if not scraper.follow("bwskflib.P_SelDefTerm"):
-        # Login if not logged then try again
-        scraper.login()
-        return get_schedule(semester)
-    # Select the sent semester to be displayed
-    scraper.select_form(nr=1)
-    # Select semester if it was specified
-    if semester:
-        scraper.form["term_in"] = [semester]
-    else:
-        semester = scraper.form["term_in"][0]
-    scraper.submit()
-    # Enter Student Detail Schedule page
-    scraper.follow("bwskfshd.P_CrseSchdDetl")
-    # Scrape soup and store data instead of the empty {}
-    schedule = scrape_detail_schedule(scraper.get_soup(), {})
-    # Return to Student -> Registration section
-    scraper.get("GenMenu?name=bmenu.P_RegMnu")
-    # Enter Student Summarized Schedule page
-    scraper.follow("uos_dispschd.P_DispCrseSchdSum")
-    # Scrape soup and store data on top of schedule then return it
-    return [semester, scrape_summarized_schedule(scraper.get_soup(), schedule)]
-
 
 # Scrape Student Detail Schedule from soup and return data in schedule
-def scrape_detail_schedule(soup, schedule):
+def detail_schedule(soup, schedule):
     # Loop through tables with datadisplaytable class
     for table in soup.find_all("table", class_="datadisplaytable"):
         # If it's the heading table
@@ -66,7 +34,7 @@ def scrape_detail_schedule(soup, schedule):
 
 
 # Scrape Student Summarized Schedule from soup and store complete data in schedule
-def scrape_summarized_schedule(soup, schedule):
+def summarized_schedule(soup, schedule):
     # Declare previous course key holder
     previous_key = None
     # Loop through TR tags of tables with datadisplaytable class
@@ -78,9 +46,9 @@ def scrape_summarized_schedule(soup, schedule):
             # Store dictionary key as course number
             key = row[0].string
             # Store course time interval
-            time = [minutes_from_string(time) for time in row[5].string.split(" - ")]
+            time = [__minutes_from_string(time) for time in row[5].string.split(" - ")]
             # Fix if location info is divided into parts or repeated
-            location = split_location(row[6].string)
+            location = __split_location(row[6].string)
             # collect other details as: ([days in chars], [building, room], [start/end class time], length)
             data = {"days": list(row[4].string), "location": location, "time": time}
             # If key isn't empty
@@ -101,7 +69,7 @@ def scrape_summarized_schedule(soup, schedule):
 
 
 # Split location info and fix if it's repeated
-def split_location(raw_location):
+def __split_location(raw_location):
     try:
         # Split and store the raw location info
         location = raw_location.split()
@@ -118,7 +86,7 @@ def split_location(raw_location):
         return [raw_location, ""]
 
 
-def minutes_from_string(time):
+def __minutes_from_string(time):
     # Store "1:30" in clock and "pm" in period
     clock, period = time.split()
     # Store "1" in hours and "30" in minutes

@@ -53,7 +53,7 @@
             <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-lighten-5"><i class="fa fa-sign-out"></i>LOGOUT</a></li>
             {%- endif %}
         </ul><!--Side Navigation bar end-->
-        
+
         {% if 'name' not in session -%}
         <!--Login form dialog Structure -->
         <form id="login-dialog" class="modal white" method="post">
@@ -79,7 +79,7 @@
             </div>
         </form><!--Login form dialog end-->
         {%- endif -%}
-        
+
         {# Flash messages logic start #}
         {%- for message in get_flashed_messages() %}
             <script>Materialize.toast({{ message|tojson }}, 5000)</script>
