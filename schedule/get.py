@@ -24,14 +24,8 @@ def schedule(semester):
     br.submit()
     # Enter Student Detail Schedule page
     br.follow("bwskfshd.P_CrseSchdDetl")
-    # Scrape soup and store data instead of the empty {}
-    result = scrape.detail_schedule(br.get_soup(), {})
-    # Return to Student -> Registration section
-    br.get("GenMenu?name=bmenu.P_RegMnu")
-    # Enter Student Summarized Schedule page
-    br.follow("uos_dispschd.P_DispCrseSchdSum")
-    # Scrape soup and store data on top of schedule then return it
-    return [semester, scrape.summarized_schedule(br.get_soup(), result)]
+    # Scrape soup and store data instead of the empty {} then return it
+    return [semester, scrape.detail_schedule(br.get_soup(), {})]
 
 
 # Returns student's available semesters

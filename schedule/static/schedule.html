@@ -16,7 +16,7 @@
 
     <body class="grey lighten-2">
         <div class="navbar-fixed">
-            <nav class="grey lighten-5 shadow">
+            <nav class="white shadow">
                 <div class="nav-wrapper">
                     <a href="http://uoshub.tk" class="brand-logo">
                         <object type="image/svg+xml" data="{{ url_for('schedule.static', filename='img/uos_logo.svg') }}">Logo</object>
@@ -54,26 +54,26 @@
             <div id="schedule" class="row">
                 <div class="col s12">
                     <div class="card-panel shadow">
-                        <div class="day hhead teal lighten-5"></div>
+                        <div class="day as-hours-head teal lighten-5"></div>
                         <div class="day"></div>
                         <div class="day"></div>
                         <div class="day"></div>
                         <div class="day"></div>
 
-                        <div class="days-head teal lighten-5"></div>
+                        <div class="hour as-days-head teal lighten-5"></div>
                         <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
                             {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
                         </div>
-                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%; border-bottom: 1px solid #eceff1;"></div>
+                        <div ng-if="fraction >= 1 || ($last && fraction == -1)" class="half hour" style="height: {$ height / 2 $}%"></div>
                         <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
-                        <div ng-if="fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
+                        <div ng-if="$first && fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
 
-                        <div ng-repeat="course in courses"> {$ updateColor($index) $}
-                            <div ng-repeat="point in course.points" class="class {$ color $}"
-                                style="width: calc(19% - 1px); height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
-                                <span class="course-name">{$ course.short_name $}</span><br>
-                                <i class="fa fa-user fa-fw"></i> {$ course.prof_name $}<br>
-                                <i class="fa fa-map-marker fa-fw"></i> {$ course.location[0] $} {$ course.location[1] $}
+                        <div ng-repeat="course in courses">
+                            <div ng-repeat="point in course.points" class="class {$ course.color $}"
+                                style="height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
+                                <span class="course-name">{$ course.name $}</span><br>
+                                <i class="fa fa-user fa-fw"></i> {$ course.doctor[0] $}<br>
+                                <i class="fa fa-map-marker fa-fw"></i> {$ course.place[0] $} {$ course.place[1] $}
                             </div>
                         </div>
                         <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">

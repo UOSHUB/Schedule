@@ -105,13 +105,10 @@ nav object {
     border-right: 1px solid #cfd8dc;
 }
 
-.days-head {
-    height: 5%;
-    position: relative;
-    width: calc(95% + 1px);
-    margin-left: calc(5% - 1px);
-    border-bottom: 1px solid #cfd8dc;
-    border-radius: 2px;
+.day.as-hours-head {
+    width: 5%;
+    border-top-left-radius: 2px;
+    border-bottom-left-radius: 2px;
 }
 
 .day-label {
@@ -131,9 +128,15 @@ nav object {
     border-bottom: 1px solid #cfd8dc;
 }
 
-.hhead {
-    width: 5%;
-    border-radius: 2px;
+.half.hour {
+    border-bottom-color: #eceff1;
+}
+
+.hour.as-days-head {
+    height: 5%;
+    width: calc(95% + 1px);
+    margin-left: calc(5% - 1px);
+    border-top-right-radius: 2px;
 }
 
 .hour-label {
@@ -145,6 +148,7 @@ nav object {
 }
 
 .class {
+    width: calc(19% - 1px);
     position: absolute;
     padding: 0.5rem 0.5rem 0.7rem 0.7rem;
     color: #fff;

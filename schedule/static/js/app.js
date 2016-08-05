@@ -6,17 +6,10 @@ app.config(["$interpolateProvider", function($interpolateProvider) {
 }]);
 
 app.controller("ctrl", function($scope, $http, localStorageService) {
-    var lss = localStorageService;
+    var lss = localStorageService;  // TODO: identify data with user id
     var requesting = false;
 
     $scope.days = ["Sun", "Mon", "Tue", "Wed", "Thu"];
-    $scope.colors = ["red", "teal", "green", "orange",
-                     "purple", "light-blue", "teal",
-                     "yellow", "deep-orange", "blue"];
-
-    $scope.updateColor = function(index) {
-        $scope.color = $scope.colors[index];
-    };
 
     $scope.initialize = function() {
         $scope.semester = lss.get("semester");

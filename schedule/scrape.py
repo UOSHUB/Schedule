@@ -7,22 +7,21 @@ def detail_schedule(soup, schedule):
     for table in soup.find_all("table", class_="datadisplaytable"):
         # If it's the heading table
         if table.caption.string != "Scheduled Meeting Times":
-            # Split table caption into three parts ["name", "number", "section"]
-            caption = table.caption.string.split(" - ")
+            # Split table caption into three parts ["name", "key", "section"]
+            name, key, section = table.caption.string.split(" - ")
             # Store dictionary key as course number after removing spaces
-            key = caption[1].replace(' ', '')
-            # Store all table cells into row array
-            row = table.find_all("td", class_="dddefault")
-            # Get professor info and handle TBA
-            prof = row[3].a
-            if prof:
-                prof_name = prof.get("target")
-                prof_email = prof.get("href").split(':')[1]
-            else:
-                prof_name = prof_email = "To Be Announced"
-            # Store courses info
-            course = {"name": caption[0], "section": caption[2], "crn": row[1].string, "prof_name": prof_name,
-                      "prof_email": prof_email, "credit_hours": int(row[5].string.split()[0][0])}
+            key = key.replace(' ', '')
+            # Store all table cells into cells array
+            cells = table.find_all("td", class_="dddefault")
+            # Store course info so far
+            course = {"name": name, "section": section,
+                      "crn": int(cells[1].string),
+                      "ch": int(cells[5].string.strip()[0])}
+        else:
+            rows = table.find_all("tr")
+            course.update(__extract_data(rows[1].find_all("td", class_="dddefault"), {"doctor": ["To Be Announced"] * 2}))
+            if len(rows) > 2:
+                course["lab"] = __extract_data(rows[2].find_all("td", class_="dddefault"), {})
             # If course key is new to schedule
             if schedule.get(key, None) is None:
                 # Store the course with that key
@@ -33,68 +32,31 @@ def detail_schedule(soup, schedule):
     return schedule
 
 
-# Scrape Student Summarized Schedule from soup and store complete data in schedule
-def summarized_schedule(soup, schedule):
-    # Declare previous course key holder
-    previous_key = None
-    # Loop through TR tags of tables with datadisplaytable class
-    for table in soup.find_all("table", class_="datadisplaytable")[1].find_all("tr"):
-        # Exclude rows with TH tag or that doesn't have valign attribute
-        if table.th is None and table.has_attr("valign"):
-            # Store all table cells into row array
-            row = table.find_all("td", class_="dddefault")
-            # Store dictionary key as course number
-            key = row[0].string
-            # Store course time interval
-            time = [__minutes_from_string(time) for time in row[5].string.split(" - ")]
-            # Fix if location info is divided into parts or repeated
-            location = __split_location(row[6].string)
-            # collect other details as: ([days in chars], [building, room], [start/end class time], length)
-            data = {"days": list(row[4].string), "location": location, "time": time}
-            # If key isn't empty
-            if key != " ":
-                # Add short name to data then add data to course
-                data["short_name"] = row[1].string
-                # If key isn't repeated, it's dedicated course, otherwise consider it a lab
-                (schedule[key] if key != previous_key else schedule[key]["lab"]).update(data)
-            else:  # If key is empty, consider course as a lab
-                # Add prof name to data if it exists and not TBA
-                if row[7].string not in ("To Be Announced", None):
-                    data["prof_name"] = row[7].string
-                # Assign collected data as a lab for the previous course
-                schedule[previous_key]["lab"] = data
-            # Store course key for possible lab addition case
-            previous_key = key
-    return schedule
+#  Returns extracted data from cells as a dict
+def __extract_data(cells, alt):
+    return dict({
+        # Loop through time range bounds and convert them to minutes, e.g. [750, 825]
+        "time": [__calc_minutes(time.replace(':', ' ').split()) for time in cells[1].string.split(" - ")],
+        # Store class days in chars, e.g. ['M', 'W']
+        "days": list(cells[2].string),
+        # Remove extra parts from place details, e.g. ["M10", "TH007"]
+        "place": __remove_extras(cells[3].string.split()),
+        # If doctor info is valid store doctor name and email, e.g. ["Name", "Email"]
+    }, **({"doctor": [cells[6].a.get("target"), cells[6].a.get("href")[7:]]} if cells[6].a else alt))
 
 
-# Split location info and fix if it's repeated
-def __split_location(raw_location):
-    try:
-        # Split and store the raw location info
-        location = raw_location.split()
-        # If building info is repeated in room info
-        if location[0] in location[1]:
-            # Remove repetition and return split location
-            return [location[0], location[1].split('-')[1]]
-        else:
-            # Otherwise return split location info as is
-            return location
-    # If this fails for some reason
-    except:
-        # Return location without splitting
-        return [raw_location, ""]
+# Takes place details array e.g. ["M10:", "Engineering", "(Men)", "TH007"] and remove extra details
+def __remove_extras(place):
+    # From building only get first letter and the digits after it, and from room remove any duplicates
+    return [place[0][0] + __get_digits(place[0][1:]), __get_digits(place[-1].split('-')[-1])]
 
 
-def __minutes_from_string(time):
-    # Store "1:30" in clock and "pm" in period
-    clock, period = time.split()
-    # Store "1" in hours and "30" in minutes
-    hours, minutes = clock.split(":")
-    # Calculate minutes without considering period
-    total_minutes = int(minutes) + int(hours) * 60
-    # If it's "pm" then add 12 * 60
-    if period == "pm" and hours != "12":
-        total_minutes += 720
-    # Return final result
-    return total_minutes
+# Takes a string and returns digits from it
+def __get_digits(string):
+    return ''.join([char for char in string if char.isdigit()])
+
+
+# Takes a time array e.g. ['1', '30', 'pm'] and calculates minutes
+def __calc_minutes(time):
+    # Calculate minutes from time and if it's "pm" then add 12 * 60
+    return int(time[0]) * 60 + int(time[1]) + (720 if time[2] == "pm" and time[0] != "12" else 0)

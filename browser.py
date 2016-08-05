@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from mechanize import Browser as Mechanize, _http, LinkNotFoundError
+from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNotFoundError
 from flask import session, flash, url_for, redirect
 from bs4 import BeautifulSoup
 from functools import wraps
@@ -56,8 +56,11 @@ class Browser(Mechanize):
         self.get("WWWLogin")
         # Fill up login form
         self.select_form(nr=0)
-        self["sid"] = session["sid"]
-        self["PIN"] = session["pin"]
+        try:
+            self["sid"] = session["sid"]
+            self["PIN"] = session["pin"]
+        except ControlNotFoundError:
+            return self.login()
         # Submit and return login validation
         self.submit()
         return self.title() == "Main Menu"

@@ -6,6 +6,10 @@ var switchDay = {"U": 0, "M": 1, "T": 2, "W": 3, "R": 4, "F": 5, "S": 6};
 var topShift = 5, leftShift = 5, columnWidth = 19;
 // Declare schedule frequently used variables
 var maxTime, minTime, hoursCount, rowHeight;
+// Declare colors to be included in courses
+var colors = ["red", "teal", "green", "orange",
+              "purple", "light-blue", "brown",
+              "yellow", "deep-orange", "blue"];
 // Returns semesters as [digit value, beautified string]
 function getSemestersData(semesters) {
     var data = [];
@@ -48,9 +52,9 @@ function initialProcessing(courses) {
     // Initial max and min values
     maxTime = 0; minTime = 24 * 60;
     // Loop through courses again!
-    for(var id in courses) {
+    Object.keys(courses).forEach(function(id, index) {
         var course = courses[id];
-        findMinMax(course.time);
+        colorAndMinMax(course, index);
         // If course has a lab, separate it
         if("lab" in course) {
             // Make a copy of course
@@ -59,17 +63,18 @@ function initialProcessing(courses) {
             for(var key in copy.lab)
                 // Replace them with original course ones
                 copy[key] = copy.lab[key];
-            if(!("name" in copy.lab)) copy.name += " Lab";
-            if(!("short_name" in copy.lab)) copy.short_name += " Lab";
+            // If lab doesn't have a name, then add " Lab" to course name
+            if(!("name" in copy.lab) || copy.lab.name.indexOf("Lab") < 0)
+                copy.name += " Lab";
             // delete lab property
             delete copy.lab;
-            findMinMax(copy.time);
+            colorAndMinMax(copy, index);
             // Store resulted course as "id + lab"
             courses[id + "-lab"] = copy;
             // Flag original course lab as true
             course.lab = true;
         }
-    }
+    });
     // Add 30 minutes margin to schedule
     maxTime += 30; minTime -= 30;
     // Number of hours in schedule
@@ -77,8 +82,12 @@ function initialProcessing(courses) {
     // Height of a row in schedule
     rowHeight = (100 - topShift) / hoursCount;
 }
-// Finds min and max course times in schedule
-function findMinMax(time) {
+// Sets course color and finds min and max times in schedule
+function colorAndMinMax(course, index) {
+    // Set course color accourding to index
+    course.color = colors[index];
+    // Compare course time to other courses
+    var time = course.time;
     if(time[0] < minTime) minTime = time[0];
     if(time[1] > maxTime) maxTime = time[1];
 }
@@ -118,6 +127,8 @@ function hoursFractions() {
     // Add the remaining hours cumulatively
     for(var i = 1; i < remaining; i++)
         fractions.push(1 + fractions.slice(-1)[0]);
+    // If there's an extra half an hour add -1
+    if(remaining % 1 > 0.5) fractions.push(-1);
     return fractions;
 }
 // Returns an array of weekday dates: ["MM/DD"]
