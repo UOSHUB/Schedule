@@ -34,15 +34,15 @@ def detail_schedule(soup, schedule):
 
 #  Returns extracted data from cells as a dict
 def __extract_data(cells, alt):
-    return dict({
-        # Loop through time range bounds and convert them to minutes, e.g. [750, 825]
-        "time": [__calc_minutes(time.replace(':', ' ').split()) for time in cells[1].string.split(" - ")],
+    return dict(
+        # Upper case and split time string e.g. ["8:00 AM", "9:15 AM"]
+        time = cells[1].string.upper().split(" - "),
         # Store class days in chars, e.g. ['M', 'W']
-        "days": list(cells[2].string),
+        days = list(cells[2].string),
         # Remove extra parts from place details, e.g. ["M10", "TH007"]
-        "place": __remove_extras(cells[3].string.split()),
+        place = __remove_extras(cells[3].string.split()),
         # If doctor info is valid store doctor name and email, e.g. ["Name", "Email"]
-    }, **({"doctor": [cells[6].a.get("target"), cells[6].a.get("href")[7:]]} if cells[6].a else alt))
+        **({"doctor": [cells[6].a.get("target"), cells[6].a.get("href")[7:]]} if cells[6].a else alt))
 
 
 # Takes place details array e.g. ["M10:", "Engineering", "(Men)", "TH007"] and remove extra details
@@ -54,9 +54,3 @@ def __remove_extras(place):
 # Takes a string and returns digits from it
 def __get_digits(string):
     return ''.join([char for char in string if char.isdigit()])
-
-
-# Takes a time array e.g. ['1', '30', 'pm'] and calculates minutes
-def __calc_minutes(time):
-    # Calculate minutes from time and if it's "pm" then add 12 * 60
-    return int(time[0]) * 60 + int(time[1]) + (720 if time[2] == "pm" and time[0] != "12" else 0)

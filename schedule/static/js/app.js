@@ -14,6 +14,8 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
     $scope.initialize = function() {
         $scope.semester = lss.get("semester");
         $scope.grabSchedule($scope.semester);
+        if(lss.keys().indexOf("semesters") > -1)
+            $scope.semesters = lss.get("semesters");
     }
 
     $scope.grabSchedule = function(semester) {
@@ -29,8 +31,13 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
     function getSchedule(semester) {
         requesting = true;
         $http.post("/schedule/get_schedule", semester).then(function(response) {
-            lss.set(response.data[0], response.data[1]);
-            extractData(response.data[0], response.data[1]);
+            if(semester == null) {
+                semester = response.data["semester"];
+                $scope.semesters = toString(semester, {});
+                lss.set("semesters", $scope.semesters);
+            }
+            lss.set(semester, response.data["courses"]);
+            extractData(semester, response.data["courses"]);
             requesting = false;
         }, function(response) {
             Materialize.toast("Couldn't get schedule!", 2000);
@@ -52,7 +59,7 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
 
     $scope.grabSemesters = function() {
         if($("#semesters").is(":hidden")) {
-            if(lss.keys().indexOf("semesters") > -1) {
+            if(Object.keys(lss.get("semesters")).length > 1) {
                 if(!(angular.isDefined($scope.semesters)))
                     $scope.semesters = lss.get("semesters");
             } else if(!requesting)
@@ -74,4 +81,16 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
             requesting = false;
         });
     }
+
+    $scope.showClass = function(id) {
+        $scope.class = $scope.courses[id];
+        $scope.class.id = id;
+        $("#class-modal").openModal({
+            opacity: .2,
+            in_duration: 200,
+            out_duration: 100,
+            starting_top: "35%",
+            ending_top: "25%"
+        });
+    };
 });

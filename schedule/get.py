@@ -20,12 +20,13 @@ def schedule(semester):
     if semester:
         br.form["term_in"] = [semester]
     else:
-        semester = br.form["term_in"][0]
+        extras = br.form["term_in"][0]
     br.submit()
     # Enter Student Detail Schedule page
     br.follow("bwskfshd.P_CrseSchdDetl")
     # Scrape soup and store data instead of the empty {} then return it
-    return [semester, scrape.detail_schedule(br.get_soup(), {})]
+    return dict(courses=scrape.detail_schedule(br.get_soup(), {}),
+                **({} if semester else {"semester": extras}))
 
 
 # Returns student's available semesters

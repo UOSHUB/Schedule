@@ -57,16 +57,24 @@ nav object {
     bottom: 0;
 }
 
-#back i {
-    font-size: 1.8rem;
-}
-
 .selected {
     color: white !important;
 }
 
 .loading {
     display: none;
+}
+
+#semesters ul {
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    transform: rotate(180deg);
+}
+
+#semesters > ul > li {
+    -moz-transform: rotate(-180deg);
+    -webkit-transform: rotate(-180deg);
+    transform: rotate(-180deg);
 }
 /* Side bar end */
 
@@ -179,3 +187,35 @@ nav object {
     font-weight: 500;
 }
 /* Schedule card end */
+
+#class-modal {
+    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    width: 50rem;
+}
+
+.modal-head {
+    padding: 24px;
+    color: white;
+}
+
+.modal-head i {
+    cursor: pointer;
+}
+
+.modal-content.row {
+    padding: 16px 16px 2px;
+    font-size: 1.2rem;
+    color: #424242;
+}
+
+.modal-content i {
+    margin-right: 16px;
+}
+
+.modal-content.row * {
+    padding: 8px;
+}
+
+.mid-font {
+    font-size: 1.8rem !important;
+}

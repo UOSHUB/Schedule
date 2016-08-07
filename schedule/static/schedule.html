@@ -31,23 +31,23 @@
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
                         <li>
-                            <a ng-click="grabSemesters()" class="collapsible-header waves-effect"><i class="fa fa-clock-o" aria-hidden="true"></i>Switch Semester</a>
+                            <a ng-click="grabSemesters()" class="collapsible-header waves-effect"><i class="fa fa-clock-o"></i>Switch Semester</a>
                             <div id="semesters" class="collapsible-body">
                                 <ul>
                                     <li class="loading"><a class="waves-effect"><i class="fa fa-refresh fa-spin fa-fw"></i>Loading...</a></li>
-                                    <li ng-repeat="item in semesters"><a id="{$ item[0] $}" ng-click="grabSchedule(item[0])"
-                                        class="waves-effect{$ item[0] == semester ? ' selected' : '' $}">{$ item[1] $}</a></li>
+                                    <li ng-repeat="(id, string) in semesters"><a ng-click="grabSchedule(id)"
+                                        class="waves-effect{$ id == semester ? ' selected' : '' $}">{$ string $}</a></li>
                                 </ul>
                             </div>
                         </li>
                     </ul>
                 </li>
-                <li><a class="waves-effect"><i class="fa fa-plus" aria-hidden="true"></i>Add an Event</a></li>
-                <li><a class="waves-effect"><i class="fa fa-pencil" aria-hidden="true"></i>Design Schedule</a></li>
-                <li><a class="waves-effect"><i class="fa fa-share-alt" aria-hidden="true"></i>Share Schedule</a></li>
+                <li><a class="waves-effect"><i class="fa fa-plus"></i>Add an Event</a></li>
+                <li><a class="waves-effect"><i class="fa fa-pencil"></i>Design Schedule</a></li>
+                <li><a class="waves-effect"><i class="fa fa-share-alt"></i>Share Schedule</a></li>
                 <li id="divider"><div class="divider"></div></li>
                 <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
-                    <i class="fa fa-dashboard" aria-hidden="true"></i>Go To Dashboard
+                    <i class="fa fa-dashboard mid-font"></i>Go To Dashboard
                 </a></li>
             </ul>
 
@@ -68,8 +68,8 @@
                         <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
                         <div ng-if="$first && fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
 
-                        <div ng-repeat="course in courses">
-                            <div ng-repeat="point in course.points" class="class {$ course.color $}"
+                        <div ng-repeat="(id, course) in courses">
+                            <div ng-repeat="point in course.points" class="class {$ course.color $}" ng-click="showClass(id)"
                                 style="height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
                                 <span class="course-name">{$ course.name $}</span><br>
                                 <i class="fa fa-user fa-fw"></i> {$ course.doctor[0] $}<br>
@@ -80,6 +80,26 @@
                             {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
                         </div>
                     </div>
+                </div>
+            </div>
+
+            <!-- Modal Structure -->
+            <div id="class-modal" class="modal">
+                <div class="modal-head {$ class.color $} darken-1">
+                    <div class="mid-font">{$ class.name $}<i class="fa fa-times right"></i></div>
+                    {$ semesters[semester] $}
+                </div>
+                <div class="modal-content row">
+                    <div><span data-tooltip="Doctor Name"><i class="fa fa-user fa-fw"></i> {$ class.doctor[0] $}</span></div>
+                    <div><span data-tooltip="Doctor Email"><i class="fa fa-envelope fa-fw"></i> {$ class.doctor[1] $}</span></div>
+                    <div><span data-tooltip="Start Time"><i class="fa fa-hourglass-start fa-fw"></i> {$ class.time[0] $}</span></div>
+                    <div><span data-tooltip="End Time"><i class="fa fa-hourglass-end fa-fw"></i> {$ class.time[1] $}</span></div>
+                    <div><span data-tooltip="Building"><i class="fa fa-building fa-fw"></i> {$ class.place[0] $}</span></div>
+                    <div><span data-tooltip="Room"><i class="fa fa-location-arrow fa-fw"></i> {$ class.place[1] $}</span></div>
+                    <div><span data-tooltip="Course key"><i class="fa fa-key fa-fw"></i> {$ class.id $}</span></div>
+                    <div><span data-tooltip="CRN"><i class="fa fa-info fa-fw"></i> {$ class.crn $}</span></div>
+                    <div><span data-tooltip="Credit Hours"><i class="fa fa-clock-o fa-fw"></i> {$ class.ch $}</span></div>
+                    <div><span data-tooltip="Section"><i class="fa fa-puzzle-piece fa-fw"></i> {$ class.section $}</span></div>
                 </div>
             </div>
         </div>
