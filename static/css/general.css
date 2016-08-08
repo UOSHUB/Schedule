@@ -8,6 +8,8 @@ html, body {
 nav object {
     height: 2rem;
     pointer-events: none;
+    position: relative;
+    top: 0.2rem;
 }
 
 nav span {

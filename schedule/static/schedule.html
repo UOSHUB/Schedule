@@ -19,8 +19,8 @@
             <nav class="white shadow">
                 <div class="nav-wrapper">
                     <a href="http://uoshub.tk" class="brand-logo">
-                        <object type="image/svg+xml" data="{{ url_for('schedule.static', filename='img/uos_logo.svg') }}">Logo</object>
-                        <span class="teal-text text-darken-1"><b class="blue-grey-text text-darken-3">UOS</b> HUB</span>
+                        <object type="image/svg+xml" data="{{ url_for('static', filename='img/logo.svg') }}">Logo</object>
+                        <span class="blue-text text-darken-2"><b class="blue-grey-text text-darken-3">UOS</b> HUB</span>
                     </a>
                 </div>
             </nav>
@@ -54,13 +54,13 @@
             <div id="schedule" class="row">
                 <div class="col s12">
                     <div class="card-panel shadow">
-                        <div class="day as-hours-head teal lighten-5"></div>
+                        <div class="day as-hours-head indigo lighten-5"></div>
                         <div class="day"></div>
                         <div class="day"></div>
                         <div class="day"></div>
                         <div class="day"></div>
 
-                        <div class="hour as-days-head teal lighten-5"></div>
+                        <div class="hour as-days-head indigo lighten-5"></div>
                         <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
                             {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
                         </div>
