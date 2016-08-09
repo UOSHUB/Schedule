@@ -22,6 +22,11 @@ nav span {
 nav .button-collapse > i {
     font-size: 1.8rem;
 }
+
+nav {
+    line-height: 64px;
+    height: 64px;
+}
 /* Navigation bar end */
 
 /* Content container start */

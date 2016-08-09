@@ -4,14 +4,14 @@ $(document).ready(function(){
         $(div).children("span").addClass("tooltipped");
     });
     $(".tooltipped").tooltip({
-        delay: 50,
+        delay: 100,
         position: "right"
     });
     $("#side-bar").hover(function() {
         if($(this).width() < 61)
             $(this).animate({width: "240px"}, 300)
     }, function() {
-        $(this).animate({width: "60px"}, 300, "swing");
+        $(this).animate({width: "60px"}, 300);
         $("#side-bar .collapsible").each(function(index, item) {
             if($(item).find($(".collapsible-header")).hasClass("active"))
                 $(item).find($(".collapsible-header")).click();

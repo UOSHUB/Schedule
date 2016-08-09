@@ -5,6 +5,13 @@ nav object {
 /* Navigation bar end */
 
 /* Side bar start */
+@media only screen and (max-width: 992px){
+    .side-nav.fixed {
+        -webkit-transform: translateX(0);
+        transform: translateX(0);
+    }
+}
+
 #side-bar {
     width: 60px;
     top: 64px;
@@ -14,9 +21,14 @@ nav object {
 #side-bar a {
     height: 60px;
     line-height: 60px;
-    color: #90a4ae;
+    color: #b0bec5;
     font-size: 1.2rem;
     font-weight: 400;
+}
+
+#side-bar a:hover {
+    background-color: #37474f;
+    color: #eceff1;
 }
 
 #side-bar i {
@@ -24,6 +36,10 @@ nav object {
     color: #b0bec5;
     font-size: 2rem;
     margin: 0 24px 0 0;
+}
+
+#side-bar a:hover i {
+    color: #eceff1;
 }
 
 #side-bar .collapsible-body a {
@@ -38,6 +54,10 @@ nav object {
     font-size: 1.2rem;
     margin: 0 12px 0 0;
     line-height: 48px;
+}
+
+#side-bar .collapsible-body a:hover {
+    background-color: #1e282c;
 }
 
 #back, #divider {
@@ -57,6 +77,7 @@ nav object {
     bottom: 0;
 }
 
+.selected i,
 .selected {
     color: white !important;
 }
@@ -188,6 +209,7 @@ nav object {
 }
 /* Schedule card end */
 
+/* Class Modal start */
 #class-modal {
     box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     width: 50rem;
@@ -212,9 +234,15 @@ nav object {
     margin-right: 16px;
 }
 
-.modal-content.row * {
-    padding: 8px;
+.modal-content.row > .col {
+    padding: 0 8px;
+    margin: 8px 0;
 }
+
+.modal-content.row span {
+    padding: 10px 0;
+}
+/* Class Modal end */
 
 .mid-font {
     font-size: 1.8rem !important;

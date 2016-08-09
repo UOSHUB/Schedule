@@ -36,7 +36,9 @@
                                 <ul>
                                     <li class="loading"><a class="waves-effect"><i class="fa fa-refresh fa-spin fa-fw"></i>Loading...</a></li>
                                     <li ng-repeat="(id, string) in semesters"><a ng-click="grabSchedule(id)"
-                                        class="waves-effect{$ id == semester ? ' selected' : '' $}">{$ string $}</a></li>
+                                        class="waves-effect{$ id == semester ? ' selected' : '' $}">
+                                        <i class="fa fa-{$ isStored(id) ? 'calendar-check-o' : (requesting == id ? 'refresh fa-spin' : 'calendar-times-o') $} fa-fw"></i>{$ string $}</a>
+                                    </li>
                                 </ul>
                             </div>
                         </li>
@@ -69,7 +71,7 @@
                         <div ng-if="$first && fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
 
                         <div ng-repeat="(id, course) in courses">
-                            <div ng-repeat="point in course.points" class="class {$ course.color $}" ng-click="showClass(id)"
+                            <div ng-repeat="point in course.points" class="class {$ course.color $}" ng-click="showClass(id, point[0])"
                                 style="height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
                                 <span class="course-name">{$ course.name $}</span><br>
                                 <i class="fa fa-user fa-fw"></i> {$ course.doctor[0] $}<br>
@@ -90,16 +92,16 @@
                     {$ semesters[semester] $}
                 </div>
                 <div class="modal-content row">
-                    <div><span data-tooltip="Doctor Name"><i class="fa fa-user fa-fw"></i> {$ class.doctor[0] $}</span></div>
-                    <div><span data-tooltip="Doctor Email"><i class="fa fa-envelope fa-fw"></i> {$ class.doctor[1] $}</span></div>
-                    <div><span data-tooltip="Start Time"><i class="fa fa-hourglass-start fa-fw"></i> {$ class.time[0] $}</span></div>
-                    <div><span data-tooltip="End Time"><i class="fa fa-hourglass-end fa-fw"></i> {$ class.time[1] $}</span></div>
-                    <div><span data-tooltip="Building"><i class="fa fa-building fa-fw"></i> {$ class.place[0] $}</span></div>
-                    <div><span data-tooltip="Room"><i class="fa fa-location-arrow fa-fw"></i> {$ class.place[1] $}</span></div>
-                    <div><span data-tooltip="Course key"><i class="fa fa-key fa-fw"></i> {$ class.id $}</span></div>
-                    <div><span data-tooltip="CRN"><i class="fa fa-info fa-fw"></i> {$ class.crn $}</span></div>
-                    <div><span data-tooltip="Credit Hours"><i class="fa fa-clock-o fa-fw"></i> {$ class.ch $}</span></div>
-                    <div><span data-tooltip="Section"><i class="fa fa-puzzle-piece fa-fw"></i> {$ class.section $}</span></div>
+                    <div><span data-tooltip="Doctor Name"><i class="fa fa-user fa-fw"></i>{$ class.doctor[0] $}</span></div>
+                    <div><span data-tooltip="Doctor Email"><i class="fa fa-envelope fa-fw"></i>{$ class.doctor[1] $}</span></div>
+                    <div><span data-tooltip="Date"><i class="fa fa-calendar-o fa-fw"></i>{$ days[class.day] $}, {$ dates[class.day] $}</span></div>
+                    <div><span data-tooltip="Building, Room"><i class="fa fa-map-marker fa-fw"></i>{$ class.place[0] $}, {$ class.place[1] $}</span></div>
+                    <div><span data-tooltip="Start Time"><i class="fa fa-hourglass-start fa-fw"></i>{$ class.time[0] $}</span></div>
+                    <div><span data-tooltip="End Time"><i class="fa fa-hourglass-end fa-fw"></i>{$ class.time[1] $}</span></div>
+                    <div><span data-tooltip="Section"><i class="fa fa-puzzle-piece fa-fw"></i>{$ class.section $} <span class="grey-text">(Section)</span></span></div>
+                    <div><span data-tooltip="Credit Hours"><i class="fa fa-certificate fa-fw"></i>{$ class.ch $} <span class="grey-text">(CrHrs)</span></span></div>
+                    <div><span data-tooltip="Course key"><i class="fa fa-key fa-fw"></i>{$ class.id $}</span></div>
+                    <div><span data-tooltip="CRN"><i class="fa fa-info fa-fw"></i>{$ class.crn $}</span></div>
                 </div>
             </div>
         </div>

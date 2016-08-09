@@ -157,3 +157,6 @@ function toString(semester, array) {
                       + " 20" + year + " - 20" + (Number(year) + 1);
     return array;
 }
+function dayFromX(x) {
+    return (x - leftShift) / columnWidth;
+}

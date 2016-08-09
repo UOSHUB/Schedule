@@ -1,35 +1,36 @@
 var app = angular.module("schedule", ["LocalStorageModule"]);
 
-app.config(["$interpolateProvider", function($interpolateProvider) {
+app.config(function($interpolateProvider, $compileProvider) {
     $interpolateProvider.startSymbol("{$");
     $interpolateProvider.endSymbol("$}");
-}]);
+    $compileProvider.debugInfoEnabled(false);
+});
 
 app.controller("ctrl", function($scope, $http, localStorageService) {
     var lss = localStorageService;  // TODO: identify data with user id
-    var requesting = false;
 
+    $scope.requesting = false;
     $scope.days = ["Sun", "Mon", "Tue", "Wed", "Thu"];
 
     $scope.initialize = function() {
         $scope.semester = lss.get("semester");
         $scope.grabSchedule($scope.semester);
-        if(lss.keys().indexOf("semesters") > -1)
+        if($scope.isStored("semesters"))
             $scope.semesters = lss.get("semesters");
     }
 
     $scope.grabSchedule = function(semester) {
-        if(lss.keys().indexOf(semester) > -1)
+        if($scope.isStored(semester))
             if(!(angular.isDefined($scope.courses) && $scope.semester === semester))
                 extractData(semester, lss.get(semester));
             else Materialize.toast("Schedule already selected", 2000);
-        else if(!requesting)
+        else if(!$scope.requesting)
             getSchedule(semester);
         else Materialize.toast("Still processing, Please wait!", 2000);
     };
 
     function getSchedule(semester) {
-        requesting = true;
+        $scope.requesting = semester;
         $http.post("/schedule/get_schedule", semester).then(function(response) {
             if(semester == null) {
                 semester = response.data["semester"];
@@ -38,10 +39,10 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
             }
             lss.set(semester, response.data["courses"]);
             extractData(semester, response.data["courses"]);
-            requesting = false;
+            $scope.requesting = false;
         }, function(response) {
             Materialize.toast("Couldn't get schedule!", 2000);
-            requesting = false;
+            $scope.requesting = false;
         });
     }
 
@@ -62,29 +63,34 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
             if(Object.keys(lss.get("semesters")).length > 1) {
                 if(!(angular.isDefined($scope.semesters)))
                     $scope.semesters = lss.get("semesters");
-            } else if(!requesting)
+            } else if(!$scope.requesting)
                 getSemesters();
             else Materialize.toast("Still processing, Please wait!", 2000);
         }
     };
 
     function getSemesters() {
-        requesting = true;
+        $scope.requesting = "semesters";
         $("#semesters .loading").show();
         $http.post("/schedule/get_semesters").then(function(response) {
-            requesting = false;
+            $scope.requesting = false;
             $("#semesters .loading").hide();
             $scope.semesters = getSemestersData(response.data);
             lss.set("semesters", $scope.semesters);
         }, function(response) {
             Materialize.toast("Couldn't get semesters!", 2000);
-            requesting = false;
+            $scope.requesting = false;
         });
     }
 
-    $scope.showClass = function(id) {
+    $scope.isStored = function(key) {
+        return lss.keys().indexOf(key) > -1;
+    }
+
+    $scope.showClass = function(id, x) {
         $scope.class = $scope.courses[id];
         $scope.class.id = id;
+        $scope.class.day = dayFromX(x);
         $("#class-modal").openModal({
             opacity: .2,
             in_duration: 200,

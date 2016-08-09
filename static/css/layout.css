@@ -23,11 +23,17 @@ body {
 /* Side bar start */
 #side-bar a {
     font-size: 1.2rem;
+    height: 56px;
+    line-height: 56px;
+    padding: 0 24px;
+    font-weight: 400;
 }
 
 #side-bar i {
-    padding-right: 1rem;
     font-size: 1.4rem;
+    line-height: 56px;
+    margin-right: 20px;
+    color: inherit;
 }
 
 .blue-grey-text.text-lighten-5:hover {
