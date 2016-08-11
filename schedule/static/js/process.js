@@ -31,8 +31,9 @@ function getCoursesData(courses) {
         var course = courses[id];
         // Declare points array in course
         course.points = [];
-        // Calculate [x, y] coordinates then store them in array
+        // y is the top shift + the distance between day start and class start
         var y = topShift + rowHeight * (course.minutes[0] - minTime) / 60;
+        // x is the left shift + the distance between week start and class day
         for(var i = 0; i < course.days.length; i++)
             course.points.push([leftShift + switchDay[course.days[i]] * columnWidth, y]);
         // Calculate length of course
@@ -150,13 +151,17 @@ function dates() {
         dates.push(new Date(year, month, startDay + i).toLocaleDateString().slice(0,-5));
     return dates;
 }
-// Returns beautified string of semester id
+// Returns beautified string of semester id "201610" --> "Fall 2016 - 2017"
 function toString(semester, array) {
+    // Store year first two digits
     var year = semester.slice(2, 4);
+    // Add semester string and current and next year to array object
     array[semester] = {"10": "Fall", "20": "Spring", "30": "Summer"}[semester.slice(4)]
                       + " 20" + year + " - 20" + (Number(year) + 1);
     return array;
 }
+// Returns the day number from class's x point
 function dayFromX(x) {
+    // Day is how many columns between week start and x point
     return (x - leftShift) / columnWidth;
 }

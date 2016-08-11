@@ -75,5 +75,5 @@ class Browser(Mechanize):
         return self.get_soup().find("td", class_="dedefault").string.split()[0]
 
 # Instantiate a scraper object to be used
-# in many different places (kind statically)
+# in many different places (statically, kind of)
 br = Browser()

@@ -15,6 +15,7 @@
     </head>
 
     <body class="grey lighten-2">
+        <!--Top navigation bar start-->
         <div class="navbar-fixed">
             <nav class="white shadow">
                 <div class="nav-wrapper">
@@ -24,9 +25,11 @@
                     </a>
                 </div>
             </nav>
-        </div>
+        </div><!--Top navigation bar end-->
 
+        <!--Main container and angular app start-->
         <div id="container" ng-controller="ctrl" ng-init="initialize()">
+            <!--Left side bar start-->
             <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
                 <li class="no-padding">
                     <ul class="collapsible collapsible-accordion">
@@ -51,8 +54,9 @@
                 <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
                     <i class="fa fa-dashboard mid-font"></i>Go To Dashboard
                 </a></li>
-            </ul>
+            </ul><!--Left side bar end-->
 
+            <!--Schedule card start-->
             <div id="schedule" class="row">
                 <div class="col s12">
                     <div class="card-panel shadow">
@@ -83,9 +87,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div><!--Schedule card end-->
 
-            <!-- Modal Structure -->
+            <!--Classes modal structure start-->
             <div id="class-modal" class="modal">
                 <div class="modal-head {$ class.color $} darken-1">
                     <div class="mid-font">{$ class.name $}<i class="fa fa-times right"></i></div>
@@ -103,8 +107,8 @@
                     <div><span data-tooltip="Course key"><i class="fa fa-key fa-fw"></i>{$ class.id $}</span></div>
                     <div><span data-tooltip="CRN"><i class="fa fa-info fa-fw"></i>{$ class.crn $}</span></div>
                 </div>
-            </div>
-        </div>
+            </div><!--Classes modal structure end-->
+        </div><!--Main container and angular app end-->
 
         <!--Google Analytics code start-->
         {% include 'ganalytics.html' %}

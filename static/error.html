@@ -2,13 +2,14 @@
 
 {% block title %}
     {% if "404" in error %}
-        Page Not Found - 
+        Page Not Found -
     {% else %}
-        Server Error - 
+        Server Error -
     {% endif %}
 {% endblock %}
 
 {% block body %}
+    <!--Error message container start-->
     <div class="container" id="error">
         {% if "404" in error %}
             <i class="fa fa-frown-o"></i><br>
@@ -19,7 +20,9 @@
         {% endif %}
         <br>
         <h5><a href="{{ url_for('index') }}">Go somewhere nice</a></h5>
-    </div>
+    </div><!--Error message container end-->
+
+    <!--Error message css styles start-->
     <style>
         #error {
             text-align: center;
@@ -29,5 +32,5 @@
             font-size: 25rem;
             font-size: 37vw;
         }
-    </style>
+    </style><!--Error message css styles end-->
 {% endblock %}
