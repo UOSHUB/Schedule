@@ -8,6 +8,8 @@ import os
 class Base(object):
     # Disable debugger
     DEBUG = False
+    # Enable minifying rendered html pages
+    MINIFY_PAGE = True
     # Define a randomly generated secret key for flask session
     SECRET_KEY = os.environ["SECRET_KEY"]
     # Define database url according to the current environment

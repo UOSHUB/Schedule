@@ -1,8 +1,13 @@
 Flask==0.11.1
+Flask-Assets==0.11
 Flask-Migrate==1.8.1
+Flask-HTMLmin==1.2
 Flask-SQLAlchemy==2.1
 Flask-Script==2.0.5
 Jinja2==2.8
+cssmin==0.2.0
+jsmin==2.2.1
+webassets==0.11.1
 Mako==1.0.4
 MarkupSafe==0.23
 SQLAlchemy==1.0.14

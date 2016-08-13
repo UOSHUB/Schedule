@@ -1,15 +1,26 @@
 <!doctype html>
 <html ng-app="schedule">
     <head>
-        {% include 'general.html' %}
-        <!--Import specific schedule.css-->
-        <link type="text/css" rel="stylesheet" href="{{ url_for('schedule.static', filename='css/schedule.css') }}"/>
-        <!--Import specific Data process.js Handler-->
-        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/process.js') }}"></script>
-        <!--Import specific AngularJS app.js-->
-        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/app.js') }}"></script>
-        <!--Import my scripts.js-->
-        <script type="text/javascript" src="{{ url_for('schedule.static', filename='js/scripts.js') }}"></script>
+        <!--Import common style sheets-->
+        {% assets "common.css" -%}
+            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+        {% endassets -%}
+        <!--Import specific schedule style sheets-->
+        {% assets "schedule.css" -%}
+            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+        {% endassets -%}
+        <!--Import common needed js libraries-->
+        {% assets "common.js" -%}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets -%}
+        <!--Import schedule angularjs app and scripts-->
+        {% assets "schedule.js" -%}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Setup page icon-->
+        <link href="{{ url_for('static', filename='img/icon.png') }}" type="image/png" rel="shortcut icon" />
         <!--Setup page title-->
         <title>Schedule - UOSHUB</title>
     </head>

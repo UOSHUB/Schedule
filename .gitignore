@@ -12,3 +12,9 @@ test.py
 # Ignore PyCharm IDE project folder
 #
 .idea
+
+#
+# Ignore compressed and cached files by Flask-Assets
+#
+*min
+*.webassets-cache

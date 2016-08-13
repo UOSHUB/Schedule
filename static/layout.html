@@ -1,13 +1,27 @@
 <!doctype html>
 <html>
     <head>
-        {%- include 'general.html' %}
-
-        <!--Import specific layout.css-->
-        <link type="text/css" rel="stylesheet" href="{{ url_for('static', filename='css/layout.css') }}"/>
-        <!--Import My scripts.js-->
-        <script type="text/javascript" src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+        <!--Import common style sheets-->
+        {% assets "common.css" -%}
+            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+        {% endassets -%}
+        <!--Import home layout style sheets-->
+        {% assets "layout.css" -%}
+            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+        {% endassets -%}
         {% block head %}{% endblock %}
+        <!--Import common needed js libraries-->
+        {% assets "common.js" -%}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets -%}
+        <!--Import home layout javascripts-->
+        {% assets "layout.js" -%}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Setup page icon-->
+        <link href="{{ url_for('static', filename='img/icon.png') }}" type="image/png" rel="shortcut icon" />
         <!--Setup page title-->
         <title>{% block title %}{% endblock %}UOSHUB</title>
     </head>
@@ -92,7 +106,9 @@
         <!--Main Body end-->
 
         <!--Google Analytics code start-->
-        {% include 'ganalytics.html' -%}
+        {% assets "ganalytics.html" -%}
+            {% include ASSET_URL[7:-9] -%}
+        {% endassets -%}
         <!--Google Analytics code end-->
     </body>
 </html>
