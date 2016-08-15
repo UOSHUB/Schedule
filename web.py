@@ -7,7 +7,7 @@ from schedule.views import schedule
 from flask_htmlmin import HTMLMIN
 from flask_sqlalchemy import SQLAlchemy
 from flask.exthook import ExtDeprecationWarning
-warnings.simplefilter('ignore', ExtDeprecationWarning)
+warnings.simplefilter("ignore", ExtDeprecationWarning)
 from flask_assets import Environment, Bundle
 
 # Initialize with template folder in ./static
@@ -38,19 +38,15 @@ def register_bundle(lang, *names, **options):
     ))
 
 # Nicely register bundles of css files
-register_bundle("css", "font-awesome", "materialize", "general", output="common")
+register_bundle("css", "general")
 register_bundle("css", "schedule", path="schedule/")
 register_bundle("css", "dashboard")
 register_bundle("css", "layout")
 
 # Same with js files
-register_bundle("js", "jquery", "materialize", "angular", "angular-local-storage", output="common")
+register_bundle("js", "angular-local-storage")
 register_bundle("js", "app", "scripts", "process", output="schedule", path="schedule/")
-register_bundle("js", "ganalytics")
 register_bundle("js", "layout")
-
-# This couldn't be done through the above function, so...
-assets.register("ganalytics.html", Bundle("ganalytics.html", filters="jsmin", output="min/ganalytics.html"))
 
 # Finalize configurations and run the app
 if __name__ == "__main__":

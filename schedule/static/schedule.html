@@ -1,17 +1,10 @@
 <!doctype html>
 <html ng-app="schedule">
     <head>
-        <!--Import common style sheets-->
-        {% assets "common.css" -%}
-            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
-        {% endassets -%}
+        {% include "common.html" -%}
         <!--Import specific schedule style sheets-->
         {% assets "schedule.css" -%}
             <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
-        {% endassets -%}
-        <!--Import common needed js libraries-->
-        {% assets "common.js" -%}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets -%}
         <!--Import schedule angularjs app and scripts-->
         {% assets "schedule.js" -%}
@@ -120,9 +113,5 @@
                 </div>
             </div><!--Classes modal structure end-->
         </div><!--Main container and angular app end-->
-
-        <!--Google Analytics code start-->
-        {% include 'ganalytics.html' %}
-        <!--Google Analytics code end-->
     </body>
 </html>

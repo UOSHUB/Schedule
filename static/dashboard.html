@@ -1,8 +1,9 @@
 {% extends "layout.html" %}
 
 {% block head -%}
+    <!--Import Dashboard style sheets-->
     {% assets "dashboard.css" -%}
-        <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
+        <link rel="stylesheet" href="{{ ASSET_URL }}">
     {% endassets -%}
 {% endblock %}
 

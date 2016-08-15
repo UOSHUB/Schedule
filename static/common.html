@@ -1,0 +1,24 @@
+<!--Import Materialize style sheets-->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+        <!--Import common style sheets-->
+        {% assets "general.css" -%}
+            <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets -%}
+        <!--Import FontAwesome.js-->
+        <script src="https://use.fontawesome.com/2f77a7a804.js"></script>
+        <!--Import jQuery.js-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+        <!--Import Materialize.js-->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script>
+        <!--Import Angular.js-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <!--Import Angular-Local-Storage.js-->
+        {% assets "angular-local-storage.js" -%}
+            <script src="{{ ASSET_URL }}"></script>
+        {% endassets -%}
+        {% if not config.DEBUG -%}
+        <!--Google Analytics start-->
+        <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga('create', 'UA-XXXXX-Y', 'auto');ga('send', 'pageview');</script>
+        <script async src='https://www.google-analytics.com/analytics.js'></script>
+        <!--Google Analytics end-->
+        {% endif %}
