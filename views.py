@@ -91,4 +91,3 @@ def error(e):
             return Exception
     # Otherwise render appropriate error page
     return render_template("error.html", error=str(e))
-

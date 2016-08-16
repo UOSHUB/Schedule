@@ -1,7 +1,86 @@
-{% extends "layout.html" %}
+<!doctype html>
+<html>
+    <head>
+        <!--Import Angular-Material styles-->
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.css">
+        <!--Import Roboto font styles-->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
+        <!--Import FontAwesome.js-->
+        <script src="https://use.fontawesome.com/2f77a7a804.js"></script>
+        <!--Import common styles-->
+        {% assets "common.css" -%}
+            <link rel="stylesheet" href="{{ ASSET_URL }}">
+        {% endassets -%}
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Setup page icon-->
+        <link rel="shortcut icon" href="{{ url_for('static', filename='img/icon.png') }}"/>
+        <!--Setup page title-->
+        <title>UOSHUB</title>
+        {% if not config.DEBUG -%}
+        <!--Google Analytics start-->
+        <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga("create","UA-XXXXX-Y","auto");ga("send","pageview");</script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+        <!--Google Analytics end-->
+        {% endif %}
+    </head>
 
-{% block body %}
-        <!--Page container start-->
-        <div class="container">
-        </div><!--Page container end-->
-{%- endblock %}
+    <body ng-app="main" ng-cloak>
+        <md-toolbar class="md-primary">
+            <div class="md-toolbar-tools" ng-controller="accountButton as ctrl">
+                <a href="http://uoshub.tk" class="brand-logo">
+                    <md-icon md-svg-icon="{{ url_for('static', filename='img/logo.svg') }}"></md-icon>
+                    <span><b>UOS</b> HUB</span>
+                </a>
+                <span flex></span>
+                <md-button id="loginButton" class="md-raised md-accent" ng-click="ctrl.showDialog($event)">Login</md-button>
+            </div>
+        </md-toolbar>
+        <script type="text/ng-template" id="loginForm.html">
+            <div layout="column" layout-align="center center" ng-controller="loginForm">
+                <md-toolbar class="md-accent">
+                    <div class="md-toolbar-tools">
+                        <span>Welcome to Your UOSHUB!</span>
+                    </div>
+                </md-toolbar>
+                <form name="loginForm" novalidate>
+                    <md-input-container class="md-block">
+                        <label>Student ID</label>
+                        <input required md-maxlength="9" name="sid" type="text" ng-model="student.sid"/>
+                        <div class="hint" ng-if="!loginForm.sid.$touched || loginForm.sid.$valid">e.g. u14111000</div>
+                        <div ng-messages="loginForm.sid.$error">
+                            <div ng-message="required">Your ID is required.</div>
+                            <div ng-message="md-maxlength">Your ID is too long.</div>
+                        </div>
+                    </md-input-container>
+                    <md-input-container class="md-block">
+                        <label>Password</label>
+                        <input required md-maxlength="20" name="pin" type="password" ng-model="student.pin">
+                        <div class="hint" ng-if="!loginForm.pin.$touched || loginForm.pin.$valid">Same as myUDC</div>
+                        <div ng-messages="loginForm.pin.$error">
+                            <div ng-message="required">Password is required.</div>
+                            <div ng-message="md-maxlength">Password is too long.</div>
+                        </div>
+                    </md-input-container>
+                    <div layout="row">
+                        <md-checkbox ng-model="student.remember" flex>Remember me?</md-checkbox>
+                        <md-button class="md-primary md-raised" type="submit" ng-click="login(loginForm)">Let's Go</md-button>
+                    </div>
+                </form>
+            </div>
+        </script>
+
+        <!--Import Angular.js-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
+        <!--Import Angular-Material.js-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.js"></script>
+        <!--Import common scripts and Angular-Local-Storage.js-->
+        {% assets "common.js" -%}
+            <script src="{{ ASSET_URL }}"></script>
+        {% endassets -%}
+    </body>
+</html>

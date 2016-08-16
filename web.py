@@ -38,15 +38,13 @@ def register_bundle(lang, *names, **options):
     ))
 
 # Nicely register bundles of css files
-register_bundle("css", "general")
-register_bundle("css", "schedule", path="schedule/")
+register_bundle("css", "common")
 register_bundle("css", "dashboard")
-register_bundle("css", "layout")
+register_bundle("css", "schedule", path="schedule/")
 
 # Same with js files
-register_bundle("js", "angular-local-storage")
+register_bundle("js", "angular-local-storage", "app", output="common")
 register_bundle("js", "app", "scripts", "process", output="schedule", path="schedule/")
-register_bundle("js", "layout")
 
 # Finalize configurations and run the app
 if __name__ == "__main__":
