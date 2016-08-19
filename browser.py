@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNotFoundError
-from flask import session, flash, url_for, redirect
+from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNotFoundError, URLError
+from flask import session
 from bs4 import BeautifulSoup
 from functools import wraps
 
@@ -11,11 +11,10 @@ from functools import wraps
 def login_required(f):
     @wraps(f)
     def wrap(*args, **kwargs):
-        if "name" in session:
+        if "sid" in session:
             return f(*args, **kwargs)
         else:
-            flash("You need to login first!")
-            return redirect(url_for("index"))
+            return Exception
     return wrap
 
 
@@ -33,12 +32,17 @@ class Browser(Mechanize):
 
     # Gets UOS UDC link by providing sub url only
     def get(self, sub_url):
-        self.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_" + sub_url)
+        try:
+            self.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_" + sub_url)
+        except URLError:
+            self.get(sub_url)
 
     # Follows a UOS UDC link by providing sub link only
     def follow(self, sub_link):
         try:
             self.follow_link(url="/prod_enUS/" + sub_link)
+        except URLError:
+            self.follow(sub_link)
         # Return false if link isn't found
         except LinkNotFoundError:
             return False
@@ -65,14 +69,21 @@ class Browser(Mechanize):
         self.submit()
         return self.title() == "Main Menu"
 
-    # Returns student's first name
-    def get_username(self):
-        # Enter Personal Information section
-        self.get("GenMenu?name=bmenu.P_GenMnu")
-        # Enter Directory Profile page
-        self.follow("bwgkoprf.P_ShowDiroItems")
-        # Extract and return student name from soup
-        return self.get_soup().find("td", class_="dedefault").string.split()[0]
+    # Returns student's information
+    def get_user_info(self):
+        # Enter Student -> Student Account section
+        self.get("GenMenu?name=bmenu.P_ARMnu")
+        # Enter Statement of Fees page
+        self.follow("UOS_PREFORMA.P_DispPreforma")
+        # Extract and store info tables from soup
+        tds = self.get_soup().find("div", class_="pagebodydiv").find_all("td", class_="dddefault", limit=7)
+        name = tds[0].string.split()
+        return {
+            "name": ' '.join([name[0], name[-1]]),
+            "major": tds[3].string,
+            "ech": tds[6].string,
+        }
+
 
 # Instantiate a scraper object to be used
 # in many different places (statically, kind of)
