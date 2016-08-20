@@ -28,46 +28,81 @@
 
     <body ng-app="main" ng-cloak>
         <md-toolbar class="md-primary">
-            <div class="md-toolbar-tools" ng-controller="accountButton as ctrl">
-                <a href="http://uoshub.tk" class="brand-logo">
-                    <md-icon md-svg-icon="{{ url_for('static', filename='img/logo.svg') }}"></md-icon>
-                    <span><b>UOS</b> HUB</span>
+            <div class="md-toolbar-tools" ng-controller="accountButton">
+                <a href="http://uoshub.tk">
+                    <md-icon md-svg-icon="{{ url_for('static' , filename='img/logo.svg') }}"></md-icon>
+                    <span class="md-headline lighter"><b>UOS</b> HUB</span>
                 </a>
                 <span flex></span>
-                <md-button id="loginButton" class="md-raised md-accent" ng-click="ctrl.showDialog($event)">Login</md-button>
+                <md-button id="loginButton" class="md-raised md-accent" ng-click="showPanel()">Login</md-button>
             </div>
         </md-toolbar>
-        <script type="text/ng-template" id="loginForm.html">
-            <div layout="column" layout-align="center center" ng-controller="loginForm">
-                <md-toolbar class="md-accent">
-                    <div class="md-toolbar-tools">
-                        <span>Welcome to Your UOSHUB!</span>
-                    </div>
-                </md-toolbar>
-                <form name="loginForm" novalidate>
-                    <md-input-container class="md-block">
-                        <label>Student ID</label>
-                        <input required md-maxlength="9" name="sid" type="text" ng-model="student.sid"/>
-                        <div class="hint" ng-if="!loginForm.sid.$touched || loginForm.sid.$valid">e.g. u14111000</div>
-                        <div ng-messages="loginForm.sid.$error">
-                            <div ng-message="required">Your ID is required.</div>
-                            <div ng-message="md-maxlength">Your ID is too long.</div>
+        <script type="text/ng-template" id="account-panel.html">
+            <div ng-switch="$root.status">
+                <div ng-switch-when="loggedIn" layout="column" layout-align="space-between stretch">
+                    <div layout="row" layout-padding>
+                        <img flex="33" src="{{ url_for('static' , filename='img/avatar.png') }}" height="128"/>
+                        <div flex layout="column" layout-align="center">
+                            <p class="md-headline" style="font-size: 28px">{$ $root.student.name $}</p>
+                            <p class="md-subhead">{$ $root.student.sid $}@sharjah.ac.ae</p>
                         </div>
-                    </md-input-container>
-                    <md-input-container class="md-block">
-                        <label>Password</label>
-                        <input required md-maxlength="20" name="pin" type="password" ng-model="student.pin">
-                        <div class="hint" ng-if="!loginForm.pin.$touched || loginForm.pin.$valid">Same as myUDC</div>
-                        <div ng-messages="loginForm.pin.$error">
-                            <div ng-message="required">Password is required.</div>
-                            <div ng-message="md-maxlength">Password is too long.</div>
-                        </div>
-                    </md-input-container>
-                    <div layout="row">
-                        <md-checkbox ng-model="student.remember" flex>Remember me?</md-checkbox>
-                        <md-button class="md-primary md-raised" type="submit" ng-click="login(loginForm)">Let's Go</md-button>
                     </div>
-                </form>
+                    <div layout="row" layout-padding>
+                        <div flex="33" layout="column" class="grey">
+                            <p class="md-subhead"><md-icon md-font-icon="fa fa-graduation-cap fa-fw"></md-icon> Major</p>
+                            <p class="md-subhead"><md-icon md-font-icon="fa fa-clock-o fa-fw"></md-icon> Earned</p>
+                        </div>
+                        <div flex layout="column">
+                            <p class="md-subhead">{$ $root.student.major $}</p>
+                            <p class="md-subhead">{$ $root.student.ech $} <span class="grey">(Credit Hours)</span></p>
+                        </div>
+                    </div>
+                    <md-divider></md-divider>
+                    <div layout="row" layout-padding>
+                        <div layout="row" flex layout-align="center" class="grey">
+                            <md-checkbox ng-model="student.remember" class="grey no-margin" flex>Clear data on logout?</md-checkbox>
+                            <md-button class="md-primary md-raised no-margin" ng-click="$root.logout()">Logout</md-button>
+                        </div>
+                    </div>
+                </div>
+                <div ng-switch-when="waiting" layout="column" layout-align="space-around center">
+                    <h2 class="md-headline lighter">Securely logging into UOSHUB</h2>
+                    <md-progress-circular class="md-accent"></md-progress-circular>
+                    <h4 class="md-subhead lighter">Few more seconds...</h4>
+                </div>
+                <div ng-switch-default layout="column">
+                    <md-toolbar layout="row" class="md-accent">
+                        <div class="md-toolbar-tools">
+                            <span class="md-headline">Welcome to Your UOSHUB!</span>
+                        </div>
+                    </md-toolbar>
+                    <form layout="column" flex layout-align="space-between stretch" layout-margin name="form" novalidate>
+                        <span flex></span>
+                        <md-input-container layout="row" class="md-block grey">
+                            <label class="md-title lighter">Student ID</label>
+                            <input required md-maxlength="9" name="sid" type="text" ng-model="student.sid"/>
+                            <div class="hint" ng-if="!form.sid.$touched || form.sid.$valid">e.g. u14111000</div>
+                            <div ng-messages="form.sid.$error">
+                                <div ng-message="required">Your ID is required.</div>
+                                <div ng-message="md-maxlength">Your ID is too long.</div>
+                            </div>
+                        </md-input-container>
+                        <p></p>
+                        <md-input-container layout="row" class="md-block grey">
+                            <label class="md-title lighter">Password</label>
+                            <input required md-maxlength="20" name="pin" type="password" ng-model="student.pin">
+                            <div class="hint" ng-if="!form.pin.$touched || form.pin.$valid">Same as myUDC</div>
+                            <div ng-messages="form.pin.$error">
+                                <div ng-message="required">Password is required.</div>
+                                <div ng-message="md-maxlength">Password is too long.</div>
+                            </div>
+                        </md-input-container>
+                        <div layout="row" layout-align="center">
+                            <md-checkbox ng-model="student.remember" class="grey no-margin" flex>Remember me?</md-checkbox>
+                            <md-button class="md-primary md-raised no-margin" type="submit" ng-click="$root.login(form, student)">Let's Go</md-button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </script>
 
