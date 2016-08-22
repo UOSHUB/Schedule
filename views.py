@@ -37,7 +37,7 @@ def dashboard():
 
 
 @app.route("/logout", methods=["POST"])
-@login_required
+#@login_required
 def logout():
     # Clear student info
     session.clear()

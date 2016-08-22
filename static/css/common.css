@@ -3,7 +3,6 @@ body {
 }
 
 .md-toolbar-tools a span {
-    color: #fafafa;
     margin-left: 4px;
     vertical-align: middle;
 }
@@ -15,10 +14,6 @@ body {
 .md-toolbar-tools md-icon {
     width: 55px;
     height: 32px;
-}
-
-#loginButton {
-    margin-right: 0;
 }
 
 .account-panel {
@@ -39,7 +34,7 @@ body {
     width: 90px;
 }
 
-.account-panel md-checkbox ._md-label {
+.account-panel md-checkbox .md-label {
     top: 22%;
     position: absolute;
 }
@@ -60,6 +55,20 @@ body {
 .account-panel p md-icon {
     vertical-align: baseline;
     color: inherit;
+}
+
+.account-panel div[ng-switch-when=waiting],
+.account-panel div[ng-switch-when=switching] {
+    background-color: #3f51b5;
+}
+
+.account-panel .flex-33 {
+    margin-right: 16px;
+}
+
+.account-panel md-divider {
+    padding-top: 0;
+    margin: 0 8px;
 }
 
 md-input-container .hint {
@@ -85,30 +94,8 @@ md-input-container .hint.ng-enter.ng-enter-active {
     opacity: 1;
 }
 
-.account-panel div[ng-switch] > .ng-animate {
-    -webkit-transition: 0.5s linear all;
-	  transition: 0.5s linear all;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-.account-panel div[ng-switch] > .ng-enter {
-    left: -500px;
-    opacity: 0;
-}
-
-.account-panel div[ng-switch] > .ng-leave.ng-leave-active {
-    left: 500px;
-    opacity: 0;
-}
-
-.account-panel div[ng-switch] > .ng-leave,
-.account-panel div[ng-switch] > .ng-enter.ng-enter-active {
-    left: 0;
-    opacity: 1;
+.white {
+    color: #fafafa;
 }
 
 .grey {
@@ -120,5 +107,5 @@ md-input-container .hint.ng-enter.ng-enter-active {
 }
 
 .no-margin {
-    margin: 0;
+    margin: 0 !important;
 }

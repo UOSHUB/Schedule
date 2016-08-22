@@ -2,7 +2,7 @@
 <html>
     <head>
         <!--Import Angular-Material styles-->
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.css">
+        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
         <!--Import Roboto font styles-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500">
         <!--Import FontAwesome.js-->
@@ -31,46 +31,47 @@
             <div class="md-toolbar-tools" ng-controller="accountButton">
                 <a href="http://uoshub.tk">
                     <md-icon md-svg-icon="{{ url_for('static' , filename='img/logo.svg') }}"></md-icon>
-                    <span class="md-headline lighter"><b>UOS</b> HUB</span>
+                    <span class="md-headline lighter white"><b>UOS</b> HUB</span>
                 </a>
                 <span flex></span>
-                <md-button id="loginButton" class="md-raised md-accent" ng-click="showPanel()">Login</md-button>
+                <md-button id="loginButton" class="md-raised md-accent no-margin" ng-click="showPanel()">Login</md-button>
             </div>
         </md-toolbar>
         <script type="text/ng-template" id="account-panel.html">
-            <div ng-switch="$root.status">
-                <div ng-switch-when="loggedIn" layout="column" layout-align="space-between stretch">
-                    <div layout="row" layout-padding>
-                        <img flex="33" src="{{ url_for('static' , filename='img/avatar.png') }}" height="128"/>
+            <div ng-controller="accountHandler" ng-switch="student.status">
+                <div ng-switch-when="loggedIn" layout="column" layout-align="space-between stretch" layout-padding>
+                    <div layout="row">
+                        <img flex="33" src="{{ url_for('static' , filename='img/avatar.png') }}" height="122"/>
                         <div flex layout="column" layout-align="center">
-                            <p class="md-headline" style="font-size: 28px">{$ $root.student.name $}</p>
-                            <p class="md-subhead">{$ $root.student.sid $}@sharjah.ac.ae</p>
+                            <p class="md-headline" style="font-size: 28px">{$ student.name $}</p>
+                            <p class="md-subhead">{$ student.sid $}@sharjah.ac.ae</p>
                         </div>
                     </div>
-                    <div layout="row" layout-padding>
+                    <div layout="row">
                         <div flex="33" layout="column" class="grey">
                             <p class="md-subhead"><md-icon md-font-icon="fa fa-graduation-cap fa-fw"></md-icon> Major</p>
                             <p class="md-subhead"><md-icon md-font-icon="fa fa-clock-o fa-fw"></md-icon> Earned</p>
                         </div>
                         <div flex layout="column">
-                            <p class="md-subhead">{$ $root.student.major $}</p>
-                            <p class="md-subhead">{$ $root.student.ech $} <span class="grey">(Credit Hours)</span></p>
+                            <p class="md-subhead">{$ student.major $}</p>
+                            <p class="md-subhead">{$ student.ech $} <span class="grey">(Credit Hours)</span></p>
                         </div>
                     </div>
                     <md-divider></md-divider>
-                    <div layout="row" layout-padding>
+                    <div layout="row">
                         <div layout="row" flex layout-align="center" class="grey">
-                            <md-checkbox ng-model="student.remember" class="grey no-margin" flex>Clear data on logout?</md-checkbox>
-                            <md-button class="md-primary md-raised no-margin" ng-click="$root.logout()">Logout</md-button>
+                            <md-checkbox ng-model="!student.remember" class="grey no-margin" flex>Clear data on logout?</md-checkbox>
+                            <md-button class="md-primary md-raised no-margin" ng-click="logout()">Logout</md-button>
                         </div>
                     </div>
                 </div>
                 <div ng-switch-when="waiting" layout="column" layout-align="space-around center">
-                    <h2 class="md-headline lighter">Securely logging into UOSHUB</h2>
+                    <h2 class="md-headline lighter white">Securely logging into UOSHUB</h2>
                     <md-progress-circular class="md-accent"></md-progress-circular>
-                    <h4 class="md-subhead lighter">Few more seconds...</h4>
+                    <h4 class="md-subhead lighter white">Few more seconds...</h4>
                 </div>
-                <div ng-switch-default layout="column">
+                <div ng-switch-when="switching"></div>
+                <div ng-switch-when="loggedOut" layout="column">
                     <md-toolbar layout="row" class="md-accent">
                         <div class="md-toolbar-tools">
                             <span class="md-headline">Welcome to Your UOSHUB!</span>
@@ -99,7 +100,7 @@
                         </md-input-container>
                         <div layout="row" layout-align="center">
                             <md-checkbox ng-model="student.remember" class="grey no-margin" flex>Remember me?</md-checkbox>
-                            <md-button class="md-primary md-raised no-margin" type="submit" ng-click="$root.login(form, student)">Let's Go</md-button>
+                            <md-button class="md-primary md-raised no-margin" type="submit" ng-click="login(form, student.sid)">Let's Go</md-button>
                         </div>
                     </form>
                 </div>
@@ -112,7 +113,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
         <!--Import Angular-Material.js-->
-        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc.5/angular-material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <!--Import common scripts and Angular-Local-Storage.js-->
         {% assets "common.js" -%}
             <script src="{{ ASSET_URL }}"></script>

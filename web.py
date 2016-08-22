@@ -43,7 +43,7 @@ register_bundle("css", "dashboard")
 register_bundle("css", "schedule", path="schedule/")
 
 # Same with js files
-register_bundle("js", "angular-local-storage", "app", output="common")
+register_bundle("js", "angular-local-storage", "scripts", "app", output="common")
 register_bundle("js", "app", "scripts", "process", output="schedule", path="schedule/")
 
 # Finalize configurations and run the app

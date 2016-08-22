@@ -6,6 +6,50 @@ angular.module("main", ["ngMaterial", "ngMessages"])
         $interpolateProvider.endSymbol("$}");
         // Disable info debugging for faster performance
         $compileProvider.debugInfoEnabled(false);
+    }).factory("accountMethods", function($http, $timeout) {
+        console.log("hi");
+        var student = {status: "loggedOut"};
+        var login = function(form, sid) {
+            if(form.$invalid) {
+                form.sid.$setTouched();
+                form.pin.$setTouched();
+            } else {
+                $timeout(function() {
+                    student.status = "waiting";
+                }, 400);
+                waitAnimation();
+                $http.post("/login", student).then(
+                    function(response) {
+                        jQuery.extend(student, response.data);
+                        student.status = "loggedIn";
+                        student.sid = sid;
+                        doneAnimation();
+                    },function(response) {
+                });
+            }
+        };
+        var logout = function() {
+            $timeout(function() {
+                student.status = "switching";
+            }, 400);
+            waitAnimation();
+            var start = new Date().getTime();
+            $http.post("/logout").then(
+                function(response) {
+                    $timeout(function() {
+                        student.status = "loggedOut";
+                        doneAnimation();
+                    }, 520 - new Date().getTime() + start);
+                },function(response) {
+            });
+        };
+        return {
+            student: student,
+            login: login,
+            logout: logout
+        };
+    }).controller("accountHandler", function($scope, accountMethods) {
+        jQuery.extend($scope, accountMethods);
     }).controller("accountButton", function($scope, $mdPanel) {
         var panelConfigs = {
             templateUrl: "account-panel.html",
@@ -21,29 +65,5 @@ angular.module("main", ["ngMaterial", "ngMessages"])
         };
         $scope.showPanel = function() {
             $mdPanel.open(panelConfigs);
-        };
-    }).run(function($rootScope, $http) {
-        $rootScope.login = function(form, student) {
-            if(form.$invalid) {
-                form.sid.$setTouched();
-                form.pin.$setTouched();
-            } else {
-                $rootScope.status = "waiting";
-                $http.post("/login", student).then(
-                    function(response) {
-                        $rootScope.status = "loggedIn";
-                        $rootScope.student = response.data;
-                        $rootScope.student.sid = student.sid;
-                    },function(response) {
-                });
-            }
-        };
-        $rootScope.logout = function() {
-            $rootScope.status = "waiting";
-            $http.post("/logout").then(
-                function(response) {
-                    $rootScope.status = "loggedOut";
-                },function(response) {
-            });
         };
     });
