@@ -44,7 +44,7 @@ register_bundle("css", "schedule", path="schedule/")
 
 # Same with js files
 register_bundle("js", "angular-local-storage", "scripts", "app", output="common")
-register_bundle("js", "app", "scripts", "process", output="schedule", path="schedule/")
+register_bundle("js", "controllers", "scripts", "process", output="schedule", path="schedule/")
 
 # Finalize configurations and run the app
 if __name__ == "__main__":

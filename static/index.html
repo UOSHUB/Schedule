@@ -26,12 +26,12 @@
         {% endif %}
     </head>
 
-    <body ng-app="main" ng-cloak>
-        <md-toolbar class="md-primary">
+    <body ng-app="UOSHUB" layout="column" ng-cloak>
+        <md-toolbar md-scroll-shrink class="md-primary">
             <div class="md-toolbar-tools" ng-controller="accountButton">
                 <a href="http://uoshub.tk">
                     <md-icon md-svg-icon="{{ url_for('static' , filename='img/logo.svg') }}"></md-icon>
-                    <span class="md-headline lighter white"><b>UOS</b> HUB</span>
+                    <span class="md-headline lighter white"><b md-colors="{color: 'accent'}">UOS</b> HUB</span>
                 </a>
                 <span flex></span>
                 <md-button id="loginButton" class="md-raised md-accent no-margin" ng-click="showPanel()">Login</md-button>
@@ -60,17 +60,17 @@
                     <md-divider></md-divider>
                     <div layout="row">
                         <div layout="row" flex layout-align="center" class="grey">
-                            <md-checkbox ng-model="!student.remember" class="grey no-margin" flex>Clear data on logout?</md-checkbox>
-                            <md-button class="md-primary md-raised no-margin" ng-click="logout()">Logout</md-button>
+                            <md-checkbox ng-model="student.remember" ng-true-value="false" ng-false-value="true" class="grey no-margin" flex>Clear data on logout?</md-checkbox>
+                            <md-button md-colors="{background: 'primary'}" class="no-margin" ng-click="logout()">Logout</md-button>
                         </div>
                     </div>
                 </div>
-                <div ng-switch-when="waiting" layout="column" layout-align="space-around center">
+                <div ng-switch-when="waiting" layout="column" layout-align="space-around center" md-colors="{background: 'primary'}">
                     <h2 class="md-headline lighter white">Securely logging into UOSHUB</h2>
                     <md-progress-circular class="md-accent"></md-progress-circular>
                     <h4 class="md-subhead lighter white">Few more seconds...</h4>
                 </div>
-                <div ng-switch-when="switching"></div>
+                <div ng-switch-when="switching" md-colors="{background: 'primary'}"></div>
                 <div ng-switch-when="loggedOut" layout="column">
                     <md-toolbar layout="row" class="md-accent">
                         <div class="md-toolbar-tools">
@@ -100,24 +100,26 @@
                         </md-input-container>
                         <div layout="row" layout-align="center">
                             <md-checkbox ng-model="student.remember" class="grey no-margin" flex>Remember me?</md-checkbox>
-                            <md-button class="md-primary md-raised no-margin" type="submit" ng-click="login(form, student.sid)">Let's Go</md-button>
+                            <md-button md-colors="{background: 'primary'}" class="no-margin" type="submit" ng-click="login(form)">Let's Go</md-button>
                         </div>
                     </form>
                 </div>
             </div>
         </script>
-
+        <div ng-view layout="row" layout-padding flex></div>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <!--Import Angular.js-->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-aria.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-messages.min.js"></script>
         <!--Import Angular-Material.js-->
         <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
         <!--Import common scripts and Angular-Local-Storage.js-->
         {% assets "common.js" -%}
             <script src="{{ ASSET_URL }}"></script>
         {% endassets -%}
+        <script type="text/javascript">js = {schedule: {% assets "schedule.js" -%}"{{ ASSET_URL }}"{% endassets %}};</script>
     </body>
 </html>

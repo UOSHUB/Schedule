@@ -1,14 +1,18 @@
-body {
-    background-image: url(../img/background.svg);
+*, *:before, *:after {
+    box-sizing: inherit;
+}
+
+*[ng-click] {
+    cursor: pointer;
+}
+
+*:focus {
+    outline: none;
 }
 
 .md-toolbar-tools a span {
     margin-left: 4px;
     vertical-align: middle;
-}
-
-.md-toolbar-tools a b {
-    color: #ff4081;
 }
 
 .md-toolbar-tools md-icon {
@@ -30,7 +34,6 @@ body {
 }
 
 .account-panel .md-button.md-raised {
-    box-shadow: none;
     width: 90px;
 }
 
@@ -55,11 +58,6 @@ body {
 .account-panel p md-icon {
     vertical-align: baseline;
     color: inherit;
-}
-
-.account-panel div[ng-switch-when=waiting],
-.account-panel div[ng-switch-when=switching] {
-    background-color: #3f51b5;
 }
 
 .account-panel .flex-33 {
@@ -94,6 +92,10 @@ md-input-container .hint.ng-enter.ng-enter-active {
     opacity: 1;
 }
 
+div[ng-view] {
+   height: calc(100% - 64px);
+}
+
 .white {
     color: #fafafa;
 }
@@ -104,6 +106,15 @@ md-input-container .hint.ng-enter.ng-enter-active {
 
 .lighter {
     font-weight: 300;
+}
+
+.normal {
+    font-weight: 400;
+    font-size: 18px;
+}
+
+.bolder {
+  font-weight: 500;
 }
 
 .no-margin {

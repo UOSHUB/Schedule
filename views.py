@@ -9,8 +9,8 @@ from web import app  # , db
 @app.route("/", methods=["GET"])
 def index():
     # If already logged in, flash welcome back message
-    if "sid" in session:
-        flash("Welcome back " + session["sid"])
+    # if "sid" in session:
+    #     flash("Welcome back " + session["sid"])
     # Return AngularJS app outer layout
     return render_template("index.html")
 
@@ -56,11 +56,11 @@ def about():
 
 
 # Nicely handle all errors
-@app.errorhandler(Exception)
-@app.errorhandler(500)
-@app.errorhandler(405)
-@app.errorhandler(404)
-@app.errorhandler(403)
-def error(e):
-    # Return an exceptionIf the error happened with a post request, otherwise render appropriate error page
-    return Exception if request.method == "POST" else render_template("error.html", error=str(e))
+# @app.errorhandler(Exception)
+# @app.errorhandler(500)
+# @app.errorhandler(405)
+# @app.errorhandler(404)
+# @app.errorhandler(403)
+# def error(e):
+#     # Return an exceptionIf the error happened with a post request, otherwise render appropriate error page
+#     return Exception if request.method == "POST" else render_template("error.html", error=str(e))
