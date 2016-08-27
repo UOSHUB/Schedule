@@ -1,18 +1,5 @@
-// Declare main schedule page angular app module
-var app = angular.module("schedule", ["LocalStorageModule"]);
-
-// Configure angular app
-app.config(function($interpolateProvider, $compileProvider) {
-    // Replace angular start symbol from "{{" to "{$"
-    $interpolateProvider.startSymbol("{$");
-    // Same with end symbol (to prevent conflict with jinja2 symbols)
-    $interpolateProvider.endSymbol("$}");
-    // Disable info debugging for faster performance
-    $compileProvider.debugInfoEnabled(false);
-});
-
 // Create unified controller for the whole page logic (for now!)
-app.controller("ctrl", function($scope, $http, localStorageService) {
+app.controller("scheduleHandler", function($scope, $http, localStorageService, $mdDialog) {
     // Shorten localStorageService to lss as it's going to be used a lot
     var lss = localStorageService;  // TODO: identify data with user id
     // Declare a dynamic variable for http requesting status
@@ -140,10 +127,28 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
         });
     }
     // Returns whether key is stored in storage or not
-    $scope.isStored = function(key) {
+    $scope.isStored = function(key, id, x) {
         // If key index in keys array is 0 or more return true
         return lss.keys().indexOf(key) > -1;
     }
+    // Shows class detailed dialog
+    $scope.showClass = function(event, id, x) {
+        // Store sent course details as class in scope
+        var classDetails = jQuery.extend({}, $scope.courses[id], { id: id,
+            day: $scope.days[dayFromX(x)], date: $scope.dates[dayFromX(x)],
+            semester: $scope.semesters[$scope.semester] });
+        $mdDialog.show({
+            templateUrl: "class-dialog.html",
+            controller: function($scope) {
+                $scope.class = classDetails;
+                $scope.cancel = function() {
+                    $mdDialog.cancel();
+                }
+            },
+            targetEvent: event,
+            clickOutsideToClose: true
+        });
+    };/*
     // Shows class detailed modal
     $scope.showClass = function(id, x) {
         // Store specific course by id as class in scope
@@ -160,5 +165,5 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
             starting_top: "35%", // Start animation from 35% of screen
             ending_top: "25%" // Stop animation at 25% of screen
         });
-    };
+    };*/
 });

@@ -1,3 +1,6 @@
+/*#container, #schedule {
+    height: inherit;
+}*/
 /* Navigation bar start */
 nav object {
     padding-left: 12px;
@@ -99,59 +102,36 @@ nav object {
 }
 /* Side bar end */
 
-#side-bar,
-#container {
-    height: calc(100% - 64px);
-}
-
-/* Schedule card start */
-#schedule {
-    margin-left: 60px;
-    width: calc(100% - 60px);
-    padding: 1.6rem 0;
-    margin-bottom: 0;
-}
-
-.card-panel,
-.col, .day,
-#schedule {
+#container,
+#schedule,
+md-card, .day {
     height: 100%;
 }
 
-.row .col {
-    padding: 0 1.6rem;
-}
-
-.card-panel {
-    padding: 0;
-    margin: 0;
+md-card {
     position: relative;
 }
 
 .day {
+    position: absolute;
+    top: 0;
     width: 19%;
-    float: left;
-    border-right: 1px solid #cfd8dc;
+    font-size: 1.2rem;
+    font-weight: 300;
+}
+
+.day div {
+    border-left: 1px solid #cfd8dc;
 }
 
 .day.as-hours-head {
+    left: 0;
     width: 5%;
     border-top-left-radius: 2px;
     border-bottom-left-radius: 2px;
 }
 
-.day-label {
-    position: absolute;
-    width: 19%;
-    height: 5%;
-    top: 1%;
-    text-align: center;
-    font-size: 1.2rem;
-    font-weight: 300;
-}
-
 .hour {
-    position: relative;
     width: 95%;
     margin-left: 5%;
     border-bottom: 1px solid #cfd8dc;
@@ -163,8 +143,6 @@ nav object {
 
 .hour.as-days-head {
     height: 5%;
-    width: calc(95% + 1px);
-    margin-left: calc(5% - 1px);
     border-top-right-radius: 2px;
 }
 
@@ -180,8 +158,6 @@ nav object {
     width: calc(19% - 1px);
     position: absolute;
     padding: 0.5rem 0.5rem 0.7rem 0.7rem;
-    color: #fff;
-    cursor: pointer;
     overflow: hidden;
     word-wrap: break-word;
     box-shadow: inset 0 0 10rem 2rem rgba(0, 0, 0, 0.1);
@@ -194,7 +170,7 @@ nav object {
         font-size: 0.8rem;
     }
     .hour-label,
-    .day-label {
+    .day {
         font-size: 0.9rem;
         font-weight: 300;
     }
@@ -204,46 +180,15 @@ nav object {
     box-shadow: inset 0 0 10rem 2rem rgba(255, 255, 255, 0.1);
 }
 
-.course-name {
-    font-weight: 500;
-}
 /* Schedule card end */
 
-/* Class Modal start */
-#class-modal {
-    box-shadow: 0 8px 17px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    width: 50rem;
+/* Class Dialog start */
+md-dialog {
+    width: 40rem;
 }
 
-.modal-head {
-    padding: 24px;
-    color: white;
+md-dialog-content i {
+    margin-right: 12px;
 }
 
-.modal-head i {
-    cursor: pointer;
-}
-
-.modal-content.row {
-    padding: 16px 16px 2px;
-    font-size: 1.2rem;
-    color: #424242;
-}
-
-.modal-content i {
-    margin-right: 16px;
-}
-
-.modal-content.row > .col {
-    padding: 0 8px;
-    margin: 8px 0;
-}
-
-.modal-content.row span {
-    padding: 10px 0;
-}
-/* Class Modal end */
-
-.mid-font {
-    font-size: 1.8rem !important;
-}
+/* Class Dialog end */
