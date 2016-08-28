@@ -1,117 +1,100 @@
-<!doctype html>
-<html ng-app="schedule">
-    <head>
-        {% include "common.html" -%}
-        <!--Import specific schedule style sheets-->
-        {% assets "schedule.css" -%}
-            <link type="text/css" href="{{ ASSET_URL }}" rel="stylesheet">
-        {% endassets -%}
-        <!--Import schedule angularjs app and scripts-->
-        {% assets "schedule.js" -%}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
-        <!--Let browser know website is optimized for mobile-->
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-        <!--Setup page icon-->
-        <link href="{{ url_for('static', filename='img/icon.png') }}" type="image/png" rel="shortcut icon" />
-        <!--Setup page title-->
-        <title>Schedule - UOSHUB</title>
-    </head>
-
-    <body class="grey lighten-2">
-        <!--Top navigation bar start-->
-        <div class="navbar-fixed">
-            <nav class="white shadow">
-                <div class="nav-wrapper">
-                    <a href="http://uoshub.tk" class="brand-logo">
-                        <object type="image/svg+xml" data="{{ url_for('static', filename='img/logo.svg') }}">Logo</object>
-                        <span class="blue-text text-darken-2"><b class="blue-grey-text text-darken-3">UOS</b> HUB</span>
-                    </a>
-                </div>
-            </nav>
-        </div><!--Top navigation bar end-->
-
-        <!--Main container and angular app start-->
-        <div id="container" ng-controller="ctrl" ng-init="initialize()">
-            <!--Left side bar start-->
-            <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
-                <li class="no-padding">
-                    <ul class="collapsible collapsible-accordion">
-                        <li>
-                            <a ng-click="grabSemesters()" class="collapsible-header waves-effect"><i class="fa fa-clock-o"></i>Switch Semester</a>
-                            <div id="semesters" class="collapsible-body">
-                                <ul>
-                                    <li class="loading"><a class="waves-effect"><i class="fa fa-refresh fa-spin fa-fw"></i>Loading...</a></li>
-                                    <li ng-repeat="(id, string) in semesters"><a ng-click="grabSchedule(id)"
-                                        class="waves-effect{$ id == semester ? ' selected' : '' $}">
-                                        <i class="fa fa-{$ isStored(id) ? 'calendar-check-o' : (requesting == id ? 'refresh fa-spin' : 'calendar-times-o') $} fa-fw"></i>{$ string $}</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
+<!--Import schedule styles-->
+{% assets "schedule.css" -%}
+<link rel="stylesheet" href="{{ ASSET_URL }}">
+{% endassets -%}
+<!--Main container and angular app start-->
+<div id="container" ng-init="initialize()" ng-cloak layout="column" flex>
+    <!--Left side bar start-->
+    <!--ul id="side-bar" class="side-nav fixed blue-grey darken-4">
+        <li class="no-padding">
+            <ul class="collapsible collapsible-accordion">
+                <li>
+                    <a ng-click="grabSemesters()" class="collapsible-header waves-effect"><i class="fa fa-clock-o"></i>Switch Semester</a>
+                    <div id="semesters" class="collapsible-body">
+                        <ul>
+                            <li class="loading"><a class="waves-effect"><i class="fa fa-refresh fa-spin fa-fw"></i>Loading...</a></li>
+                            <li ng-repeat="(id, string) in semesters"><a ng-click="grabSchedule(id)"
+                                class="waves-effect{$ id == semester ? ' selected' : '' $}">
+                                <i class="fa fa-{$ isStored(id) ? 'calendar-check-o' : (requesting == id ? 'refresh fa-spin' : 'calendar-times-o') $} fa-fw"></i>{$ string $}</a>
+                            </li>
+                        </ul>
+                    </div>
                 </li>
-                <li><a class="waves-effect"><i class="fa fa-plus"></i>Add an Event</a></li>
-                <li><a class="waves-effect"><i class="fa fa-pencil"></i>Design Schedule</a></li>
-                <li><a class="waves-effect"><i class="fa fa-share-alt"></i>Share Schedule</a></li>
-                <li id="divider"><div class="divider"></div></li>
-                <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
-                    <i class="fa fa-dashboard mid-font"></i>Go To Dashboard
-                </a></li>
-            </ul><!--Left side bar end-->
+            </ul>
+        </li>
+        <li><a class="waves-effect"><i class="fa fa-plus"></i>Add an Event</a></li>
+        <li><a class="waves-effect"><i class="fa fa-pencil"></i>Design Schedule</a></li>
+        <li><a class="waves-effect"><i class="fa fa-share-alt"></i>Share Schedule</a></li>
+        <li id="divider"><div class="divider"></div></li>
+        <li id="back"><a class="waves-effect" href="{{ url_for('dashboard') }}">
+            <i class="fa fa-dashboard mid-font"></i>Go To Dashboard
+        </a></li>
+    </ul--><!--Left side bar end-->
 
-            <!--Schedule card start-->
-            <div id="schedule" class="row">
-                <div class="col s12">
-                    <div class="card-panel shadow">
-                        <div class="day as-hours-head indigo lighten-5"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
-                        <div class="day"></div>
+    <!--Schedule card start-->
+    <div id="schedule" layout="row" flex>
+        <md-card class="no-margin" layout="column" flex>
+            <div class="hour as-days-head indigo lighten-5" md-colors="::{background: 'primary-50'}"></div>
+            <div class="day as-hours-head" md-colors="::{background: 'primary-50'}"></div>
 
-                        <div class="hour as-days-head indigo lighten-5"></div>
-                        <div ng-repeat-start="fraction in fractions" class="hour-label blue-grey-text" style="top: {$ 2 + fraction * height $}%">
-                            {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
-                        </div>
-                        <div ng-if="fraction >= 1 || ($last && fraction == -1)" class="half hour" style="height: {$ height / 2 $}%"></div>
-                        <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
-                        <div ng-if="$first && fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
+            <div ng-repeat-start="fraction in fractions" class="hour-label" ng-style="{top: 2 + fraction * height + '%'}" md-colors="::{color: 'blue-grey-700'}">
+                {$ labels[$index][0] $}<span class="hide-on-med-and-down">{$ labels[$index][1] $}</span>
+            </div>
+            <div ng-if="fraction >= 1 || ($last && fraction == -1)" class="half hour" style="height: {$ height / 2 $}%"></div>
+            <div ng-if="fraction >= 1" class="hour" style="height: {$ height / 2 $}%"></div>
+            <div ng-if="$first && fraction < 1" class="hour" style="height: {$ fraction * height $}%" ng-repeat-end></div>
 
-                        <div ng-repeat="(id, course) in courses">
-                            <div ng-repeat="point in course.points" class="class {$ course.color $}" ng-click="showClass(id, point[0])"
-                                style="height: {$ course.length * height $}%; left: {$ point[0] $}%; top: {$ point[1] $}%">
-                                <span class="course-name">{$ course.name $}</span><br>
-                                <i class="fa fa-user fa-fw"></i> {$ course.doctor[0] $}<br>
-                                <i class="fa fa-map-marker fa-fw"></i> {$ course.place[0] $} {$ course.place[1] $}
-                            </div>
-                        </div>
-                        <div ng-repeat="day in days" class="day-label blue-grey-text text-darken-2" style="left: {$ 5 + $index * 19 $}%">
-                            {$ day $} <span class="hide-on-small-only">{$ dates[$index] $}</span>
-                        </div>
+            <div ng-repeat="day in days" class="day blue-grey-text text-darken-2" layout="column" style="left: calc({$ 5 + $index * 19 $}% - 1px)">
+                <span layout="row" layout-align="center center" flex="5" md-colors="::{color: 'blue-grey-700'}">{$ day $} {$ dates[$index] $}</span>
+                <div flex></div>
+            </div>
+
+            <div ng-repeat="(id, course) in courses">
+                <div ng-repeat="point in course.points" ng-click="showClass($event, id, point[0])" md-colors="::{background: course.color, color: 'grey-50'}"
+                    class="class" ng-style="::{height: (course.length * height)+'%', left: point[0]+'%', top: point[1]+'%'}">
+                    <span class="bolder">{$ course.name $}</span><br>
+                    <i class="fa fa-user fa-fw"></i> {$ course.doctor[0] $}<br>
+                    <i class="fa fa-map-marker fa-fw"></i> {$ course.place[0] $} {$ course.place[1] $}
+                </div>
+            </div>
+        </md-card>
+    </div><!--Schedule card end-->
+
+    <!--Classes modal structure start-->
+    <script type="text/ng-template" id="class-dialog.html">
+        <md-dialog>
+            <md-toolbar md-colors="::{background: class.color, color: 'grey-50'}" layout-padding>
+                <div class="md-toolbar-tools" layout-padding>
+                    <div layout="column">
+                        <span class="md-headline">{$ class.name $}</span>
+                        <span class="md-caption">{$ class.semester $}</span>
+                    </div>
+                    <span flex></span>
+                    <i class="fa fa-times" ng-click="cancel()"></i>
+                </div>
+            </md-toolbar>
+            <md-dialog-content md-colors="::{background: 'grey-50', color: 'grey-700'}">
+                <div layout="row" class="md-title normal" layout-padding>
+                    <div layout="column" layout-padding flex>
+                        <div><span><md-tooltip md-direction="right">Doctor Name</md-tooltip><i class="fa fa-user fa-fw"></i>{$ class.doctor[0] $}</span></div>
+                        <div><span><md-tooltip md-direction="right">Date</md-tooltip><i class="fa fa-calendar-o fa-fw"></i>{$ class.day $}, {$ class.date $}</span></div>
+                        <div><span><md-tooltip md-direction="right">Start Time</md-tooltip><i class="fa fa-hourglass-start fa-fw"></i>{$ class.time[0] $}</span></div>
+                        <div><span><md-tooltip md-direction="right">Section</md-tooltip><i class="fa fa-puzzle-piece fa-fw"></i>{$ class.section $} <span class="grey">(Section)</span></span></div>
+                        <div><span><md-tooltip md-direction="right">Course key</md-tooltip><i class="fa fa-key fa-fw"></i>{$ class.id $}</span></div>
+                    </div>
+                    <div layout="column" layout-padding flex>
+                        <div><span><md-tooltip md-direction="right">Doctor Email</md-tooltip><i class="fa fa-envelope fa-fw"></i>{$ class.doctor[1] $}</span></div>
+                        <div><span><md-tooltip md-direction="right">Building, Room</md-tooltip><i class="fa fa-map-marker fa-fw"></i>{$ class.place[0] $}, {$ class.place[1] $}</span></div>
+                        <div><span><md-tooltip md-direction="right">End Time</md-tooltip><i class="fa fa-hourglass-end fa-fw"></i>{$ class.time[1] $}</span></div>
+                        <div><span><md-tooltip md-direction="right">Credit Hours</md-tooltip><i class="fa fa-certificate fa-fw"></i>{$ class.ch $} <span class="grey">(CrHrs)</span></span></div>
+                        <div><span><md-tooltip md-direction="right">CRN</md-tooltip><i class="fa fa-info fa-fw"></i>{$ class.crn $}</span></div>
                     </div>
                 </div>
-            </div><!--Schedule card end-->
-
-            <!--Classes modal structure start-->
-            <div id="class-modal" class="modal">
-                <div class="modal-head {$ class.color $} darken-1">
-                    <div class="mid-font">{$ class.name $}<i class="fa fa-times right"></i></div>
-                    {$ semesters[semester] $}
-                </div>
-                <div class="modal-content row">
-                    <div><span data-tooltip="Doctor Name"><i class="fa fa-user fa-fw"></i>{$ class.doctor[0] $}</span></div>
-                    <div><span data-tooltip="Doctor Email"><i class="fa fa-envelope fa-fw"></i>{$ class.doctor[1] $}</span></div>
-                    <div><span data-tooltip="Date"><i class="fa fa-calendar-o fa-fw"></i>{$ days[class.day] $}, {$ dates[class.day] $}</span></div>
-                    <div><span data-tooltip="Building, Room"><i class="fa fa-map-marker fa-fw"></i>{$ class.place[0] $}, {$ class.place[1] $}</span></div>
-                    <div><span data-tooltip="Start Time"><i class="fa fa-hourglass-start fa-fw"></i>{$ class.time[0] $}</span></div>
-                    <div><span data-tooltip="End Time"><i class="fa fa-hourglass-end fa-fw"></i>{$ class.time[1] $}</span></div>
-                    <div><span data-tooltip="Section"><i class="fa fa-puzzle-piece fa-fw"></i>{$ class.section $} <span class="grey-text">(Section)</span></span></div>
-                    <div><span data-tooltip="Credit Hours"><i class="fa fa-certificate fa-fw"></i>{$ class.ch $} <span class="grey-text">(CrHrs)</span></span></div>
-                    <div><span data-tooltip="Course key"><i class="fa fa-key fa-fw"></i>{$ class.id $}</span></div>
-                    <div><span data-tooltip="CRN"><i class="fa fa-info fa-fw"></i>{$ class.crn $}</span></div>
-                </div>
-            </div><!--Classes modal structure end-->
-        </div><!--Main container and angular app end-->
-    </body>
-</html>
+            </md-dialog-content>
+        </md-dialog>
+    </script>
+</div><!--Main container and angular app end-->
+<!--Import schedule scripts and controller-->
+{% assets "schedule.js" -%}
+<!--script type="text/javascript">jQuery.getScript("{{ ASSET_URL }}");</script-->
+{% endassets -%}
