@@ -1,5 +1,5 @@
 body {
-    background-image: linear-gradient(to bottom, #eceff1 5%, rgba(0, 0, 0, 0) 30%), url(../img/background.svg);
+    background-image: linear-gradient(to bottom, #eceff1 5%, rgba(0, 0, 0, 0) 30%), url(/static/img/background.svg);
 }
 
 /* Login dialog start */

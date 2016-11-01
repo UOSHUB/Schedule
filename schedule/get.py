@@ -19,8 +19,14 @@ def schedule(semester):
     # Select semester if it was specified
     if semester:
         br.form["term_in"] = [semester]
-    else:
+    else:  # Otherwise store selected semester to be returned
         extras = br.form["term_in"][0]
+        # If the selected term is "Year"
+        if extras.endswith('5'):
+            # Change it to a single semester
+            extras = extras[:-1] + '0'
+            # Select that semester to be scraped
+            br.form["term_in"] = [extras]
     br.submit()
     # Enter Student Detail Schedule page
     br.follow("bwskfshd.P_CrseSchdDetl")

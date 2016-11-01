@@ -49,9 +49,6 @@ register_bundle("js", "app", "scripts", "process", output="schedule", path="sche
 register_bundle("js", "ganalytics")
 register_bundle("js", "layout")
 
-# This couldn't be done through the above function, so...
-assets.register("ganalytics.html", Bundle("ganalytics.html", filters="jsmin", output="min/ganalytics.html"))
-
 # Finalize configurations and run the app
 if __name__ == "__main__":
     from views import *

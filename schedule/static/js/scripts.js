@@ -1,5 +1,12 @@
 // jQuery: When page is loaded
 $(document).ready(function(){
+    $("#class-modal").modal({
+        opacity: .2, // Low opacity of modal background
+        in_duration: 200, // Fast Transition in duration
+        out_duration: 100, // Fast Transition out duration
+        starting_top: "35%", // Start animation from 35% of screen
+        ending_top: "25%" // Stop animation at 25% of screen
+    });
     // A for each loop through class-modal divs to add common classes
     $("#class-modal .modal-content > div").each(function(index, div) {
         // Add "col s6" classes to all divs
@@ -33,11 +40,7 @@ $(document).ready(function(){
     // When closing class-modal modal through click the x button
     $("#class-modal .fa-times").click(function() {
         // Close class-modal with some configs
-        $("#class-modal").closeModal({
-            out_duration: 100, // Fast Transition out duration
-            starting_top: "15%", // Start animation from 15% of screen
-            ending_top: "25%" // Stop animation at 25% of screen
-        });
+        $("#class-modal").modal("close");
     });
 });
 // Highlights selected semester

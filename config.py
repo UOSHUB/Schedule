@@ -22,3 +22,5 @@ class Base(object):
 class Dev(Base):
     # Enable debugger
     DEBUG = True
+    # Disable minifying rendered html pages
+    MINIFY_PAGE = False

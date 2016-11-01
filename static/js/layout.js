@@ -1,9 +1,12 @@
 // Configure Materialize components
 $(document).ready(function(){
+    $("#login-dialog").modal({
+        opacity: 0.1
+    });
     // Initialize sidebar for small screens
-    $('.button-collapse').sideNav({
+    $(".button-collapse").sideNav({
         menuWidth: 200,
-        edge: 'right',
+        edge: "right",
         closeOnClick: true
     });
 });
@@ -23,7 +26,7 @@ $(window).resize(function() {
         // Only execute when sidebar is visible
         if (visible) {
             // Hide sidebar
-            $('.button-collapse').sideNav('hide');
+            $(".button-collapse").sideNav("hide");
             // Set visibility to false
             visible = false;
         }

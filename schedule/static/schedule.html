@@ -17,6 +17,12 @@
         {% assets "schedule.js" -%}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
+        {% if not config.DEBUG -%}
+        <!--Google Analytics start-->
+        <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga("create","UA-82438910-1","auto");ga("send","pageview");</script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+        <!--Google Analytics end-->
+        {% endif %}
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!--Setup page icon-->
@@ -39,7 +45,7 @@
         </div><!--Top navigation bar end-->
 
         <!--Main container and angular app start-->
-        <div id="container" ng-controller="ctrl" ng-init="initialize()">
+        <div id="container" ng-controller="ctrl" ng-init="initialize()" ng-cloak>
             <!--Left side bar start-->
             <ul id="side-bar" class="side-nav fixed blue-grey darken-4">
                 <li class="no-padding">
@@ -120,9 +126,5 @@
                 </div>
             </div><!--Classes modal structure end-->
         </div><!--Main container and angular app end-->
-
-        <!--Google Analytics code start-->
-        {% include 'ganalytics.html' %}
-        <!--Google Analytics code end-->
     </body>
 </html>

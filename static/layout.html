@@ -18,6 +18,12 @@
         {% assets "layout.js" -%}
             <script type="text/javascript" src="{{ ASSET_URL }}"></script>
         {% endassets %}
+        {% if not config.DEBUG -%}
+        <!--Google Analytics start-->
+        <script>window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;ga("create","UA-82438910-1","auto");ga("send","pageview");</script>
+        <script async src="https://www.google-analytics.com/analytics.js"></script>
+        <!--Google Analytics end-->
+        {% endif %}
         <!--Let browser know website is optimized for mobile-->
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <!--Setup page icon-->
@@ -43,7 +49,7 @@
                     {% if 'name' in session -%}
                         <li><a href="{{ url_for('logout') }}" class="blue-grey-text text-darken-4">Logout</a></li>
                     {%- else -%}
-                        <li><a id="login" onclick="$('#login-dialog').openModal({opacity: 0.1})" class="light-green-text text-darken-2">Login</a></li>
+                        <li><a id="login" onclick="$('#login-dialog').modal('open')" class="light-green-text text-darken-2">Login</a></li>
                     {%- endif %}
                 </ul>
                 <a href="" data-activates="side-bar" class="button-collapse right show-on-medium-and-down">
@@ -104,11 +110,5 @@
         <!--Main Body start-->
         {%- block body %}{% endblock -%}
         <!--Main Body end-->
-
-        <!--Google Analytics code start-->
-        {% assets "ganalytics.html" -%}
-            {% include ASSET_URL[7:-9] -%}
-        {% endassets -%}
-        <!--Google Analytics code end-->
     </body>
 </html>

@@ -46,7 +46,6 @@ nav object {
     background-color: #161d20;
     height: 48px;
     line-height: 48px;
-    padding: 0 16px;
     font-size: 1rem;
 }
 
@@ -58,6 +57,10 @@ nav object {
 
 #side-bar .collapsible-body a:hover {
     background-color: #1e282c;
+}
+
+#side-bar a.waves-effect {
+    padding: 0 16px;
 }
 
 #back, #divider {

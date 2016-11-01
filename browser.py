@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # import needed libraries
-from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNotFoundError
+from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNotFoundError, URLError
 from flask import session, flash, url_for, redirect
 from bs4 import BeautifulSoup
 from functools import wraps
@@ -33,12 +33,19 @@ class Browser(Mechanize):
 
     # Gets UOS UDC link by providing sub url only
     def get(self, sub_url):
-        self.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_" + sub_url)
+        try:
+            self.open("https://uos.sharjah.ac.ae:9050/prod_enUS/twbkwbis.P_" + sub_url)
+        # Try again if opening the link fails
+        except URLError:
+            self.get(sub_url)
 
     # Follows a UOS UDC link by providing sub link only
     def follow(self, sub_link):
         try:
             self.follow_link(url="/prod_enUS/" + sub_link)
+        # Try again if following the link fails
+        except URLError:
+            self.follow(sub_link)
         # Return false if link isn't found
         except LinkNotFoundError:
             return False

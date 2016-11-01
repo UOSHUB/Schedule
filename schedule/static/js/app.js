@@ -153,12 +153,6 @@ app.controller("ctrl", function($scope, $http, localStorageService) {
         // Store day number from class's x point
         $scope.class.day = dayFromX(x);
         // Open the modal to show the data stored in class scope
-        $("#class-modal").openModal({
-            opacity: .2, // Low opacity of modal background
-            in_duration: 200, // Fast Transition in duration
-            out_duration: 100, // Fast Transition out duration
-            starting_top: "35%", // Start animation from 35% of screen
-            ending_top: "25%" // Stop animation at 25% of screen
-        });
+        $("#class-modal").modal("open");
     };
 });
