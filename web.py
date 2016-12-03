@@ -44,7 +44,8 @@ register_bundle("css", "dashboard")
 register_bundle("css", "layout")
 
 # Same with js files
-register_bundle("js", "jquery", "materialize", "angular", "angular-local-storage", output="common")
+register_bundle("js", "redirect", "jquery", "materialize", "angular",
+                "angular-local-storage", output="common")
 register_bundle("js", "app", "scripts", "process", output="schedule", path="schedule/")
 register_bundle("js", "ganalytics")
 register_bundle("js", "layout")

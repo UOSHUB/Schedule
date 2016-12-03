@@ -5,6 +5,7 @@ from mechanize import Browser as Mechanize, _http, LinkNotFoundError, ControlNot
 from flask import session, flash, url_for, redirect
 from bs4 import BeautifulSoup
 from functools import wraps
+import ssl
 
 
 # login required decorator
@@ -30,6 +31,9 @@ class Browser(Mechanize):
         self.set_handle_referer(True)
         self.set_handle_robots(False)
         self.set_handle_refresh(_http.HTTPRefreshProcessor(), max_time=1)
+        # Disable SSL verification in Python
+        try: ssl._create_default_https_context = ssl._create_unverified_context
+        except AttributeError: pass
 
     # Gets UOS UDC link by providing sub url only
     def get(self, sub_url):
