@@ -9,11 +9,11 @@ and displays them in a modern and user friendly way.
 Here's one example of how this website changes the way you do and see things,<br>
 this is the way the official UOS UDC displays the student schedule (the Old way):
 
-![alt tag](https://raw.githubusercontent.com/OmarEinea/UOSHUB/materialize/static/img/old_schedule.png)
+![alt tag](https://raw.githubusercontent.com/OmarEinea/old_UOSHUB/materialize/static/img/old_schedule.png)
 
 And this is the way UOSHUB displays it (the New way):
 
-![alt tag](https://raw.githubusercontent.com/OmarEinea/UOSHUB/materialize/static/img/new_schedule.png)
+![alt tag](https://raw.githubusercontent.com/OmarEinea/old_UOSHUB/materialize/static/img/new_schedule.png)
 
 
 If you're a UOS student and you want to try UOSHUB yourself,<br>
@@ -37,5 +37,5 @@ head over to one of the following URLs:
 
 Copyright (C) 2016 by OmarEinea.
 
-This website is licensed under MIT License. A copy of the license can be found [here](https://github.com/OmarEinea/UOSHUB/blob/materialize/LICENSE.md).
+This website is licensed under MIT License. A copy of the license can be found [here](https://github.com/OmarEinea/old_UOSHUB/blob/materialize/LICENSE.md).
 
